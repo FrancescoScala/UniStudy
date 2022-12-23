@@ -9,23 +9,23 @@ public class Enrollment {
         GESTORECORSO
     }
 
-    private User user;
+    //private User user;
     private Course course;
     private Set<EnrollType> roles;
 
-    public Enrollment(User user, Course course, Set<EnrollType> roles) {
-        this.user = user;
+    public Enrollment(/*User user, */Course course, Set<EnrollType> roles) {
+        //this.user = user;
         this.course = course;
         this.roles = roles;
     }
 
-    public User getUser() {
+    /*public User getUser() {
         return user;
-    }
+    }*/
 
-    public void setUser(User user) {
+    /*public void setUser(User user) {
         this.user = user;
-    }
+    }*/
 
     public Course getCourse() {
         return course;
@@ -46,7 +46,7 @@ public class Enrollment {
     @Override
     public String toString() {
         return "Enrollment{" +
-                "user=" + user +
+                //"user=" + user +
                 ", course=" + course +
                 ", roles=" + roles +
                 '}';
