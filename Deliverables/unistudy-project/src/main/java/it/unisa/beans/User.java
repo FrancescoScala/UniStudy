@@ -1,5 +1,6 @@
 package it.unisa.beans;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class User {
@@ -9,16 +10,14 @@ public class User {
     private String name;
     private String surname;
     private Set<Role> roles;
-    private Set<Enrollment> enrollments;
 
-    public User(int id, String email, String password, String name, String surname, Set<Role> roles, Set<Enrollment> enrollments) {
+    public User(int id, String email, String password, String name, String surname, Set<Role> roles) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
         this.surname = surname;
         this.roles = roles;
-        this.enrollments = enrollments;
     }
 
     public int getId() {
@@ -69,14 +68,6 @@ public class User {
         this.roles = roles;
     }
 
-    public Set<Enrollment> getEnrollments() {
-        return enrollments;
-    }
-
-    public void setEnrollments(Set<Enrollment> enrollments) {
-        this.enrollments = enrollments;
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -87,5 +78,18 @@ public class User {
                 ", surname='" + surname + '\'' +
                 ", roles=" + roles +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(name, user.name) && Objects.equals(surname, user.surname) && roles.equals(user.roles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, password, name, surname, roles);
     }
 }

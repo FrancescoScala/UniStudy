@@ -1,5 +1,10 @@
 package it.unisa.dao;
+import it.unisa.beans.Role;
+import it.unisa.beans.User;
 import org.junit.jupiter.api.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,5 +47,27 @@ class UserManagerTest {
         assertFalse(check);
     }
 
-    
+    @Test
+    void loginUserSuccess() {
+        String email = "email";
+        String password= "pass";
+        Set<Role> roles = new HashSet<Role>();
+        roles.add(new Role(1,"PARTECIPANTE"));
+        User expectedUser = new User(3,email,password,"name","surname",roles);
+
+        User user = UserManager.loginUser(email, password);
+
+        assertEquals(expectedUser,user);
+    }
+
+    @Test
+    void loginUserError() {
+        String email = "email1";
+        String password= "pass";
+
+        User user = UserManager.loginUser(email, password);
+
+        assertNull(user);
+    }
+
 }
