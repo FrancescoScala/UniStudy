@@ -23,7 +23,7 @@ public class ConnectionPoolDB {
 
         String db = "unistudydb";
         String username = "root";
-        String password = "root";
+        String password = "Universitario07!";
 
         String params = "?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&useLegacyDatetimeCode=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&zeroDateTimeBehavior=CONVERT_TO_NULL&autoReconnect=true";
 
