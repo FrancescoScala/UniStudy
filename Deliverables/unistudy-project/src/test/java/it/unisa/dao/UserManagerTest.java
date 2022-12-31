@@ -61,7 +61,7 @@ class UserManagerTest {
     }
 
     @Test
-    void loginUserError() {
+    void loginUserEmailNotExisting() {
         String email = "email1";
         String password= "pass";
 
@@ -69,5 +69,16 @@ class UserManagerTest {
 
         assertNull(user);
     }
+
+    @Test
+    void loginUserPasswordNotExisting(){
+        String email = "email";
+        String password= "pass1";
+
+        User user = UserManager.loginUser(email, password);
+
+        assertNull(user);
+    }
+
 
 }
