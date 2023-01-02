@@ -68,6 +68,10 @@ public class User {
         this.roles = roles;
     }
 
+    public boolean checkRole(Role role) {
+        return this.roles.contains(role);
+    }
+
     @Override
     public String toString() {
         return "User{" +
