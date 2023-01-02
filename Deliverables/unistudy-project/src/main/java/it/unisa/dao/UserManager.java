@@ -133,4 +133,35 @@ public class UserManager {
         }
     }
 
+    public static boolean modifyInfoUser(User user, String name, String surname, String newPassword, String oldPassword) {
+        if (oldPassword.matches(pswRegex) &&
+                newPassword.matches(pswRegex) &&
+                name.matches(alphabeticRegex) &&
+                surname.matches(alphabeticRegex)) {
+
+            if (user.getPassword().equals(oldPassword)) {
+                try {
+                    String querySQL = "UPDATE user SET user_name = ? , user_surname = ?, user_password=? WHERE user_id=?";
+                    PreparedStatement ps = conn.prepareStatement(querySQL);
+                    ps.setString(1, name);
+                    ps.setString(2, surname);
+                    ps.setString(3, newPassword);
+                    ps.setInt(4, user.getId());
+                    ps.executeUpdate();
+                    return true;
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+            else {
+                return false;
+            }
+
+        }
+        else {
+            return false;
+        }
+    }
 }
+

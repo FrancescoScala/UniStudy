@@ -273,4 +273,185 @@ class UserManagerTest {
         assertNull(user);
     }
 
+    @Test
+    void modifyInfoUserSuccess()
+    {
+        String oldPassword = "P@ssword8";
+        String newPassword = "P@ssword888";
+        String name = "Pinco";
+        String surname = "Pallino";
+
+        boolean check = UserManager.modifyInfoUser(userForTesting, name, surname, newPassword, oldPassword);
+
+        assertTrue(check);
+    }
+
+    @Test
+    void modifyInfoUserSurnameBadFormatted()
+    {
+        String oldPassword = "P@ssword8";
+        String newPassword = "P@ssword888";
+        String name = "Pinco";
+        String surname = "Pallino89";
+
+        boolean check = UserManager.modifyInfoUser(userForTesting, name, surname, newPassword, oldPassword);
+
+        assertFalse(check);
+    }
+
+    @Test
+    void modifyInfoUserSurnameEmpty()
+    {
+        String oldPassword = "P@ssword8";
+        String newPassword = "P@ssword888";
+        String name = "Pinco";
+        String surname = "";
+
+        boolean check = UserManager.modifyInfoUser(userForTesting, name, surname, newPassword, oldPassword);
+
+        assertFalse(check);
+    }
+
+    @Test
+    void modifyInfoUserNameBadFormatted()
+    {
+        String oldPassword = "P@ssword8";
+        String newPassword = "P@ssword888";
+        String name = "Pinco88";
+        String surname = "Pallino";
+
+        boolean check = UserManager.modifyInfoUser(userForTesting, name, surname, newPassword, oldPassword);
+
+        assertFalse(check);
+    }
+
+    @Test
+    void modifyInfoUserNameEmpty()
+    {
+        String oldPassword = "P@ssword8";
+        String newPassword = "P@ssword888";
+        String name = "";
+        String surname = "Pallino";
+
+        boolean check = UserManager.modifyInfoUser(userForTesting, name, surname, newPassword, oldPassword);
+
+        assertFalse(check);
+    }
+
+    @Test
+    void modifyInfoUserNewPasswordBadFormatted()
+    {
+        String oldPassword = "P@sswordd";
+        String newPassword = "P@ssword888";
+        String name = "Pinco";
+        String surname = "Pallino";
+
+        boolean check = UserManager.modifyInfoUser(userForTesting, name, surname, newPassword, oldPassword);
+
+        assertFalse(check);
+    }
+
+    @Test
+    void modifyInfoUserNewPasswordMaxLength()
+    {
+        String oldPassword = "P@ssword8";
+        String newPassword = "P@ssword88888";
+        String name = "Pinco";
+        String surname = "Pallino";
+
+        boolean check = UserManager.modifyInfoUser(userForTesting, name, surname, newPassword, oldPassword);
+
+        assertFalse(check);
+    }
+
+    @Test
+    void modifyInfoUserNewPasswordMinLength()
+    {
+        String oldPassword = "P@ssword8";
+        String newPassword = "P@sswo8";
+        String name = "Pinco";
+        String surname = "Pallino";
+
+        boolean check = UserManager.modifyInfoUser(userForTesting, name, surname, newPassword, oldPassword);
+
+        assertFalse(check);
+    }
+
+    @Test
+    void modifyInfoUserNewPasswordEmpty()
+    {
+        String oldPassword = "P@ssword8";
+        String newPassword = "";
+        String name = "Pinco";
+        String surname = "Pallino";
+
+        boolean check = UserManager.modifyInfoUser(userForTesting, name, surname, newPassword, oldPassword);
+
+        assertFalse(check);
+    }
+
+    @Test
+    void modifyInfoUserOldPasswordNotValid()
+    {
+        String oldPassword = "P@ssword9";
+        String newPassword = "P@ssword888";
+        String name = "Pinco";
+        String surname = "Pallino";
+
+        boolean check = UserManager.modifyInfoUser(userForTesting, name, surname, newPassword, oldPassword);
+
+        assertFalse(check);
+    }
+
+    @Test
+    void modifyInfoUserOldPasswordBadFormatted()
+    {
+        String oldPassword = "P@sswordd";
+        String newPassword = "P@ssword888";
+        String name = "Pinco";
+        String surname = "Pallino";
+
+        boolean check = UserManager.modifyInfoUser(userForTesting, name, surname, newPassword, oldPassword);
+
+        assertFalse(check);
+    }
+
+    @Test
+    void modifyInfoUserOldPasswordMaxLength()
+    {
+        String oldPassword = "P@ssword88888";
+        String newPassword = "P@ssword888";
+        String name = "Pinco";
+        String surname = "Pallino";
+
+        boolean check = UserManager.modifyInfoUser(userForTesting, name, surname, newPassword, oldPassword);
+
+        assertFalse(check);
+    }
+
+    @Test
+    void modifyInfoUserOldPasswordMinLength()
+    {
+        String oldPassword = "P@sswo8";
+        String newPassword = "P@ssword888";
+        String name = "Pinco";
+        String surname = "Pallino";
+
+        boolean check = UserManager.modifyInfoUser(userForTesting, name, surname, newPassword, oldPassword);
+
+        assertFalse(check);
+    }
+
+    @Test
+    void modifyInfoUserOldPasswordEmpty()
+    {
+        String oldPassword = "";
+        String newPassword = "P@ssword888";
+        String name = "Pinco";
+        String surname = "Pallino";
+
+        boolean check = UserManager.modifyInfoUser(userForTesting, name, surname, newPassword, oldPassword);
+
+        assertFalse(check);
+    }
 }
