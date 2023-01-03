@@ -27,7 +27,7 @@ class UserManagerTest {
         Set<Role> roles = new HashSet<Role>();
         roles.add(new Role(1, "PARTECIPANTE"));
 
-        userForTesting = new User(-1, email, password, name, surname, roles);
+        userForTesting = new User(-2, email, password, name, surname, roles);
     }
 
     @AfterAll

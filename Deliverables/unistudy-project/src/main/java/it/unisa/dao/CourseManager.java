@@ -27,31 +27,30 @@ public class CourseManager {
     private static final String professorsRegex = "^[a-zA-Z\\s,]+$";
 
     private static final String scheduleRegex = "^((Lun|Mar|Mer|Gio|Ven)\\s(0[0-9]|1[0-9]|2[0-4]):[0-5][0-9]\\s-\\s(0[0-9]|1[0-9]|2[0-4]):[0-5][0-9],?\\s?)*$";
-/*        public static boolean createCourse(String professors, String schedule, String title) {
+
+    private static final String alphanumericRegex = "^[a-zA-Z0-9\\s]+$";
+
+    public static boolean createCourse(String professors, String schedule, String title) {
         try {
             //controllo formato?
             if (professors.matches(professorsRegex) &&
-                    password.matches(pswRegex) &&
-                    name.matches(alphabeticRegex) &&
-                    surname.matches(alphabeticRegex)) {
-                //se l'email non è presente nel sistema...
-                if (retrieveIdUserByEmail(email) == -1) {
-                    String querySQL1 = "INSERT INTO user(user_email,user_password,user_name,user_surname) VALUES (?,?,?,?)";
+                    schedule.matches(scheduleRegex) &&
+                    title.matches(alphanumericRegex)) {
+                //se che NON esiste un corso avente lo stesso nome
+                if (retrieveIdCourseByTitle(title) == -1) {
+                    String querySQL1 = "INSERT INTO course(course_professors,course_schedule,course_title) VALUES (?,?,?)";
                     PreparedStatement ps1 = conn.prepareStatement(querySQL1);
 
-                    ps1.setString(1, email);
-                    ps1.setString(2, password);
-                    ps1.setString(3, name);
-                    ps1.setString(4, surname);
+                    ps1.setString(1, professors);
+                    ps1.setString(2, schedule);
+                    ps1.setString(3, title);
                     ps1.executeUpdate();
 
                     return true;
-                }
-                //se già presente...
-                else {
+                } else {//se esiste un corso con lo stesso nome
                     return false;
                 }
-            } else {
+            } else {//se il formato non è valido
                 return false;
             }
         } catch (SQLException e) {
@@ -61,22 +60,42 @@ public class CourseManager {
 
     }
 
-/*    public static Set<Enrollment> retrieveEnrollmentByUserId(int userId) {
-        try {
-            Set<Enrollment> enrollments = new HashSet<Enrollment>();
-            String querySQL1 = "SELECT * FROM enrollment WHERE user_id = ?";
-            PreparedStatement ps1 = conn.prepareStatement(querySQL1);
-            ps1.setInt(1, userId);
-            ResultSet rs1 = ps1.executeQuery();
-            while(rs1.next()) {
-
-                Enrollment enrollment = new Enrollment();
+    public boolean modifyInfoCourse(Course course, String newProfessor, String newSchedule) {
+        if(newProfessor.matches(professorsRegex) && newSchedule.matches(scheduleRegex)) {
+            try {
+                String querySQL = "UPDATE course SET course_professors = ? , course_schedule = ? WHERE course_id=?";
+                PreparedStatement ps = conn.prepareStatement(querySQL);
+                ps.setString(1, newProfessor);
+                ps.setString(2, newSchedule);
+                ps.setInt(3, course.getId());
+                ps.executeUpdate();
+                return true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
         }
-    }*/
+        else {
+            return false;
+        }
+    }
+
+    /*    public static Set<Enrollment> retrieveEnrollmentByUserId(int userId) {
+            try {
+                Set<Enrollment> enrollments = new HashSet<Enrollment>();
+                String querySQL1 = "SELECT * FROM enrollment WHERE user_id = ?";
+                PreparedStatement ps1 = conn.prepareStatement(querySQL1);
+                ps1.setInt(1, userId);
+                ResultSet rs1 = ps1.executeQuery();
+                while(rs1.next()) {
+
+                    Enrollment enrollment = new Enrollment();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }*/
 /*    public static Course retrieveCourseById(int courseId) {
             try {
                 Course course;
@@ -104,4 +123,22 @@ public class CourseManager {
             return null;
         }
     }*/
+    public static int retrieveIdCourseByTitle(String courseTitle) {
+        try {
+            String querySQL = "SELECT course.course_id FROM course WHERE course_title=?";
+            PreparedStatement ps = conn.prepareStatement(querySQL);
+
+            ps.setString(1, courseTitle);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("course_id");
+            } else {
+                return -1;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
 }
