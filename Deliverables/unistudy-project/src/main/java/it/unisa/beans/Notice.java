@@ -1,14 +1,14 @@
 package it.unisa.beans;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class Notice {
     private int id;
     private String title;
-    private Date creationDate;
+    private Timestamp creationDate;
     private String description;
 
-    public Notice(int id, String title, Date creationDate, String description) {
+    public Notice(int id, String title, Timestamp creationDate, String description) {
         this.id = id;
         this.title = title;
         this.creationDate = creationDate;
@@ -31,11 +31,11 @@ public class Notice {
         this.title = title;
     }
 
-    public Date getCreationDate() {
+    public Timestamp getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(Timestamp creationDate) {
         this.creationDate = creationDate;
     }
 

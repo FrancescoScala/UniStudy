@@ -48,6 +48,12 @@ public class Course {
         return title;
     }
 
+    public boolean addNotice(Notice notice)
+    {
+        notices.add(notice);
+        return true;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -62,6 +68,12 @@ public class Course {
 
     public Set<Note> getNotes() {
         return notes;
+    }
+
+    public boolean addNote(Note note)
+    {
+        notes.add(note);
+        return true;
     }
 
     public void setNotes(Set<Note> notes) {

@@ -1,24 +1,24 @@
 package it.unisa.beans;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class Note {
     private int id;
     private String description;
-    private Date creationDate;
+    private Timestamp creationDate;
     private String filePath;
     private String title;
     private int authorId;
-    private String authorName;
+    private String authorInfo;
 
-    public Note(int id, String description, Date creationDate, String filePath, String title, int authorId, String authorName) {
+    public Note(int id, String description, Timestamp creationDate, String filePath, String title, int authorId, String authorInfo) {
         this.id = id;
         this.description = description;
         this.creationDate = creationDate;
         this.filePath = filePath;
         this.title = title;
         this.authorId = authorId;
-        this.authorName = authorName;
+        this.authorInfo = authorInfo;
     }
 
     public int getId() {
@@ -37,11 +37,11 @@ public class Note {
         this.description = description;
     }
 
-    public Date getCreationDate() {
+    public Timestamp getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(Timestamp creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -70,11 +70,11 @@ public class Note {
     }
 
     public String getAuthorName() {
-        return authorName;
+        return authorInfo;
     }
 
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
+    public void setAuthorName(String authorInfo) {
+        this.authorInfo = authorInfo;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class Note {
                 ", filePath='" + filePath + '\'' +
                 ", title='" + title + '\'' +
                 ", authorId=" + authorId +
-                ", authorName='" + authorName + '\'' +
+                ", authorName='" + authorInfo + '\'' +
                 '}';
     }
 }
