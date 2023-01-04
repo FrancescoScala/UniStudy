@@ -8,15 +8,17 @@ public class Note {
     private Date creationDate;
     private String filePath;
     private String title;
-    private User author;
+    private int authorId;
+    private String authorName;
 
-    public Note(int id, String description, Date creationDate, String filePath, String title, User author) {
+    public Note(int id, String description, Date creationDate, String filePath, String title, int authorId, String authorName) {
         this.id = id;
         this.description = description;
         this.creationDate = creationDate;
         this.filePath = filePath;
         this.title = title;
-        this.author = author;
+        this.authorId = authorId;
+        this.authorName = authorName;
     }
 
     public int getId() {
@@ -59,12 +61,20 @@ public class Note {
         this.title = title;
     }
 
-    public User getAuthor() {
-        return author;
+    public int getAuthorId() {
+        return authorId;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
     }
 
     @Override
@@ -75,7 +85,8 @@ public class Note {
                 ", creationDate=" + creationDate +
                 ", filePath='" + filePath + '\'' +
                 ", title='" + title + '\'' +
-                ", author=" + author +
+                ", authorId=" + authorId +
+                ", authorName='" + authorName + '\'' +
                 '}';
     }
 }

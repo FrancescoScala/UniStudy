@@ -3,36 +3,35 @@ package it.unisa.beans;
 import java.util.Set;
 
 public class Enrollment {
-    enum EnrollType
-    {
+    enum EnrollType {
         STUDENTE,
         GESTORECORSO
     }
 
-    //private User user;
-    private Course course;
+    private int userId;
+    private int courseId;
     private Set<EnrollType> roles;
 
-    public Enrollment(/*User user, */Course course, Set<EnrollType> roles) {
-        //this.user = user;
-        this.course = course;
+    public Enrollment(int userId, int courseId, Set<EnrollType> roles) {
+        this.userId = userId;
+        this.courseId = courseId;
         this.roles = roles;
     }
 
-    /*public User getUser() {
-        return user;
-    }*/
-
-    /*public void setUser(User user) {
-        this.user = user;
-    }*/
-
-    public Course getCourse() {
-        return course;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setCourse(Course course) {
-        this.course = course;
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public int getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
     }
 
     public Set<EnrollType> getRoles() {
@@ -46,8 +45,8 @@ public class Enrollment {
     @Override
     public String toString() {
         return "Enrollment{" +
-                //"user=" + user +
-                ", course=" + course +
+                "userId=" + userId +
+                ", courseId=" + courseId +
                 ", roles=" + roles +
                 '}';
     }
