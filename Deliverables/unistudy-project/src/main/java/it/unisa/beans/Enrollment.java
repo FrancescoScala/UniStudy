@@ -3,7 +3,7 @@ package it.unisa.beans;
 import java.util.Set;
 
 public class Enrollment {
-    enum EnrollType {
+    public enum EnrollType {
         STUDENTE,
         GESTORECORSO
     }
@@ -40,6 +40,21 @@ public class Enrollment {
 
     public void setRoles(Set<EnrollType> roles) {
         this.roles = roles;
+    }
+
+    public static EnrollType createRoleType(String enrollType) {
+        EnrollType type;
+        switch (enrollType) {
+            case "STUDENTE" :
+                type =  EnrollType.STUDENTE;
+                break;
+            case "GESTORECORSO" :
+                type = EnrollType.GESTORECORSO;
+                break;
+            default:
+                type = null;
+        }
+        return type;
     }
 
     @Override

@@ -1,9 +1,6 @@
 package it.unisa.dao;
 
-import it.unisa.beans.Course;
-import it.unisa.beans.Enrollment;
-import it.unisa.beans.Note;
-import it.unisa.beans.Role;
+import it.unisa.beans.*;
 import it.unisa.db.ConnectionPoolDB;
 
 import java.sql.Connection;
@@ -60,7 +57,7 @@ public class CourseManager {
 
     }
 
-    public boolean modifyInfoCourse(Course course, String newProfessor, String newSchedule) {
+    public static boolean modifyInfoCourse(Course course, String newProfessor, String newSchedule) {
         if(newProfessor.matches(professorsRegex) && newSchedule.matches(scheduleRegex)) {
             try {
                 String querySQL = "UPDATE course SET course_professors = ? , course_schedule = ? WHERE course_id=?";
@@ -80,23 +77,7 @@ public class CourseManager {
         }
     }
 
-    /*    public static Set<Enrollment> retrieveEnrollmentByUserId(int userId) {
-            try {
-                Set<Enrollment> enrollments = new HashSet<Enrollment>();
-                String querySQL1 = "SELECT * FROM enrollment WHERE user_id = ?";
-                PreparedStatement ps1 = conn.prepareStatement(querySQL1);
-                ps1.setInt(1, userId);
-                ResultSet rs1 = ps1.executeQuery();
-                while(rs1.next()) {
-
-                    Enrollment enrollment = new Enrollment();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return null;
-            }
-        }*/
-/*    public static Course retrieveCourseById(int courseId) {
+    public static Course retrieveCourseById(int courseId) {
             try {
                 Course course;
                 String querySQL1 = "SELECT * FROM course WHERE course_id = ?";
@@ -108,9 +89,9 @@ public class CourseManager {
                     String courseProfessors = rs1.getString("course_professors");
                     String courseSchedule = rs1.getString("course_schedule");
                     String courseTitle = rs1.getString("course_title");
-                    //Set<Note> notes = NoteManager.retrieveNoteByCourseId(courseId);
-                    //Set<Notice> notices = NoteManager.retrieveNoticeByCourseId(courseId);
-                   // course = new Course(courseId,courseProfessors,courseSchedule,courseTitle,note,notice);
+                    Set<Note> notes = NoteManager.retrieveNotesByCourseId(courseId);
+                    Set<Notice> notices = NoticeManager.retrieveNoticesByCourseId(courseId);
+                   course = new Course(courseId,courseProfessors,courseSchedule,courseTitle, notices, notes);
                     return course;
                 }
                 //se id non è presente
@@ -122,7 +103,7 @@ public class CourseManager {
             e.printStackTrace();
             return null;
         }
-    }*/
+    }
     public static int retrieveIdCourseByTitle(String courseTitle) {
         try {
             String querySQL = "SELECT course.course_id FROM course WHERE course_title=?";

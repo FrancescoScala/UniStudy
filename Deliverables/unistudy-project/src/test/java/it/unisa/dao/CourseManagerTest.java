@@ -124,6 +124,48 @@ public class CourseManagerTest {
         String newProfessors = "Andrea De Lucia, Fabio Palomba";
         String newSchedule = "Lun 09:00 - 11:00, Gio 15:30 - 18:30";
 
+        boolean check = CourseManager.modifyInfoCourse(courseForTesting, newProfessors, newSchedule);
+
+        assertTrue(check);
     }
 
+    @Test
+    void modifyInfoCourseProfessorsEmpty() {
+        String professors = "";
+        String schedule = "Lun 09:00 - 11:00, Gio 15:00 - 18:00";
+        String title = "Ingegneria del software";
+
+        boolean check = CourseManager.createCourse(professors,schedule,title);
+        assertFalse(check);
+    }
+
+    @Test
+    void modifyInfoCourseProfessorsBadFormatted() {
+        String professors = "Andrea De Lucia8 Vittorio Scarano";
+        String schedule = "Lun 09:00 - 11:00, Gio 15:00 - 18:00";
+        String title = "Ingegneria del software";
+
+        boolean check = CourseManager.createCourse(professors,schedule,title);
+        assertFalse(check);
+    }
+
+    @Test
+    void modifyInfoCourseScheduleEmpty() {
+        String professors = "Andrea De Lucia, Vittorio Scarano";
+        String schedule = "";
+        String title = "Ingegneria del software";
+
+        boolean check = CourseManager.createCourse(professors,schedule,title);
+        assertFalse(check);
+    }
+
+    @Test
+    void modifyInfoCourseScheduleBadFormatted() {
+        String professors = "Andrea De Lucia, Vittorio Scarano";
+        String schedule = "Lunedì 09:00 - 11:00, Gio 15:00 - 18:00";
+        String title = "Ingegneria del software";
+
+        boolean check = CourseManager.createCourse(professors,schedule,title);
+        assertFalse(check);
+    }
 }
