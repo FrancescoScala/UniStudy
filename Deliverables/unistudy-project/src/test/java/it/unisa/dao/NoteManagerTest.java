@@ -3,10 +3,7 @@ package it.unisa.dao;
 
 import it.unisa.beans.*;
 import it.unisa.db.ConnectionPoolDB;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,9 +12,9 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class NoteManagerTest {
     private User authorForTesting;
@@ -76,6 +73,7 @@ class NoteManagerTest {
         con.close();
     }
 
+    @Order(1)
     @Test
     void createNoteSuccess()
     {
@@ -120,6 +118,7 @@ class NoteManagerTest {
         assertFalse(check);
     }
 
+
     //still to implement in NoteManager
     /*@Test
     void createNotePathBadFormatted()
@@ -143,4 +142,17 @@ class NoteManagerTest {
     //checks on the description still to implement in NoteManager
 
     //checks on the title still to implement in NoteManager
+
+    @Test
+    void retrieveNotesByCourseIdSuccess() {
+        Set<Note> notes = NoteManager.retrieveNotesByCourseId(courseForTesting.getId());
+        assertEquals(courseForTesting.getNotes(),notes);
+    }
+
+    @Test
+    void retrieveNotesByCourseIdNotValid()
+    {
+        Set<Note> notes = NoteManager.retrieveNotesByCourseId(-1);
+        assertNull(notes);
+    }
 }

@@ -36,7 +36,6 @@ public class NoteManager {
                 ps1.setInt(6, authorId);
                 ps1.executeUpdate();
                 ps1.close();
-                System.out.println(creationDate.toString().split("\\.")[0]);
                 ResultSet resultSet = conn.prepareStatement("SELECT note_id FROM note WHERE user_id='" + authorId + "' AND note_creation_date='" + creationDate + "'").executeQuery();
                 resultSet.next();
                 int noteId = resultSet.getInt("note_id");
@@ -62,10 +61,9 @@ public class NoteManager {
             PreparedStatement ps = conn.prepareStatement(querySQL);
             ps.setInt(1, courseId);
             ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
                 int id = rs.getInt("note_id");
-                String description = rs.getString("note_title");
+                String description = rs.getString("note_description");
                 Timestamp creationDate = rs.getTimestamp("note_creation_date"); //modificare nel db il tipo della data
                 String filepath = rs.getString("note_path");
                 String title = rs.getString("note_title");
@@ -75,7 +73,10 @@ public class NoteManager {
                 notes.add(note);
             }
 
-            return notes;
+            if(notes.size()!=0)
+                return notes;
+            else
+                return null;
 
         } catch (SQLException e) {
             e.printStackTrace();

@@ -1,6 +1,7 @@
 package it.unisa.beans;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 public class Note {
     private int id;
@@ -88,5 +89,18 @@ public class Note {
                 ", authorId=" + authorId +
                 ", authorName='" + authorInfo + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Note note = (Note) o;
+        return id == note.id && authorId == note.authorId && Objects.equals(description, note.description) && Objects.equals(creationDate, note.creationDate) && Objects.equals(filePath, note.filePath) && Objects.equals(title, note.title) && Objects.equals(authorInfo, note.authorInfo);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, description, creationDate, filePath, title, authorId, authorInfo);
     }
 }
