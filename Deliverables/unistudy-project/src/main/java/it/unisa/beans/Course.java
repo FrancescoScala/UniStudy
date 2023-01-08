@@ -1,5 +1,6 @@
 package it.unisa.beans;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class Course {
@@ -10,6 +11,7 @@ public class Course {
     private Set<Notice> notices;
     private Set<Note> notes;
     //per il mapping model->code (deprecato):  private Set<Enrollment> enrollments;
+
 
     public Course(int id, String professors, String timeSchedule, String title, Set<Notice> notices, Set<Note> notes) {
         this.id = id;
@@ -90,5 +92,18 @@ public class Course {
                 ", notices=" + notices +
                 ", notes=" + notes +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return id == course.id && Objects.equals(professors, course.professors) && Objects.equals(timeSchedule, course.timeSchedule) && Objects.equals(title, course.title) && Objects.equals(notices, course.notices) && Objects.equals(notes, course.notes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, professors, timeSchedule, title, notices, notes);
     }
 }

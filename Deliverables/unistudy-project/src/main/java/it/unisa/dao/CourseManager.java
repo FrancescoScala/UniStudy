@@ -91,7 +91,7 @@ public class CourseManager {
                     String courseTitle = rs1.getString("course_title");
                     Set<Note> notes = NoteManager.retrieveNotesByCourseId(courseId);
                     Set<Notice> notices = NoticeManager.retrieveNoticesByCourseId(courseId);
-                   course = new Course(courseId,courseProfessors,courseSchedule,courseTitle, notices, notes);
+                    course = new Course(courseId,courseProfessors,courseSchedule,courseTitle, notices, notes);
                     return course;
                 }
                 //se id non è presente

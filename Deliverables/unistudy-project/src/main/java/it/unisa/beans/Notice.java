@@ -1,6 +1,7 @@
 package it.unisa.beans;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 public class Notice {
     private int id;
@@ -55,5 +56,18 @@ public class Notice {
                 ", creationDate=" + creationDate +
                 ", description='" + description + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Notice notice = (Notice) o;
+        return id == notice.id && Objects.equals(title, notice.title) && Objects.equals(creationDate, notice.creationDate) && Objects.equals(description, notice.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, creationDate, description);
     }
 }

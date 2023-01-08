@@ -3,15 +3,19 @@ package it.unisa.dao;
 import it.unisa.beans.*;
 import it.unisa.db.ConnectionPoolDB;
 import org.junit.jupiter.api.*;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CourseManagerTest {
@@ -168,4 +172,28 @@ public class CourseManagerTest {
         boolean check = CourseManager.createCourse(professors,schedule,title);
         assertFalse(check);
     }
+
+    @Test
+    void retrieveCourseByIdSuccess() {
+        int id = courseForTesting.getId();
+
+        MockedStatic<NoticeManager> noticeMock = Mockito.mockStatic(NoticeManager.class);
+        MockedStatic<NoteManager> noteMock = Mockito.mockStatic(NoteManager.class);
+
+        noticeMock.when(() -> NoticeManager.retrieveNoticesByCourseId(id))
+                .thenReturn(new HashSet<Notice>());
+
+        noteMock.when(() -> NoteManager.retrieveNotesByCourseId(id))
+                .thenReturn(new HashSet<Note>());
+
+        Course course = CourseManager.retrieveCourseById(id);
+        assertEquals(courseForTesting,course);
+    }
+/*
+    @Test
+    void retrieveCourseByIdInvalidId() {
+        int id = -3;
+        Course course = CourseManager.retrieveCourseById(id);
+        assertNull(course);
+    }*/
 }
