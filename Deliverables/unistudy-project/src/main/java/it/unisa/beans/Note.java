@@ -69,7 +69,7 @@ public class Note {
         this.authorId = authorId;
     }
 
-    public String getAuthorName() {
+    public String getAuthorInfo() {
         return authorInfo;
     }
 
