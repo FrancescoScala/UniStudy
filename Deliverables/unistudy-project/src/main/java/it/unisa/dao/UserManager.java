@@ -28,7 +28,7 @@ public class UserManager {
 
     public static boolean signupUser(String email, String password, String name, String surname) {
         try {
-            //controllo formato?
+            //controllo formato? AGGIUNGERE ECCEZIONI E CONTROLLO SU EMAIL E PASS VUOTE
             if (email.matches(emailRegex) &&
                     password.matches(pswRegex) &&
                     name.matches(alphabeticRegex) &&
@@ -63,8 +63,8 @@ public class UserManager {
     public static User loginUser(String email, String password) {
         try {
             //controllo formato
-            if (email.matches(emailRegex) &&
-                    password.matches(pswRegex)) {
+            if (!email.equals("") &&
+                    !password.equals("")) {
                 //
                 int userId = retrieveIdUserByEmail(email);
                 User user;
