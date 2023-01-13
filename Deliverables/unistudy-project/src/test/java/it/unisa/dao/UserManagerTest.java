@@ -454,4 +454,18 @@ class UserManagerTest {
 
         assertFalse(check);
     }
+
+    @Test
+    void retrieveIdUserByEmailSuccess() {
+        String email = userForTesting.getEmail();
+        int id = UserManager.retrieveIdUserByEmail(email);
+        assertEquals(userForTesting.getId(),id);
+    }
+
+    @Test
+    void retrieveIdUserByEmailNotValid() {
+        String email = "test@otheremail.com";
+        int id = UserManager.retrieveIdUserByEmail(email);
+        assertEquals(-1,id);
+    }
 }
