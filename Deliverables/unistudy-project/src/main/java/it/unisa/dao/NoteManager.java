@@ -11,7 +11,7 @@ import java.util.Set;
 public class NoteManager {
     private static Connection conn; //final?
     private static final String alphabeticRegex = "^[a-zA-Z ]+$";
-    private static final String pathRegex = "^(\\/[A-Za-z0-9_-]+)+\\/[A-Za-z0-9_-]+\\.(txt|pdf|png|docx|doc|jpeg|jpg)$";
+    private static final String pathRegex = "^(\\/[A-Za-z0-9_-]+)+\\.(txt|pdf|png|docx|doc|jpeg|jpg|img)$";
     private static final String alphanumericRegex = "^[a-zA-Z0-9\\s]+$";
 
     static {
@@ -26,7 +26,13 @@ public class NoteManager {
     //controllo formato sul path? O sulla dimensione della description e del titolo?
     public static boolean createNote(String description, Timestamp creationDate, String filepath, String title, int authorId, String authorInfo, Course course) {
         try {
-            if(authorInfo.matches(alphabeticRegex)) {
+            if (authorInfo.matches(alphabeticRegex) &&
+                    (description.length()!=0) &&
+                    (description.length() <= 300) &&
+                    title.matches(alphanumericRegex) &&
+                    title.length()!=0 &&
+                    filepath.matches(pathRegex)) {
+
                 String querySQL1 = "INSERT INTO note(note_title, note_description, note_creation_date, note_path, course_id, user_id) VALUES (?,?,?,?,?,?)";
                 PreparedStatement ps1 = conn.prepareStatement(querySQL1);
 
@@ -43,8 +49,7 @@ public class NoteManager {
                 int noteId = resultSet.getInt("note_id");
                 course.addNote(new Note(noteId, description, creationDate, filepath, title, authorId, authorInfo));
                 return true;
-            }
-            else
+            } else
                 return false;
         } catch (SQLException | NullPointerException e) {
             e.printStackTrace();
@@ -52,8 +57,7 @@ public class NoteManager {
         }
     }
 
-    public static Set<Note> retrieveNotesByCourseId(int courseId)
-    {
+    public static Set<Note> retrieveNotesByCourseId(int courseId) {
         try {
             Set<Note> notes = new HashSet<Note>();
             String querySQL = "SELECT note_id, note_title, note_description, note_creation_date, note_path, " +
@@ -70,12 +74,12 @@ public class NoteManager {
                 String filepath = rs.getString("note_path");
                 String title = rs.getString("note_title");
                 int authorId = rs.getInt("user_id");
-                String authorinfo = rs.getString("user_name")+" "+rs.getString("user_surname") ;
+                String authorinfo = rs.getString("user_name") + " " + rs.getString("user_surname");
                 Note note = new Note(id, description, creationDate, filepath, title, authorId, authorinfo);
                 notes.add(note);
             }
 
-            if(notes.size()!=0)
+            if (notes.size() != 0)
                 return notes;
             else
                 return null;

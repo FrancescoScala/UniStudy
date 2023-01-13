@@ -46,7 +46,7 @@ class NoteManagerTest {
         UserManager.signupUser(email, password, name, surname);
         authorForTesting.setId(UserManager.retrieveIdUserByEmail(email));
         //create the note for testing, using the id of the author just created
-        noteForTesting = new Note(-1,"descrizione",new Timestamp(System.currentTimeMillis()),"filepath.img","title",
+        noteForTesting = new Note(-1,"descrizione",new Timestamp(System.currentTimeMillis()),"/ciao/filepath.img","title",
                 authorForTesting.getId(),
                 authorForTesting.getName()+" "+authorForTesting.getSurname());
     }
@@ -118,30 +118,53 @@ class NoteManagerTest {
         assertFalse(check);
     }
 
-
-    //still to implement in NoteManager
-    /*@Test
+    @Test
     void createNotePathBadFormatted()
     {
         boolean check = NoteManager.createNote(noteForTesting.getDescription(),noteForTesting.getCreationDate(),"badFormattedPath",noteForTesting.getTitle(),
                 noteForTesting.getAuthorId(), noteForTesting.getAuthorInfo(),courseForTesting);
 
-        assertTrue(check);
-    }*/
-
-    //still to implement in NoteManager
-    /*@Test
-    void createNoteDateBadFormatted()
-    {
-        boolean check = NoteManager.createNote(noteForTesting.getDescription(),noteForTesting.getCreationDate(),"badFormattedPath",noteForTesting.getTitle(),
-                noteForTesting.getAuthorId(), noteForTesting.getAuthorInfo(),courseForTesting);
-
-        assertTrue(check);
-    }*/
+        assertFalse(check);
+    }
 
     //checks on the description still to implement in NoteManager
+    @Test
+    void createNoteDescriptionMaxLength()
+    {
+        String descriptionForTesting= "Risale al 1944 la costituzione di un istituto universitario di magistero nella città, fortemente voluto da Giovanni Cuomo. Esso divenne statale nel 1968, trasformandosi nella facoltà di magistero della costituenda Università degli Studi di Salerno. Nel 1969 la facoltà di magistero divenne facoltà di lettere e filosofia, affiancata, dal 1970, dalla facoltà di economia e commercio. Nel 1972 furono fondate le facoltà di scienze matematiche, fisiche e naturali e di giurisprudenza, nel 1983 il corso completo di ingegneria. Nel 1988 l'università fu spostata dal centro urbano del comune capoluogo alle nuove strutture del comune di Fisciano, ai margini della provincia. Nel 1991 fu aggiunta la facoltà di farmacia, nel 1992 quella di scienze politiche, nel 1996 quella di lingue e letterature straniere e nel 2006 la facoltà di medicina e chirurgia.[1] Nel 2006 avviò i propri corsi la scuola di giornalismo di Salerno, riconosciuta dall'Ordine nazionale dei giornalisti[2], mentre nel 2014 furono attivate le prime tre scuole di specializzazione dell'area medica presso l'Azienda Ospedaliera Universitaria San Giovanni di Dio e Ruggi D'Aragona";
+        boolean check = NoteManager.createNote(descriptionForTesting,noteForTesting.getCreationDate(), noteForTesting.getFilePath(), noteForTesting.getTitle(),
+                noteForTesting.getAuthorId(), noteForTesting.getAuthorInfo(),courseForTesting);
+
+        assertFalse(check);
+    }
+
+    @Test
+    void createNoteDescriptionEmpty()
+    {
+        boolean check = NoteManager.createNote("",noteForTesting.getCreationDate(), noteForTesting.getFilePath(), noteForTesting.getTitle(),
+                noteForTesting.getAuthorId(), noteForTesting.getAuthorInfo(),courseForTesting);
+
+        assertFalse(check);
+    }
 
     //checks on the title still to implement in NoteManager
+    @Test
+    void createNoteTitleBadFormatted()
+    {
+        boolean check = NoteManager.createNote(noteForTesting.getDescription(), noteForTesting.getCreationDate(), noteForTesting.getFilePath(),"_$!&",
+                noteForTesting.getAuthorId(), noteForTesting.getAuthorInfo(),courseForTesting);
+
+        assertFalse(check);
+    }
+
+    @Test
+    void createNoteTitleEmpty()
+    {
+        boolean check = NoteManager.createNote(noteForTesting.getDescription(), noteForTesting.getCreationDate(), noteForTesting.getFilePath(),"",
+                noteForTesting.getAuthorId(), noteForTesting.getAuthorInfo(),courseForTesting);
+
+        assertFalse(check);
+    }
 
     @Test
     void retrieveNotesByCourseIdSuccess() {
