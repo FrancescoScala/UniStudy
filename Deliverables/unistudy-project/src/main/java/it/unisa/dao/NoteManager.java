@@ -11,6 +11,8 @@ import java.util.Set;
 public class NoteManager {
     private static Connection conn; //final?
     private static final String alphabeticRegex = "^[a-zA-Z ]+$";
+    private static final String pathRegex = "^(\\/[A-Za-z0-9_-]+)+\\/[A-Za-z0-9_-]+\\.(txt|pdf|png|docx|doc|jpeg|jpg)$";
+    private static final String alphanumericRegex = "^[a-zA-Z0-9\\s]+$";
 
     static {
         try {
