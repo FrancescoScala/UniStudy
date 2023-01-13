@@ -9,7 +9,7 @@ import org.mockito.Mockito;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Timestamp;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -187,13 +187,31 @@ public class CourseManagerTest {
                 .thenReturn(new HashSet<Note>());
 
         Course course = CourseManager.retrieveCourseById(id);
+        noticeMock.close();
+        noteMock.close();
         assertEquals(courseForTesting,course);
+
     }
-/*
+
     @Test
-    void retrieveCourseByIdInvalidId() {
+    void retrieveCourseByIdNotValid() {
         int id = -3;
+
         Course course = CourseManager.retrieveCourseById(id);
         assertNull(course);
-    }*/
+    }
+
+    @Test
+    void retrieveIdCourseByTitleSuccess() {
+        String title=courseForTesting.getTitle();
+        int id = CourseManager.retrieveIdCourseByTitle(title);
+        assertEquals(courseForTesting.getId(),id);
+    }
+
+    @Test
+    void retrieveIdCourseByTitleNotValid() {
+        String title="Architettura degli elaboratori 2";
+        int id = CourseManager.retrieveIdCourseByTitle(title);
+        assertEquals(-1,id);
+    }
 }
