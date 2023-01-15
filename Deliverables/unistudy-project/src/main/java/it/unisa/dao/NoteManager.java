@@ -70,7 +70,7 @@ public class NoteManager {
             while (rs.next()) {
                 int id = rs.getInt("note_id");
                 String description = rs.getString("note_description");
-                Timestamp creationDate = rs.getTimestamp("note_creation_date"); //modificare nel db il tipo della data
+                Timestamp creationDate = rs.getTimestamp("note_creation_date");
                 String filepath = rs.getString("note_path");
                 String title = rs.getString("note_title");
                 int authorId = rs.getInt("user_id");
@@ -79,10 +79,7 @@ public class NoteManager {
                 notes.add(note);
             }
 
-            if (notes.size() != 0)
-                return notes;
-            else
-                return null;
+            return notes;
 
         } catch (SQLException e) {
             e.printStackTrace();
