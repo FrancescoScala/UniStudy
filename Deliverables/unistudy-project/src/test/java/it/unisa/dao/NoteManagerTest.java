@@ -1,17 +1,13 @@
 package it.unisa.dao;
-
-
 import it.unisa.beans.*;
 import it.unisa.db.ConnectionPoolDB;
 import org.junit.jupiter.api.*;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -55,20 +51,15 @@ class NoteManagerTest {
     void tearDown() throws SQLException {
         Connection con = ConnectionPoolDB.getConnection();
 
-        PreparedStatement ps = con.prepareStatement("DELETE FROM note WHERE note_id=?");
-        ps.setInt(1, noteForTesting.getId());
-        ps.executeUpdate();
-        ps.close();
+        PreparedStatement ps2 = con.prepareStatement("DELETE FROM course WHERE course_id=?");
+        ps2.setInt(1, courseForTesting.getId());
+        ps2.executeUpdate();
+        ps2.close();
 
         PreparedStatement ps1 = con.prepareStatement("DELETE FROM user WHERE user_id=?");
         ps1.setInt(1, authorForTesting.getId());
         ps1.executeUpdate();
         ps1.close();
-
-        PreparedStatement ps2 = con.prepareStatement("DELETE FROM course WHERE course_id=?");
-        ps2.setInt(1, courseForTesting.getId());
-        ps2.executeUpdate();
-        ps2.close();
 
         con.close();
     }
