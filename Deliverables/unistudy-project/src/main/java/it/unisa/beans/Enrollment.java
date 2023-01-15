@@ -1,5 +1,6 @@
 package it.unisa.beans;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class Enrollment {
@@ -10,12 +11,14 @@ public class Enrollment {
 
     private int userId;
     private int courseId;
+    private String courseTitle;
     private Set<EnrollType> roles;
 
-    public Enrollment(int userId, int courseId, Set<EnrollType> roles) {
+    public Enrollment(int userId, int courseId,String courseTitle, Set<EnrollType> roles) {
         this.userId = userId;
         this.courseId = courseId;
         this.roles = roles;
+        this.courseTitle=courseTitle;
     }
 
     public int getUserId() {
@@ -32,6 +35,14 @@ public class Enrollment {
 
     public void setCourseId(int courseId) {
         this.courseId = courseId;
+    }
+
+    public String getCourseTitle() {
+        return courseTitle;
+    }
+
+    public void setCourseTitle(String courseTitle) {
+        this.courseTitle = courseTitle;
     }
 
     public Set<EnrollType> getRoles() {
@@ -62,7 +73,21 @@ public class Enrollment {
         return "Enrollment{" +
                 "userId=" + userId +
                 ", courseId=" + courseId +
+                ", courseTitle='" + courseTitle + '\'' +
                 ", roles=" + roles +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Enrollment that = (Enrollment) o;
+        return userId == that.userId && courseId == that.courseId && Objects.equals(courseTitle, that.courseTitle) && Objects.equals(roles, that.roles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, courseId, courseTitle, roles);
     }
 }
