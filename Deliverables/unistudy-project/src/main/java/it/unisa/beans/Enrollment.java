@@ -14,7 +14,7 @@ public class Enrollment {
     private String courseTitle;
     private Set<EnrollType> roles;
 
-    public Enrollment(int userId, int courseId,String courseTitle, Set<EnrollType> roles) {
+    public Enrollment(int userId, int courseId, String courseTitle, Set<EnrollType> roles) {
         this.userId = userId;
         this.courseId = courseId;
         this.roles = roles;
