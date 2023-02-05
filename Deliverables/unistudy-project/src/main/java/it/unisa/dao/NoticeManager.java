@@ -11,7 +11,7 @@ import java.util.Set;
 public class NoticeManager {
     private static Connection conn; //final?
 
-    private static final String alphabeticRegex = "^[a-zA-Z ]+$";
+    private static final String alphabeticTitleRegex = "^[a-zA-Z ]+${8,12}";
 
 
     static {
@@ -27,7 +27,7 @@ public class NoticeManager {
         //control in db by title
         if ((description.length() != 0) &&
                 (description.length() <= 300) &&
-                title.matches(alphabeticRegex)) {
+                title.matches(alphabeticTitleRegex)) {
             try {
                 String querySQL1 = "INSERT INTO notice(notice_description,notice_creation_date,notice_title,course_id) VALUES (?,?,?,?)";
                 PreparedStatement ps1 = conn.prepareStatement(querySQL1);

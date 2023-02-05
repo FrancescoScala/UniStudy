@@ -36,11 +36,7 @@ public class EnrollmentManager {
 
                 ps1.executeUpdate();
                 ps1.close();
-                //DA VEDERE SE POSSIBILE PASSARE IL TITOLO COME PARAMETRO ESPLICITO DELLA FUNZIONE
-        /*  ResultSet resultSet = conn.prepareStatement("SELECT course_title FROM course WHERE course_id='" + courseId + "'").executeQuery();
-            resultSet.next();
-            String courseTitle = resultSet.getString("course_title");
-        */
+
                 Set<Enrollment.EnrollType> enrollTypes = new HashSet<>();
                 enrollTypes.add(enrollType);
 

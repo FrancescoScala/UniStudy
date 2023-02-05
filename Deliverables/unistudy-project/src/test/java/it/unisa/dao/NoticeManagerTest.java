@@ -100,10 +100,10 @@ class NoticeManagerTest {
         assertFalse(check);
     }
 
-    //controllo max length 50
-
     @Test
     void retrieveNoticesByCourseId() {
 
     }
+
+
 }
