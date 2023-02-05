@@ -20,6 +20,7 @@ public class EnrollmentManagerTest {
     private User userForTesting;
 
     private Enrollment enrollmentForTesting;
+    private Set<Enrollment> enrollmentsForTesting;
     private Course courseForTesting;
     @BeforeAll
     void setUp() {
@@ -50,10 +51,13 @@ public class EnrollmentManagerTest {
         Set<Enrollment.EnrollType> enrollRoles = new HashSet<Enrollment.EnrollType>();
         enrollRoles.add(STUDENTE);
         enrollmentForTesting = new Enrollment(userForTesting.getId(),courseForTesting.getId(),courseForTesting.getTitle(),enrollRoles);
+        enrollmentsForTesting = new HashSet<Enrollment>();
+        enrollmentsForTesting.add(enrollmentForTesting);
     }
 
     @AfterAll
     void tearDown() throws SQLException {
+        enrollmentsForTesting=null;
         Connection con = ConnectionPoolDB.getConnection();
 
         PreparedStatement ps = con.prepareStatement("DELETE FROM enrollment WHERE user_id=? AND course_id=?");
@@ -114,6 +118,20 @@ public class EnrollmentManagerTest {
         Enrollment enrollment = EnrollmentManager.createEnrollment(enrollmentForTesting.getUserId(), enrollmentForTesting.getCourseId(), STUDENTE,"Ingegneria del software!!!");
 
         assertNull(enrollment);
+    }
+
+    @Test
+    void retrieveEnrollmentsByUserIdSuccess() {
+        int id = userForTesting.getId();
+        Set<Enrollment> enrollments = EnrollmentManager.retrieveEnrollmentsByUserId(id);
+        assertEquals(enrollmentsForTesting,enrollments);
+    }
+
+    @Test
+    void retrieveEnrollmentsByUserIdNotValid() {
+        int id = -3;
+        Set<Enrollment> enrollments = EnrollmentManager.retrieveEnrollmentsByUserId(id);
+        assertNull(enrollments);
     }
 
 }

@@ -24,8 +24,8 @@ public class EnrollmentManager {
 
     private static final String alphanumericRegex = "^[a-zA-Z0-9\\s]+$";
 
-    public static Enrollment createEnrollment(int userId, int courseId, Enrollment.EnrollType enrollType,String courseTitle) {
-        if(courseTitle.matches(alphanumericRegex)) {
+    public static Enrollment createEnrollment(int userId, int courseId, Enrollment.EnrollType enrollType, String courseTitle) {
+        if (courseTitle.matches(alphanumericRegex)) {
             try {
                 String querySQL1 = "INSERT INTO enrollment(user_id, course_id, enrollment_type) VALUES (?,?,?)";
                 PreparedStatement ps1 = conn.prepareStatement(querySQL1);
@@ -46,30 +46,35 @@ public class EnrollmentManager {
                 e.printStackTrace();
                 return null;
             }
-        }
-        else {
+        } else {
             return null;
         }
     }
 
-    public static Set<Enrollment> retrieveEnrollmentByUserId(int userId) {
+    public static Set<Enrollment> retrieveEnrollmentsByUserId(int userId) {
         try {
             Set<Enrollment> enrollments = new HashSet<Enrollment>();
             String querySQL1 = "SELECT e.user_id,e.course_id,e.enrollment_type,c.course_title FROM enrollment AS e,course AS c WHERE e.user_id = ?";
             PreparedStatement ps1 = conn.prepareStatement(querySQL1);
             ps1.setInt(1, userId);
             ResultSet rs1 = ps1.executeQuery();
-            while (rs1.next()) {
-                int courseId = rs1.getInt("e.course_id");
-                String courseTitle = rs1.getString("c.course_tile");
-                String[] enrollTypeName = rs1.getString("e.enrollment_type").split(",");
-                Set<Enrollment.EnrollType> enrollTypes = new HashSet<>();
-                for (String s : enrollTypeName) {
-                    Enrollment.EnrollType enrollType = Enrollment.createRoleType(s);
-                    enrollTypes.add(enrollType);
+            if (rs1.next()) {
+                do {
+                    int courseId = rs1.getInt("e.course_id");
+                    String courseTitle = rs1.getString("c.course_title");
+                    String[] enrollTypeName = rs1.getString("e.enrollment_type").split(",");
+                    Set<Enrollment.EnrollType> enrollTypes = new HashSet<>();
+                    for (String s : enrollTypeName) {
+                        Enrollment.EnrollType enrollType = Enrollment.createRoleType(s);
+                        enrollTypes.add(enrollType);
+                    }
+                    Enrollment enrollment = new Enrollment(userId, courseId, courseTitle, enrollTypes);
+                    enrollments.add(enrollment);
                 }
-                Enrollment enrollment = new Enrollment(userId, courseId, courseTitle, enrollTypes);
-                enrollments.add(enrollment);
+                while (rs1.next());
+            }
+            else {
+                return null;
             }
             return enrollments;
         } catch (SQLException e) {
