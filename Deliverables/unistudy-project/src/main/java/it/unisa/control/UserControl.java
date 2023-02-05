@@ -7,9 +7,12 @@ import it.unisa.dao.UserManager;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Set;
+
 
 @WebServlet(name = "UserControl", value = "/UserControl")
 public class UserControl extends HttpServlet {
@@ -43,6 +46,20 @@ public class UserControl extends HttpServlet {
                 break;
 
             case "signup":
+                response.setContentType("application/json");
+                PrintWriter out = response.getWriter();
+                boolean check = UserManager.signupUser(request.getParameter("email"), request.getParameter("password"),
+                        request.getParameter("name"), request.getParameter("surname"));
+                String mex;
+                if(check) {
+                    mex = "OK";
+                }
+                else {
+                    mex = "Registrazione fallita User o password nel formato errato";
+                }
+                JSONObject json = new JSONObject();
+                json.put("result",mex);
+                out.print(json.toString());
                 break;
 
             default:

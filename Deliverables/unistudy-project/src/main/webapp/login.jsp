@@ -15,7 +15,7 @@
     <input type="hidden" name="action" value="login">
     <input type="text" name="email" placeholder="Email">
     <input type="text" name="password" placeholder="Password">
-    <button type="submit">Logga mocc a mammt</button>
+    <button type="submit">ACCEDI</button>
 </form>
 </body>
 </html>
