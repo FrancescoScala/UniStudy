@@ -29,7 +29,7 @@ public class UserControl extends HttpServlet {
                 {
                     // pagina di errore con #throw della exception
                 }
-                Set<Enrollment> enrollments = EnrollmentManager.retrieveEnrollmentByUserId(user.getId());
+                Set<Enrollment> enrollments = EnrollmentManager.retrieveEnrollmentsByUserId(user.getId());
                 if(enrollments==null)
                 {
                     // pagina di errore con #throw della exception
