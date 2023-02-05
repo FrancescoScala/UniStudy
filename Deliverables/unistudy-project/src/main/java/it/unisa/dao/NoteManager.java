@@ -67,18 +67,21 @@ public class NoteManager {
             PreparedStatement ps = conn.prepareStatement(querySQL);
             ps.setInt(1, courseId);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                int id = rs.getInt("note_id");
-                String description = rs.getString("note_description");
-                Timestamp creationDate = rs.getTimestamp("note_creation_date");
-                String filepath = rs.getString("note_path");
-                String title = rs.getString("note_title");
-                int authorId = rs.getInt("user_id");
-                String authorinfo = rs.getString("user_name") + " " + rs.getString("user_surname");
-                Note note = new Note(id, description, creationDate, filepath, title, authorId, authorinfo);
-                notes.add(note);
+            if(rs.next()) {
+                do {
+                    int id = rs.getInt("note_id");
+                    String description = rs.getString("note_description");
+                    Timestamp creationDate = rs.getTimestamp("note_creation_date");
+                    String filepath = rs.getString("note_path");
+                    String title = rs.getString("note_title");
+                    int authorId = rs.getInt("user_id");
+                    String authorinfo = rs.getString("user_name") + " " + rs.getString("user_surname");
+                    Note note = new Note(id, description, creationDate, filepath, title, authorId, authorinfo);
+                    notes.add(note);
+                } while (rs.next());
             }
-
+            else
+                return null;
             return notes;
 
         } catch (SQLException e) {

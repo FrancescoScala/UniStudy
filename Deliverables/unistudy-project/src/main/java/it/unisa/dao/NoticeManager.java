@@ -59,17 +59,19 @@ public class NoticeManager {
             PreparedStatement ps = conn.prepareStatement(querySQL);
             ps.setInt(1, courseId);
             ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                do {
+                    int id = rs.getInt("notice_id");
+                    String title = rs.getString("notice_title");
+                    Timestamp creationDate = rs.getTimestamp("notice_creation_date");
+                    String description = rs.getString("notice_description");
 
-            while (rs.next()) {
-                int id = rs.getInt("notice_id");
-                String title = rs.getString("notice_title");
-                Timestamp creationDate = rs.getTimestamp("notice_creation_date");
-                String description = rs.getString("notice_description");
+                    Notice notice = new Notice(id, title, creationDate, description);
+                    notices.add(notice);
+                } while (rs.next());
 
-                Notice notice = new Notice(id, title, creationDate, description);
-                notices.add(notice);
-            }
-
+            } else
+                return null;
             return notices;
 
         } catch (SQLException e) {

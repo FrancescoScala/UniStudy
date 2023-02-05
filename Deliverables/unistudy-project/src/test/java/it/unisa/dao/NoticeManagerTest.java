@@ -13,8 +13,8 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class NoticeManagerTest {
@@ -101,9 +101,17 @@ class NoticeManagerTest {
     }
 
     @Test
-    void retrieveNoticesByCourseId() {
+    void retrieveNoticesByCourseIdSuccess() {
+        Set<Notice> notices = NoticeManager.retrieveNoticesByCourseId(courseForTesting.getId());
 
+        assertEquals(courseForTesting.getNotices(),notices);
     }
 
 
+    @Test
+    void retrieveNoticesByCourseIdNotValid() {
+        Set<Notice> notices = NoticeManager.retrieveNoticesByCourseId(-2);
+
+        assertNull(notices);
+    }
 }

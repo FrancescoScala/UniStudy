@@ -167,6 +167,6 @@ class NoteManagerTest {
     void retrieveNotesByCourseIdNotValid()
     {
         Set<Note> notes = NoteManager.retrieveNotesByCourseId(-1);
-        assertNotEquals(courseForTesting.getNotes(),notes);
+        assertNull(notes);
     }
 }
