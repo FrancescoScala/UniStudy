@@ -61,9 +61,9 @@ public class NoteManager {
         try {
             Set<Note> notes = new HashSet<Note>();
             String querySQL = "SELECT note_id, note_title, note_description, note_creation_date, note_path, " +
-                    "note.user_id, user_name, user_surname " +
+                    "note.user_id, user.user_id, user_name, user_surname " +
                     "FROM note, user " +
-                    "WHERE course_id=?";
+                    "WHERE course_id=? AND note.user_id=user.user_id";
             PreparedStatement ps = conn.prepareStatement(querySQL);
             ps.setInt(1, courseId);
             ResultSet rs = ps.executeQuery();
