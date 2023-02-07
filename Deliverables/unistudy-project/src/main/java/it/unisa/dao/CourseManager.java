@@ -3,10 +3,7 @@ package it.unisa.dao;
 import it.unisa.beans.*;
 import it.unisa.db.ConnectionPoolDB;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -120,6 +117,45 @@ public class CourseManager {
         } catch (SQLException e) {
             e.printStackTrace();
             return -1;
+        }
+    }
+
+    public static Set<Course> retrieveAll() {
+        try {
+            String querySQL = "SELECT * FROM course";
+            PreparedStatement ps = conn.prepareStatement(querySQL);
+
+            ResultSet rs = ps.executeQuery();
+            Set<Course> courses = new HashSet<Course>();
+            if(rs.next()) {
+                do {
+                    int id = rs.getInt("course_id");
+                    String professors = rs.getString("course_professors");
+                    String schedule = rs.getString("course_schedule");
+                    String title = rs.getString("course_title");
+                    Course course = new Course(id,professors,schedule,title,null,null);
+                    courses.add(course);
+                } while (rs.next());
+            }
+            else
+                return null;
+            return courses;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static boolean deleteCourse(int id) {
+        try {
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM course WHERE course_id=?");
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            ps.close();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }

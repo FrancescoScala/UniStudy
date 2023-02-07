@@ -29,37 +29,31 @@ public class CourseManagerTest {
         Set<Note> notes = new HashSet<Note>();
         Set<Notice> notices = new HashSet<Notice>();
 
-        courseForTesting = new Course(-2, professors,schedule,title,notices,notes);
+        courseForTesting = new Course(-2, professors, schedule, title, notices, notes);
     }
 
     @AfterAll
-    void tearDown() {
-        try {
-            Connection con = ConnectionPoolDB.getConnection();
-            PreparedStatement ps = con.prepareStatement("DELETE FROM course WHERE course_id=?");
-            ps.setInt(1,courseForTesting.getId());
-            ps.executeUpdate();
-            ps.close();
-            con.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    void deleteCourseSuccess() {
+        boolean check = CourseManager.deleteCourse(courseForTesting.getId());
+        assertTrue(check);
     }
+
     @Order(1)
     @Test
     void createCourseSuccess() {
 
-        boolean check = CourseManager.createCourse(courseForTesting.getProfessors(),courseForTesting.getTimeSchedule(),courseForTesting.getTitle());
+        boolean check = CourseManager.createCourse(courseForTesting.getProfessors(), courseForTesting.getTimeSchedule(), courseForTesting.getTitle());
         courseForTesting.setId(CourseManager.retrieveIdCourseByTitle(courseForTesting.getTitle()));
         assertTrue(check);
     }
+
     @Test
     void createCourseTitleAlreadyExisting() {
         String professors = "Andrea De Lucia, Vittorio Scarano";
         String schedule = "Lun 09:00 - 11:00, Gio 15:00 - 18:00";
         String title = "Ingegneria del software";
 
-        boolean check = CourseManager.createCourse(professors,schedule,title);
+        boolean check = CourseManager.createCourse(professors, schedule, title);
         assertFalse(check);
     }
 
@@ -69,7 +63,7 @@ public class CourseManagerTest {
         String schedule = "Lun 09:00 - 11:00, Gio 15:00 - 18:00";
         String title = "Ingegneria del software";
 
-        boolean check = CourseManager.createCourse(professors,schedule,title);
+        boolean check = CourseManager.createCourse(professors, schedule, title);
         assertFalse(check);
     }
 
@@ -79,7 +73,7 @@ public class CourseManagerTest {
         String schedule = "Lun 09:00 - 11:00, Gio 15:00 - 18:00";
         String title = "Ingegneria del software";
 
-        boolean check = CourseManager.createCourse(professors,schedule,title);
+        boolean check = CourseManager.createCourse(professors, schedule, title);
         assertFalse(check);
     }
 
@@ -89,7 +83,7 @@ public class CourseManagerTest {
         String schedule = "";
         String title = "Ingegneria del software";
 
-        boolean check = CourseManager.createCourse(professors,schedule,title);
+        boolean check = CourseManager.createCourse(professors, schedule, title);
         assertFalse(check);
     }
 
@@ -99,7 +93,7 @@ public class CourseManagerTest {
         String schedule = "Lunedì 09:00 - 11:00, Gio 15:00 - 18:00";
         String title = "Ingegneria del software";
 
-        boolean check = CourseManager.createCourse(professors,schedule,title);
+        boolean check = CourseManager.createCourse(professors, schedule, title);
         assertFalse(check);
     }
 
@@ -109,7 +103,7 @@ public class CourseManagerTest {
         String schedule = "Lun 09:00 - 11:00, Gio 15:00 - 18:00";
         String title = "";
 
-        boolean check = CourseManager.createCourse(professors,schedule,title);
+        boolean check = CourseManager.createCourse(professors, schedule, title);
         assertFalse(check);
     }
 
@@ -119,7 +113,7 @@ public class CourseManagerTest {
         String schedule = "Lun 09:00 - 11:00, Gio 15:00 - 18:00";
         String title = "Ingegneria del software!!!";
 
-        boolean check = CourseManager.createCourse(professors,schedule,title);
+        boolean check = CourseManager.createCourse(professors, schedule, title);
         assertFalse(check);
     }
 
@@ -139,7 +133,7 @@ public class CourseManagerTest {
         String schedule = "Lun 09:00 - 11:00, Gio 15:00 - 18:00";
         String title = "Ingegneria del software";
 
-        boolean check = CourseManager.createCourse(professors,schedule,title);
+        boolean check = CourseManager.createCourse(professors, schedule, title);
         assertFalse(check);
     }
 
@@ -149,7 +143,7 @@ public class CourseManagerTest {
         String schedule = "Lun 09:00 - 11:00, Gio 15:00 - 18:00";
         String title = "Ingegneria del software";
 
-        boolean check = CourseManager.createCourse(professors,schedule,title);
+        boolean check = CourseManager.createCourse(professors, schedule, title);
         assertFalse(check);
     }
 
@@ -159,7 +153,7 @@ public class CourseManagerTest {
         String schedule = "";
         String title = "Ingegneria del software";
 
-        boolean check = CourseManager.createCourse(professors,schedule,title);
+        boolean check = CourseManager.createCourse(professors, schedule, title);
         assertFalse(check);
     }
 
@@ -169,7 +163,7 @@ public class CourseManagerTest {
         String schedule = "Lunedì 09:00 - 11:00, Gio 15:00 - 18:00";
         String title = "Ingegneria del software";
 
-        boolean check = CourseManager.createCourse(professors,schedule,title);
+        boolean check = CourseManager.createCourse(professors, schedule, title);
         assertFalse(check);
     }
 
@@ -189,7 +183,7 @@ public class CourseManagerTest {
         Course course = CourseManager.retrieveCourseById(id);
         noticeMock.close();
         noteMock.close();
-        assertEquals(courseForTesting,course);
+        assertEquals(courseForTesting, course);
 
     }
 
@@ -203,15 +197,15 @@ public class CourseManagerTest {
 
     @Test
     void retrieveIdCourseByTitleSuccess() {
-        String title=courseForTesting.getTitle();
+        String title = courseForTesting.getTitle();
         int id = CourseManager.retrieveIdCourseByTitle(title);
-        assertEquals(courseForTesting.getId(),id);
+        assertEquals(courseForTesting.getId(), id);
     }
 
     @Test
     void retrieveIdCourseByTitleNotValid() {
-        String title="Architettura degli elaboratori 2";
+        String title = "Architettura degli elaboratori 2";
         int id = CourseManager.retrieveIdCourseByTitle(title);
-        assertEquals(-1,id);
+        assertEquals(-1, id);
     }
 }
