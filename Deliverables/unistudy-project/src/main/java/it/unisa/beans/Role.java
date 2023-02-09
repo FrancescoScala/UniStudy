@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Role {
 
-    enum RoleType
+    public enum RoleType
     {
         PARTECIPANTE,
         GESTOREUTENTI,

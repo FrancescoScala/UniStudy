@@ -1,5 +1,6 @@
 package it.unisa.control;
 
+import it.unisa.beans.Course;
 import it.unisa.dao.CourseManager;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -13,7 +14,7 @@ import java.io.PrintWriter;
 public class CourseControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        doPost(request, response);
     }
 
     @Override
@@ -22,9 +23,9 @@ public class CourseControl extends HttpServlet {
             case "create":
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
-                boolean check = CourseManager.createCourse(request.getParameter("professors"),request.getParameter("schedule"),request.getParameter("title"));
+                boolean created = CourseManager.createCourse(request.getParameter("professors"),request.getParameter("schedule"),request.getParameter("title"));
                 String mex;
-                if(check) {
+                if(created) {
                     mex = "OK";
                 }
                 else {
@@ -35,19 +36,34 @@ public class CourseControl extends HttpServlet {
                 out.print(json.toString());
                 break;
 
-            case "delete":
-           //     response.setContentType("application/json");
-             //   PrintWriter out1 = response.getWriter();
-
+            case "view":
+                if(request.getParameter("qty").equals("all")) {
+                    response.setContentType("application/json");
+                    PrintWriter out1 = response.getWriter();
+                    JSONObject json1 = new JSONObject();
+                    json1.put("objects", CourseManager.retrieveAll());
+                    System.out.println(json1.toString());
+                    out1.print(json1.toString());
+                }
+                else {
+                    int id = Integer.parseInt(request.getParameter("id"));
+                    Course course = CourseManager.retrieveCourseById(id);
+                    request.setAttribute("course",course);
+                    request.getRequestDispatcher("/partecipante/corso/view_course.jsp?id="+course.getId()+"").forward(request,response);
+                }
                 break;
 
-            case "view":
+            case "delete":
                 response.setContentType("application/json");
-                PrintWriter out1 = response.getWriter();
-                JSONObject json1 = new JSONObject();
-                json1.put("all",CourseManager.retrieveAll());
-                System.out.println(json1.toString());
-            //    out1.print(json1.toString());
+                PrintWriter out2 = response.getWriter();
+                boolean deleted = CourseManager.deleteCourse(Integer.parseInt(request.getParameter("id")));
+                if(deleted)
+                    mex = "OK";
+                else
+                    mex = "Errore nella rimozione del corso. Riprovare.";
+                JSONObject json2 = new JSONObject();
+                json2.put("result",mex);
+                out2.print(json2.toString());
                 break;
 
             default:

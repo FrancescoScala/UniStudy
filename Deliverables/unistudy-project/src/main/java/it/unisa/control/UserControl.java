@@ -42,6 +42,7 @@ public class UserControl extends HttpServlet {
                 RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/partecipante/homepage.jsp"); //homepage.jsp
                 request.getSession().setAttribute("userInSession", user);
                 request.getSession().setAttribute("enrollments", enrollments);
+                System.out.println("enrollments: "+enrollments);
                 dispatcher.forward(request,response);
                 break;
 
