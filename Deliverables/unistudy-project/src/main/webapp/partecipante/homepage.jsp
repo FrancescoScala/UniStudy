@@ -15,14 +15,15 @@
 </a>
 <%
     if (((Set<Enrollment>) session.getAttribute("enrollments")).size() >= 1) {
-        for (Enrollment enrollment : (Set<Enrollment>) request.getAttribute("enrollments")) {
+        for (Enrollment enrollment : (Set<Enrollment>) session.getAttribute("enrollments")) {
 %>
 <form method="post" action="CourseControl">
     <input type="hidden" id="action" name="action" value="view">
     <input type="hidden" id="qty" name="qty" value="single">
-    <input type="hidden" id="id" name="id" value="<%=enrollment.getCourseId()%>">
-    <h2><%=enrollment.getCourseTitle()%>
-    </h2>
+    <input type="hidden" id="id" name="id" value="86">
+    <input type="hidden" id="courseTitle" name="courseTitle" value="Programmazione 3">
+    <h2 >Programmazione 3</h2>
+    <button value="STUDENTE" name="role" type="submit">VISUALIZZA</button>
 </form>
 <%
         }

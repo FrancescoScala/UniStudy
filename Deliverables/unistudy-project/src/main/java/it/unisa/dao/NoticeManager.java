@@ -70,8 +70,7 @@ public class NoticeManager {
                     notices.add(notice);
                 } while (rs.next());
 
-            } else
-                return null;
+            }
             return notices;
 
         } catch (SQLException e) {

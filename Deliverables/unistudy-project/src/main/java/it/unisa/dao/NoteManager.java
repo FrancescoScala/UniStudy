@@ -80,8 +80,6 @@ public class NoteManager {
                     notes.add(note);
                 } while (rs.next());
             }
-            else
-                return null;
             return notes;
 
         } catch (SQLException e) {

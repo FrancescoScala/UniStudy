@@ -33,6 +33,7 @@ public class UserControl extends HttpServlet {
                     // pagina di errore con #throw della exception
                 }
                 Set<Enrollment> enrollments = EnrollmentManager.retrieveEnrollmentsByUserId(user.getId());
+
                 if(enrollments==null)
                 {
                     // pagina di errore con #throw della exception
@@ -42,7 +43,7 @@ public class UserControl extends HttpServlet {
                 RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/partecipante/homepage.jsp"); //homepage.jsp
                 request.getSession().setAttribute("userInSession", user);
                 request.getSession().setAttribute("enrollments", enrollments);
-                System.out.println("enrollments: "+enrollments);
+
                 dispatcher.forward(request,response);
                 break;
 

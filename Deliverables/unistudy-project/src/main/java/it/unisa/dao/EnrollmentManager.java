@@ -54,7 +54,7 @@ public class EnrollmentManager {
     public static Set<Enrollment> retrieveEnrollmentsByUserId(int userId) { // test case not valid...
         try {
             Set<Enrollment> enrollments = new HashSet<Enrollment>();
-            String querySQL1 = "SELECT e.user_id,e.course_id,e.enrollment_type,c.course_title FROM enrollment AS e,course AS c WHERE e.user_id = ?";
+            String querySQL1 = "SELECT e.user_id,e.course_id,e.enrollment_type,c.course_title FROM enrollment AS e,course AS c WHERE e.user_id = ? AND e.course_id=c.course_id";
             PreparedStatement ps1 = conn.prepareStatement(querySQL1);
             ps1.setInt(1, userId);
             ResultSet rs1 = ps1.executeQuery();
