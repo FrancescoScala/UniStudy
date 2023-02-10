@@ -32,10 +32,10 @@
 <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient"
      style="padding-bottom: 0px;margin-top: -20px;">
     <div class="container"><a class="navbar-brand logo" href="/partecipante/my-courses.html"><img class="img-fluid"
-                                                                                                    src="assets/img/UniStudy%20Logo%20-%20White.png"
-                                                                                                    style="padding-right: 0px;"
-                                                                                                    width="232"
-                                                                                                    height="91"></a>
+                                                                                                  src="assets/img/UniStudy%20Logo%20-%20White.png"
+                                                                                                  style="padding-right: 0px;"
+                                                                                                  width="232"
+                                                                                                  height="91"></a>
         <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navbarNav"><span
                 class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -47,7 +47,8 @@
                     <div class="nav-item dropdown show" style="position: relative;padding: 8px;"><a
                             class="dropdown-toggle text-decoration-none" aria-expanded="true" data-bs-toggle="dropdown"
                             href="#"
-                            style="color: var(--bs-navbar-active-color);display: flex;font-weight: bold;backdrop-filter: opacity(1);-webkit-backdrop-filter: opacity(1);"><%=((User) session.getAttribute("userInSession")).getName()%></a>
+                            style="color: var(--bs-navbar-active-color);display: flex;font-weight: bold;backdrop-filter: opacity(1);-webkit-backdrop-filter: opacity(1);"><%=((User) session.getAttribute("userInSession")).getName()%>
+                    </a>
                         <div class="dropdown-menu show" data-bs-popper="none"><a class="dropdown-item"
                                                                                  href="/partecipante/select-role.html">Seleziona
                             permessi</a><a class="dropdown-item" href="#">Logout</a></div>
@@ -88,19 +89,41 @@
                     <div class="card border-0"><a href="#"></a>
                         <form method="post" action="<%=request.getContextPath()%>/CourseControl">
                             <div class="card-body">
-                                <h6><%=enrollment.getCourseTitle()%></h6>
+                                <h6><%=enrollment.getCourseTitle()%>
+                                </h6>
                                 <div>
                                     <input type="hidden" id="action" name="action" value="view">
                                     <input type="hidden" id="qty" name="qty" value="single">
                                     <input type="hidden" id="id" name="id" value="<%=enrollment.getCourseId()%>">
-                                    <input type="hidden" id="courseTitle" name="courseTitle" value="<%=enrollment.getCourseTitle()%>">
-                                    <div class="selectgroup selectgroup-pills"><label class="selectgroup-item"><input
-                                            type="checkbox" name="value" value="HTML" class="selectgroup-input"
-                                            checked/>
-                                        <button value="STUDENTE" name="role" type="submit" class="selectgroup-button">
-                                            Studente
-                                        </button>
-                                    </label>
+                                    <input type="hidden" id="courseTitle" name="courseTitle"
+                                           value="<%=enrollment.getCourseTitle()%>">
+                                    <div class="selectgroup selectgroup-pills">
+                                        <%
+                                            for (Enrollment.EnrollType role : enrollment.getRoles()) {
+                                                if (role.toString().equals("STUDENTE")) {
+                                        %>
+                                        <label class="selectgroup-item"><input
+                                                type="checkbox" name="value" value="HTML" class="selectgroup-input"
+                                                checked/>
+                                            <button value="STUDENTE" name="role" type="submit"
+                                                    class="selectgroup-button">
+                                                Visualizza
+                                            </button>
+                                        </label>
+                                        <%
+                                        } else {
+                                        %>
+                                        <label class="selectgroup-item"><input
+                                                type="checkbox" name="value" value="HTML" class="selectgroup-input"
+                                                checked/>
+                                            <a href="partecipante/corso/gestore/info-modify-course.jsp?id=<%=enrollment.getCourseId()%>" value="GESTORECORSO" type="button"
+                                                    class="selectgroup-button">
+                                                Gestisci
+                                            </a>
+                                        </label>
+                                        <% }
+                                        }
+                                        %>
                                     </div>
                                 </div>
                             </div>

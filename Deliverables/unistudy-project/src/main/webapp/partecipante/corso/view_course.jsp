@@ -1,4 +1,6 @@
-<%@ page import="it.unisa.beans.Course" %><%--
+<%@ page import="it.unisa.beans.Course" %>
+<%@ page import="it.unisa.beans.Notice" %>
+<%@ page import="java.util.Set" %><%--
   Created by IntelliJ IDEA.
   User: francesco
   Date: 08/02/23
@@ -63,7 +65,8 @@
                     <div class="row g-0">
                         <div class="col-md-6">
                             <div class="p-4 p-md-5" style="background: white;margin-bottom: 1px;">
-                                <h1 style="margin-bottom: 20px;color: black;"><%=course.getTitle()%></h1>
+                                <h1 style="margin-bottom: 20px;color: black;"><%=course.getTitle()%>
+                                </h1>
                                 <p class="text-start"><strong>Professori</strong>: <%=course.getProfessors()%>
                                 </p>
                                 <p class="text-start"><strong>Orari</strong>: <%=course.getTimeSchedule()%>
@@ -85,39 +88,27 @@
                 <div class="heading">
                     <h2 class="text-center">avvisi</h2>
                 </div>
+
+                <%
+                    Set<Notice> notices = ((Course) request.getAttribute("course")).getNotices();
+                    for (Notice notice: notices) {
+                %>
+
                 <div class="item">
                     <div class="row">
                         <div class="col-md-6 col-lg-9">
-                            <h3>Cambio professore dalla prossima settimana</h3>
-                            <h4 class="organization">Amazing Co.</h4>
-                        </div>
-                        <div class="col-md-6 col-lg-3"><span class="period">10/ 04/2018</span></div>
-                    </div>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget velit
-                        ultricies, feugiat est sed, efficitur nunc, vivamus vel accumsan dui.</p>
-                </div>
-                <div class="item">
-                    <div class="row">
-                        <div class="col-6 col-lg-9">
-                            <h3>Nuovo orario di lezione in piattaforma</h3>
-                            <h4 class="organization">Innovative Org.</h4>
-                        </div>
-                        <div class="col-md-6 col-lg-3"><span class="period">05/12/2018</span></div>
-                    </div>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget velit
-                        ultricies, feugiat est sed, efficitur nunc, vivamus vel accumsan dui.</p>
-                </div>
-                <div class="item">
-                    <div class="row">
-                        <div class="col-md-6 col-lg-9">
-                            <h3>La lezione di mercoledì è rinviata a data da definire</h3>
+                            <h3><%=notice.getTitle()%>
+                            </h3>
                             <h4 class="organization">Special Inc.</h4>
                         </div>
-                        <div class="col-md-6 col-lg-3"><span class="period">06/11/2018</span></div>
+                        <div class="col-md-6 col-lg-3"><span class="period"><%=notice.getCreationDate()%></span></div>
                     </div>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget velit
-                        ultricies, feugiat est sed, efficitur nunc, vivamus vel accumsan dui.</p>
+                    <p class="text-muted"><%=notice.getDescription()%>
+                    </p>
                 </div>
+
+                <% }
+                %>
             </div>
             <div class="education group">
                 <div class="heading">

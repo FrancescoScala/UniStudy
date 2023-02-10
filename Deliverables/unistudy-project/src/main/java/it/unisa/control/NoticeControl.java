@@ -23,14 +23,29 @@ public class NoticeControl extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         switch (request.getParameter("action")) {
             case "add":
+                System.out.println("SONO NELLO SWITCH iN add\n"+"Titolo: "+request.getParameter("titolo")+" action: "+request.getParameter("action")+
+                        "Id: "+ request.getParameter("id")+ "descrizione: "+ request.getParameter("description"));
+                response.setContentType("application/json");
+                PrintWriter out = response.getWriter();
                 Course course = CourseManager.retrieveCourseById(Integer.parseInt(request.getParameter("id")));
-                NoticeManager.createNotice(request.getParameter("title"),
+                System.out.println(course);
+                boolean check = NoticeManager.createNotice(request.getParameter("title"),
                         new Timestamp(System.currentTimeMillis()),
                         request.getParameter("description"),
                         course); // forse inutile...
-                RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/partecipante/corso/view_course.jsp?id="+course.getId());
-                request.setAttribute("course",course); // forse inutile
-                dispatcher.forward(request,response);
+
+                JSONObject json = new JSONObject();
+                String mex;
+                if(check) {
+                    mex="OK";
+                }
+                else {
+                    mex="AVVISO NON CREATO VERIFICA CHE IL FORMATO DEI DATI SIA CORRETTO";
+                }
+                json.put("result",mex);
+                System.out.println("signup restituisce: "+mex);
+                out.print(json.toString());
+
                 break;
             case "delete":
 
