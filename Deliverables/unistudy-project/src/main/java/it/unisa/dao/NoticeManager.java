@@ -79,4 +79,16 @@ public class NoticeManager {
         }
     }
 
+    public static boolean deleteNotice(int id) { // da testare
+        try {
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM notice WHERE notice_id=?");
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            ps.close();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

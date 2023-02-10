@@ -4,6 +4,8 @@ import it.unisa.beans.Role;
 import it.unisa.beans.User;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
@@ -17,10 +19,11 @@ public class AmministratoreFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
-        User user = (User)request.getAttribute("userInSession");
+        HttpServletRequest request1 = (HttpServletRequest) request;
+        User user = (User)request1.getSession().getAttribute("userInSession");
         for(Role r : user.getRoles())
         {
-            if(r.getRoleName().equals("AMMINISTRATORE"))
+            if(r.getRoleName().toString().equals("AMMINISTRATORE"))
             {
                 chain.doFilter(request, response);
             }

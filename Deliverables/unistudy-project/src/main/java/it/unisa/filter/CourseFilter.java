@@ -18,16 +18,27 @@ public class CourseFilter implements Filter {
         Set<Enrollment> enrollments = (Set<Enrollment>) request1.getSession().getAttribute("enrollments");
          // System.out.println("Enrollments registrati in sessione");
         int id = Integer.parseInt(request1.getParameter("id"));
+        request1.getRequestURI().startsWith(request1.getContextPath()+"/partecipante/corso/");
 
         for (Enrollment enrollment : enrollments) {
             if (enrollment.getCourseId() == id) {
             //    System.out.println("HAI TROVATO IL CORSO");
                 for (Enrollment.EnrollType role : enrollment.getRoles()) {
              //       System.out.println("SONO "+ role +" Cerco"+ request1.getParameter("role"));
-                    if ((role.toString()).equals(request1.getParameter("role"))) {
-            //            System.out.println("Hai il permesso " + request1.getParameter("role"));
-                        chain.doFilter(request, response);
-                        return;
+                    if(request1.getRequestURI().startsWith(request1.getContextPath()+"/partecipante/corso/gestore")) {
+                        if ((role.toString()).equals("GESTORECORSO")) {
+                            //            System.out.println("Hai il permesso " + request1.getParameter("role"));
+                            chain.doFilter(request, response);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        if ((role.toString()).equals("STUDENTE")) {
+                            //            System.out.println("Hai il permesso " + request1.getParameter("role"));
+                            chain.doFilter(request, response);
+                            return;
+                        }
                     }
                 }
             }

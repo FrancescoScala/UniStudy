@@ -87,4 +87,17 @@ public class NoteManager {
             return null;
         }
     }
+
+    public static boolean deleteNote(int id) { // da testare
+        try {
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM note WHERE note_id=?");
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            ps.close();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

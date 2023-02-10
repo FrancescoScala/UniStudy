@@ -26,8 +26,10 @@ public class CourseControl extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         switch (request.getParameter("action")) {
             case "create":
+                System.out.println("Creo il corso");
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
+                System.out.println("Parametri passati: "+request.getParameter("professors")+request.getParameter("schedule")+request.getParameter("title"));
                 boolean created = CourseManager.createCourse(request.getParameter("professors"), request.getParameter("schedule"), request.getParameter("title"));
                 String mex;
                 if (created) {
