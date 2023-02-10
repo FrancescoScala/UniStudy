@@ -6,10 +6,7 @@ import it.unisa.beans.Notice;
 import it.unisa.db.ConnectionPoolDB;
 import org.junit.jupiter.api.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,7 +26,6 @@ class NoticeManagerTest {
         String title = "Ingegneria del software";
         Set<Note> notes = new HashSet<Note>();
         Set<Notice> notices = new HashSet<Notice>();
-
         courseForTesting = new Course(-2, professors,schedule,title,notices,notes);
         CourseManager.createCourse(courseForTesting.getProfessors(),courseForTesting.getTimeSchedule(),courseForTesting.getTitle());
         courseForTestingId = CourseManager.retrieveIdCourseByTitle(courseForTesting.getTitle());

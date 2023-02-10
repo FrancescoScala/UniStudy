@@ -97,7 +97,7 @@
               <li><a href="info-modify-course.html?id=<%=request.getParameter("id")%>">Modifica info corso</a></li>
               <li><a class="active" href="publish-alert.jsp?id=<%=request.getParameter("id")%>">Pubblica avviso</a></li>
               <li><a href="modify-alert.html?id=<%=request.getParameter("id")%>">Modifica avviso</a></li>
-              <li><a href="remove-alert.html?id=<%=request.getParameter("id")%>">Rimuovi avviso</a></li>
+              <li><a href="<%=request.getContextPath()%>/NoticeControl?action=view&id=<%=request.getParameter("id")%>">Rimuovi avviso</a></li>
               <li><a href="remove-note.html?id=<%=request.getParameter("id")%>">Rimuovi appunto</a></li>
             </ul>
           </div>

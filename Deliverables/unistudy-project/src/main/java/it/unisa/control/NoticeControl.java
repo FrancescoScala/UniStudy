@@ -1,6 +1,7 @@
 package it.unisa.control;
 
 import it.unisa.beans.Course;
+import it.unisa.beans.Notice;
 import it.unisa.dao.CourseManager;
 import it.unisa.dao.NoticeManager;
 import jakarta.servlet.*;
@@ -11,12 +12,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
+import java.util.Set;
 
 @WebServlet(name = "NoticeControl", value = "/NoticeControl")
 public class NoticeControl extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        doPost(request, response);
     }
 
     @Override
@@ -47,9 +49,17 @@ public class NoticeControl extends HttpServlet {
                 out.print(json.toString());
 
                 break;
-            case "delete":
-
+            case "view":
+                Set<Notice> notices = NoticeManager.retrieveNoticesByCourseId(Integer.parseInt(request.getParameter("id")));
+                System.out.println(notices);
+                RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/partecipante/corso/gestore/remove-alert.jsp?id="+request.getParameter("id"));
+                request.setAttribute("notices", notices);
+                dispatcher.forward(request,response);
                 break;
+            case "delete":
+                System.out.println("delete");
+                break;
+
             default:
                 // pagina 404
         }
