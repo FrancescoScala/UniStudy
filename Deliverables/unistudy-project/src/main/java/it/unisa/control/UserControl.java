@@ -68,6 +68,15 @@ public class UserControl extends HttpServlet {
                 out.print(json.toString());
                 break;
 
+            case "logout":
+                System.out.println("Sono in logout");
+                request.getSession().removeAttribute("userInSession");
+                request.getSession().removeAttribute("enrollments");
+                System.out.println(request.getContextPath());
+                RequestDispatcher dispatcher1 = this.getServletContext().getRequestDispatcher("/login.jsp");
+                dispatcher1.forward(request,response);
+                break;
+
             default:
                 // pagina 404
         }
