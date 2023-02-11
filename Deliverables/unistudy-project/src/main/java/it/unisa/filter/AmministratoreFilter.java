@@ -20,7 +20,7 @@ public class AmministratoreFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
         HttpServletRequest request1 = (HttpServletRequest) request;
-        User user = (User)request1.getSession().getAttribute("userInSession");
+        User user = (User)request1.getSession(false).getAttribute("userInSession");
         for(Role r : user.getRoles())
         {
             if(r.getRoleName().toString().equals("AMMINISTRATORE"))

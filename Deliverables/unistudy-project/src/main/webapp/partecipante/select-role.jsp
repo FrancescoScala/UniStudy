@@ -1,10 +1,18 @@
-<!DOCTYPE html>
+<%@ page import="it.unisa.beans.User" %>
+<%@ page import="it.unisa.beans.Role" %><%--
+  Created by IntelliJ IDEA.
+  User: francesco
+  Date: 10/02/23
+  Time: 22:56
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Hire me - Brand</title>
+    <title>Seleziona permesso</title>
     <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;display=swap">
     <link rel="stylesheet" href="../assets/css/-Login-form-Page-BS4--Login-form-Page-BS4.css">
@@ -16,36 +24,6 @@
     <link rel="stylesheet" href="../assets/css/Search-Input-Responsive-with-Icon.css">
     <link rel="stylesheet" href="../assets/css/Sidebar-Menu-sidebar.css">
     <link rel="stylesheet" href="../assets/css/Sidebar-Menu.css">
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-
-            $("#createCourseButton").click(chiamaControl);
-
-            function chiamaControl() {
-
-                var jqxhr = $.post("<%=request.getContextPath()%>/CourseControl",
-                    {
-                        "action": $("#action").val(),
-                        "title": $("#title").val(),
-                        "professors": $("#professors").val(),
-                        "schedule": $("#schedule").val()
-                    },
-                    function (data) {
-                        var success = "\"OK\"";
-                        var result = (JSON.stringify(data.result)).localeCompare(success);
-
-                        if (result == 0) {
-                            $("#mex").html("Aggiunta effettuata");
-                        } else {
-                            $("#mex").html(data.result);
-                        }
-                    });
-            }
-
-        });
-    </script>
-
 </head>
 
 <body>
@@ -68,7 +46,8 @@
                             class="dropdown-toggle text-decoration-none" aria-expanded="true" data-bs-toggle="dropdown"
                             href="#"
                             style="color: var(--bs-navbar-active-color);display: flex;font-weight: bold;backdrop-filter: opacity(1);-webkit-backdrop-filter: opacity(1);">NomeUtente</a>
-                        <div class="dropdown-menu show" data-bs-popper="none"><a class="dropdown-item" href="#">Seleziona
+                        <div class="dropdown-menu show" data-bs-popper="none"><a class="dropdown-item"
+                                                                                 href="../partecipante/select-role.html">Seleziona
                             permessi</a><a class="dropdown-item" href="#">Logout</a></div>
                     </div>
                 </li>
@@ -76,49 +55,51 @@
         </div>
     </div>
 </nav>
-<main class="page hire-me-page">
-    <section class="portfolio-block hire-me" style="padding-top: 0px;">
-        <section class="portfolio-block projects-with-sidebar" style="padding-top: 0px;">
-            <div class="container">
-                <div class="heading"></div>
-                <div class="row">
-                    <div class="col-md-3">
-                        <ul class="list-unstyled fs-5 sidebar">
-                            <li><a class="active" href="add-course.html">Aggiungi corso</a></li>
-                            <li><a href="delete-course.html">Rimuovi corso</a></li>
-                            <li></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-9">
-                        <div class="row">
-                            <div class="col" style="padding-left: 0px;padding-right: 0px;">
-                                <h3><span id="mex"></span></h3>
-                                <form method="post" onSubmit="return false;">
-                                    <input type="hidden" id="action" name="action" value="create">
-                                    <h2 style="margin-bottom: 30px;">Aggiungi corso</h2>
-                                    <div class="mb-3"><label class="form-label" for="title">Titolo</label><input
-                                            class="form-control" name="title" id="title"></div>
-                                    <div class="mb-3"><label class="form-label" for="schedule">Orario</label><input
-                                            class="form-control" name="schedule" id="schedule"></div>
-                                    <div class="mb-3"><label class="form-label"
-                                                             for="professors">Professori</label><input
-                                            class="form-control" name="professors" id="professors"></div>
-                                    <div class="mb-3">
-                                        <div class="row">
-                                            <div class="col-md-12 col-xl-12 justify-content-center button">
-                                                <button id="createCourseButton" class="btn btn-primary d-block w-100"
-                                                        type="submit">Conferma
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
+<main class="page projects-page">
+    <section class="portfolio-block projects-cards" style="padding-top: 0px;padding-bottom: 0px;">
+        <div class="container">
+            <div class="heading"></div>
+            <div class="row">
+                <div class="col-md-6 col-lg-12">
+                    <div class="card border-0"><a href="#"></a>
+                        <div class="card-body">
+                            <h3><a href="#">Seleziona uno fra i tuoi permessi</a></h3>
+                            <div>
+
+                                <div class="selectgroup selectgroup-pills">
+                                    <%
+                                        for (Role role : ((User) request.getSession().getAttribute("userInSession")).getRoles()) {
+                                            if (role.getRoleName().toString().equals("AMMINISTRATORE")) {
+                                    %>
+                                    <label class="selectgroup-item"><input
+                                            type="checkbox" name="value" value="HTML" class="selectgroup-input"
+                                            checked/><span class="selectgroup-button">Partecipante</span></label>
+                                    <%
+                                        }
+                                        if (role.getRoleName().toString().equals("GESTOREUTENTI")) {
+                                    %>
+                                    <label
+                                            class="selectgroup-item"><input type="checkbox" name="value" value="CSS"
+                                                                            class="selectgroup-input"/><span
+                                            class="selectgroup-button">Gestore utenti</span></label>
+                                    <%
+                                        }
+                                        if (role.getRoleName().toString().equals("AMMINISTRATORE")) {
+                                    %>
+                                    <label class="selectgroup-item"><input type="checkbox" name="value" value="CSS"
+                                                                           class="selectgroup-input"/><span
+                                            class="selectgroup-button">Amministratore</span></label>
+                                    <%
+                                            }
+                                        }
+                                    %>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     </section>
 </main>
 <footer class="page-footer"><img class="img-fluid"

@@ -13,7 +13,7 @@ public class PartecipanteFilter implements Filter {
         HttpServletRequest request1 = (HttpServletRequest) request;
         try {
             System.out.println(request1.getSession(false).getAttribute("userInSession"));
-            if (request1.getSession().getAttribute("userInSession") != null) {
+            if (request1.getSession(false).getAttribute("userInSession") != null) {
                 System.out.println("Utente registrato in sessione");
                 chain.doFilter(request, response);
             }

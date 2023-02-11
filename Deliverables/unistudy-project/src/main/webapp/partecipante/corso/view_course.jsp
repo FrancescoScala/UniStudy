@@ -1,6 +1,8 @@
 <%@ page import="it.unisa.beans.Course" %>
 <%@ page import="it.unisa.beans.Notice" %>
-<%@ page import="java.util.Set" %><%--
+<%@ page import="java.util.Set" %>
+<%@ page import="it.unisa.beans.Note" %>
+<%@ page import="it.unisa.beans.User" %><%--
   Created by IntelliJ IDEA.
   User: francesco
   Date: 08/02/23
@@ -13,7 +15,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>CV - Brand</title>
+    <title>Pagina del corso</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;display=swap">
     <link rel="stylesheet" href="assets/css/-Login-form-Page-BS4--Login-form-Page-BS4.css">
@@ -88,12 +90,10 @@
                 <div class="heading">
                     <h2 class="text-center">avvisi</h2>
                 </div>
-
                 <%
                     Set<Notice> notices = ((Course) request.getAttribute("course")).getNotices();
-                    for (Notice notice: notices) {
+                    for (Notice notice : notices) {
                 %>
-
                 <div class="item">
                     <div class="row">
                         <div class="col-md-6 col-lg-9">
@@ -106,7 +106,6 @@
                     <p class="text-muted"><%=notice.getDescription()%>
                     </p>
                 </div>
-
                 <% }
                 %>
             </div>
@@ -114,55 +113,53 @@
                 <div class="heading">
                     <h2 class="text-center">appunti</h2>
                 </div>
+                <%
+                    Set<Note> notes = ((Course) request.getAttribute("course")).getNotes();
+                    for (Note note : notes) {
+                %>
                 <div class="item">
                     <div class="row">
                         <div class="col-md-6 col-lg-9">
-                            <h3>Cos'è il middleware</h3>
-                            <h4 class="organization">Mario Rossi</h4>
+                            <h3><%=note.getTitle()%>
+                            </h3>
+                            <h4 class="organization"><%=note.getAuthorInfo()%>
+                            </h4>
                         </div>
                         <div class="col-md-6 col-lg-3">
                             <div class="table-responsive border-primary" style="padding-right: 0px;">
+                                <%if ((((User) request.getSession().getAttribute("userInSession")).getId()) == note.getAuthorId()) {%>
                                 <table class="table">
                                     <tbody>
                                     <tr>
-                                        <td><a class="text-decoration-none" href="#" style="color: var(--bs-red);">Rimuovi</a>
-                                        </td>
+                                        <form method="post" action="NoteControl">
+                                            <input type="hidden" name="action" value="delete">
+                                            <input type="hidden" name="id" value="<%=course.getId()%>">
+                                            <input type="hidden" name="noteId" value="<%=note.getId()%>">
+                                            <input type="hidden" name="noteAuthorId" value="<%=note.getAuthorId()%>">
+                                            <td>
+                                                <button type="submit"
+                                                        style="color: var(--bs-red);">Rimuovi
+                                                </button>
+                                            </td>
+                                        </form>
                                     </tr>
                                     <tr></tr>
                                     </tbody>
                                 </table>
+                                <%}%>
                             </div>
-                            <span class="period">06/11/2018</span>
+                            <span class="period"><%=note.getCreationDate()%></span>
                         </div>
                     </div>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget velit
-                        ultricies, feugiat est sed, efficitur nunc, vivamus vel accumsan dui.</p>
+                    <p class="text-muted"><%=note.getDescription()%>
+                    </p>
                 </div>
-                <div class="item">
-                    <div class="row">
-                        <div class="col-md-6 col-lg-9">
-                            <h3>Introduction to Java EE</h3>
-                            <h4 class="organization">Pinco Pallino</h4>
-                        </div>
-                        <div class="col-md-6 col-lg-3"><span class="period">06/11/2018</span></div>
-                    </div>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget velit
-                        ultricies, feugiat est sed, efficitur nunc, vivamus vel accumsan dui.</p>
-                </div>
-                <div class="item">
-                    <div class="row">
-                        <div class="col-md-6 col-lg-9">
-                            <h3>Esercizi sui Socket dal laboratorio di lunedì</h3>
-                            <h4 class="organization">Luigi Silvestre</h4>
-                        </div>
-                        <div class="col-md-6 col-lg-3"><span class="period">06/11/2018</span></div>
-                    </div>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget velit
-                        ultricies, feugiat est sed, efficitur nunc, vivamus vel accumsan dui.</p>
-                </div>
+                <% }
+                %>
             </div>
             <div class="row" style="text-align: center;">
-                <div class="col"><a class="btn btn-primary btn-lg me-2" role="button" href="#"
+                <div class="col"><a class="btn btn-primary btn-lg me-2" role="button"
+                                    href="partecipante/corso/studente/publish-note.jsp?id=<%=course.getId()%>"
                                     style="background: rgb(32,201,151);">Aggiungi un nuovo appunto</a></div>
             </div>
         </div>

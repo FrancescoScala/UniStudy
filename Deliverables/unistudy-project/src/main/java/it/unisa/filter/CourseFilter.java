@@ -15,7 +15,7 @@ public class CourseFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
     //    System.out.println("SONO IN COURSE FILTER");
         HttpServletRequest request1 = (HttpServletRequest) request;
-        Set<Enrollment> enrollments = (Set<Enrollment>) request1.getSession().getAttribute("enrollments");
+        Set<Enrollment> enrollments = (Set<Enrollment>) request1.getSession(false).getAttribute("enrollments");
          // System.out.println("Enrollments registrati in sessione");
         int id = Integer.parseInt(request1.getParameter("id"));
         request1.getRequestURI().startsWith(request1.getContextPath()+"/partecipante/corso/");

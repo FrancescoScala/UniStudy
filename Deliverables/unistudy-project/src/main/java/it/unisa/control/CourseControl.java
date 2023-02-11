@@ -50,6 +50,16 @@ public class CourseControl extends HttpServlet {
                     json1.put("objects", CourseManager.retrieveAll());
                     System.out.println(json1.toString());
                     out1.print(json1.toString());
+                }
+                else if (request.getParameter("qty").equals("one")) {
+                    response.setContentType("application/json");
+                    PrintWriter out1 = response.getWriter();
+                    JSONObject json1 = new JSONObject();
+                    Set<Course> course = new HashSet<>();
+                    course.add(CourseManager.retrieveCourseById(Integer.parseInt(request.getParameter("id"))));
+                    json1.put("course", course);
+                    System.out.println(json1.toString());
+                    out1.print(json1.toString());
                 } else {
                     int id = Integer.parseInt(request.getParameter("id"));
                     Course course = CourseManager.retrieveCourseById(id);
@@ -85,6 +95,25 @@ public class CourseControl extends HttpServlet {
                         request.getParameter("id") + "").forward(request, response);
                 break;
 
+            case "modify":
+                System.out.println("Sono in modify info course");
+                response.setContentType("application/json");
+                PrintWriter out3 = response.getWriter();
+                System.out.println("Eseguo la retrieve su courseId: "+request.getParameter("id"));
+                Course course1 = CourseManager.retrieveCourseById(Integer.parseInt(request.getParameter("id")));
+                System.out.println(course1+request.getParameter("schedule")+request.getParameter("professors"));
+                boolean check = CourseManager.modifyInfoCourse(course1,
+                        request.getParameter("professors"),
+                        request.getParameter("schedule"));
+                if (true)
+                    mex = "OK";
+                else
+                    mex = "Errore nella modifica delle info del corso. Riprovare.";
+                JSONObject json3 = new JSONObject();
+                System.out.println(mex);
+                json3.put("result", mex);
+                out3.print(json3.toString());
+                break;
             default:
                 // pagina 404
         }

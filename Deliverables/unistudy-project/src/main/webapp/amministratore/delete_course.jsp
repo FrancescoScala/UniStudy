@@ -40,11 +40,11 @@
                         "qty": "all"
                     },
                     function (data) {
-                        let objects = data.objects;
-                        for (let i = 0; i < objects.length; i++) {
-                            let object = objects[i];
-                            $("#courses").append("<option value=" + object["id"] + ">" + object["title"] + "</option>");
-                        }
+                            let objects = data.objects;
+                            for (let i = 0; i < objects.length; i++) {
+                                let object = objects[i];
+                                $("#courses").append("<option value=" + object["id"] + ">" + object["title"] + "</option>");
+                            }
                     });
             }
 

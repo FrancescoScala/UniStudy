@@ -1,0 +1,81 @@
+package it.unisa.control;
+
+import it.unisa.beans.Course;
+import it.unisa.beans.Note;
+import it.unisa.beans.User;
+import it.unisa.dao.CourseManager;
+import it.unisa.dao.NoteManager;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.*;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Timestamp;
+
+@WebServlet(name = "NoteControl", value = "/NoteControl")
+public class NoteControl extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doPost(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        switch (request.getParameter("action")){
+            case "add":
+                response.setContentType("application/json");
+                PrintWriter out = response.getWriter();
+                Course course = CourseManager.retrieveCourseById(Integer.parseInt(request.getParameter("id")));
+                User author = (User) request.getSession().getAttribute("userInSession");
+                System.out.println("Dati arrivati a addNote: "+
+                        request.getParameter("description")+
+                        request.getParameter("title")+
+                        author.getId()+
+                        author.getName()+author.getSurname()+
+                        course);
+
+                boolean check = NoteManager.createNote(request.getParameter("description"),
+                        new Timestamp(System.currentTimeMillis()),
+                        "/ciao/filepath.img",
+                        request.getParameter("title"),
+                        author.getId(),
+                        author.getName()+" "+author.getSurname(),
+                        course);
+                String mex;
+                if(check) {
+                    mex = "OK";
+                }
+                else {
+                    mex = "Aggiunta nota fallita. Reinsirisci i dati nel formato errato corretto e riprova";
+                }
+                JSONObject json = new JSONObject();
+                json.put("result",mex);
+                System.out.println("addNote restituisce: "+mex);
+                out.print(json.toString());
+                break;
+
+            case "delete":
+                User user = (User) request.getSession().getAttribute("userInSession");
+                int noteAuthorId = Integer.parseInt(request.getParameter("noteAuthorId"));
+                if (((User) request.getSession().getAttribute("userInSession")).getId() == noteAuthorId) {
+                    boolean checkDelete = NoteManager.deleteNote(Integer.parseInt(request.getParameter("noteId")));
+                    if(checkDelete)
+                    {
+                        int id = Integer.parseInt(request.getParameter("id"));
+                        Course course1 = CourseManager.retrieveCourseById(id);
+                        request.setAttribute("course", course1);
+                        request.getRequestDispatcher("/partecipante/corso/view_course.jsp?id=" + course1.getId() + "").forward(request, response);
+                    }
+                    // else pagina di errore
+                }
+                break;
+
+            case "view":
+
+                break;
+            default:
+        }
+    }
+}

@@ -94,7 +94,7 @@
         <div class="row">
           <div class="col-md-3">
             <ul class="list-unstyled fs-5 sidebar">
-              <li><a href="info-modify-course.html?id=<%=request.getParameter("id")%>">Modifica info corso</a></li>
+              <li><a href="info-modify-course.jsp?id=<%=request.getParameter("id")%>">Modifica info corso</a></li>
               <li><a class="active" href="publish-alert.jsp?id=<%=request.getParameter("id")%>">Pubblica avviso</a></li>
               <li><a href="modify-alert.html?id=<%=request.getParameter("id")%>">Modifica avviso</a></li>
               <li><a href="<%=request.getContextPath()%>/NoticeControl?action=view&id=<%=request.getParameter("id")%>">Rimuovi avviso</a></li>
