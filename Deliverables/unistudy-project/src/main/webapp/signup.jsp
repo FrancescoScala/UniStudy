@@ -84,7 +84,7 @@
                             class="form-control" id="password" type="password" required="" name="password"></div>
                     <button id="signupButton" class="btn btn-info mt-2" type="submit">Sign up</button>
                 </form>
-                <p class="mt-3 mb-0"><a class="text-info small" href="login.html">Già registrato? Clicca qui per
+                <p class="mt-3 mb-0"><a class="text-info small" href="<%=request.getContextPath()%>/login.jsp">Già registrato? Clicca qui per
                     accedere</a></p>
             </div>
         </div>

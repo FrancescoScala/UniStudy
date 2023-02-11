@@ -38,22 +38,20 @@
                 class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/CourseControl?action=view&qty=all-objects">Tutti i corsi</a></li>
-                <li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/partecipante/homepage.jsp">I miei corsi</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Modifica info
-                    personali</a></li>
-                <li class="nav-item">
-                    <div class="nav-item dropdown show" style="position: relative;padding: 8px;"><a
-                            class="dropdown-toggle text-decoration-none" aria-expanded="true" data-bs-toggle="dropdown"
-                            href="#"
-                            style="color: var(--bs-navbar-active-color);display: flex;font-weight: bold;backdrop-filter: opacity(1);-webkit-backdrop-filter: opacity(1);"><%=((User) session.getAttribute("userInSession")).getName()%>
-                    </a>
-                        <div class="dropdown-menu show" data-bs-popper="none"><a class="dropdown-item"
-                                                                                 href="<%=request.getContextPath()%>/partecipante/select-role.jsp">Seleziona
-                            permessi</a><a class="dropdown-item" href="<%=request.getContextPath()%>/UserControl?action=logout">Logout</a></div>
-                    </div>
-                </li>
-            </ul>
+            <li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/CourseControl?action=view&qty=all-objects">Tutti i corsi</a></li>
+            <li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/partecipante/homepage.jsp">I miei corsi</a></li>
+            <li class="nav-item">
+                <div class="nav-item dropdown show" style="position: relative;padding: 8px;"><a
+                        class="dropdown-toggle text-decoration-none" aria-expanded="true" data-bs-toggle="dropdown"
+                        href="#"
+                        style="color: var(--bs-navbar-active-color);display: flex;font-weight: bold;backdrop-filter: opacity(1);-webkit-backdrop-filter: opacity(1);"><%=((User) session.getAttribute("userInSession")).getName()%>
+                </a>
+                    <div class="dropdown-menu" data-bs-popper="none"><a class="dropdown-item"
+                                                                        href="<%=request.getContextPath()%>/partecipante/select-role.jsp">Seleziona
+                        permessi</a><a class="dropdown-item" href="<%=request.getContextPath()%>/UserControl?action=logout">Logout</a></div>
+                </div>
+            </li>
+        </ul>
         </div>
     </div>
 </nav>
