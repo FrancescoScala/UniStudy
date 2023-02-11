@@ -31,7 +31,7 @@
 <body>
 <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient"
      style="padding-bottom: 0px;margin-top: -20px;">
-    <div class="container"><a class="navbar-brand logo" href="/partecipante/my-courses.html"><img class="img-fluid"
+    <div class="container"><a class="navbar-brand logo" href="<%=request.getContextPath()%>/partecipante/homepage.jsp"><img class="img-fluid"
                                                                                                   src="<%=request.getContextPath()%>/assets/img/UniStudy%20Logo%20-%20White.png"
                                                                                                   style="padding-right: 0px;"
                                                                                                   width="232"
@@ -40,8 +40,9 @@
                 class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="my-courses.html">I miei corsi</a></li>
-                <li class="nav-item"><a class="nav-link" href="/partecipante/info-modify.html">Modifica info
+                <li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/CourseControl?action=view&qty=all-objects">Tutti i corsi</a></li>
+                <li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/partecipante/homepage.jsp">I miei corsi</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Modifica info
                     personali</a></li>
                 <li class="nav-item">
                     <div class="nav-item dropdown show" style="position: relative;padding: 8px;"><a
@@ -49,9 +50,9 @@
                             href="#"
                             style="color: var(--bs-navbar-active-color);display: flex;font-weight: bold;backdrop-filter: opacity(1);-webkit-backdrop-filter: opacity(1);"><%=((User) session.getAttribute("userInSession")).getName()%>
                     </a>
-                        <div class="dropdown-menu show" data-bs-popper="none"><a class="dropdown-item"
+                        <div class="dropdown-menu" data-bs-popper="none"><a class="dropdown-item"
                                                                                  href="<%=request.getContextPath()%>/partecipante/select-role.jsp">Seleziona
-                            permessi</a><a class="dropdown-item" href="#">Logout</a></div>
+                            permessi</a><a class="dropdown-item" href="<%=request.getContextPath()%>/UserControl?action=logout">Logout</a></div>
                     </div>
                 </li>
             </ul>
@@ -60,22 +61,6 @@
 </nav>
 <main class="page projects-page">
     <section class="portfolio-block projects-cards">
-        <div class="row">
-            <div class="col-md-10 col-xxl-10 offset-md-1" style="padding-bottom: 20px;">
-                <div class="card border-0 m-auto" style="max-width: 850px;padding-bottom: 0px;">
-                    <div class="card-body" style="padding-top: 16px;margin-bottom: 22px;">
-                        <form class="d-flex align-items-center"><i
-                                class="fas fa-search d-none d-sm-block h4 text-body m-0"></i><input
-                                class="form-control form-control-lg flex-shrink-1 form-control-borderless" type="search"
-                                placeholder="Ricerca corsi" name="searchbar">
-                            <button class="btn btn-success btn-lg" type="submit" style="background: var(--bs-purple);">
-                                Cerca
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="container">
             <div class="heading">
                 <h2>I miei corsi</h2>

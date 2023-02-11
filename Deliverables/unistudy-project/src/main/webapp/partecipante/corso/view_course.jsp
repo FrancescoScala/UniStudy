@@ -33,26 +33,34 @@
 <%Course course = (Course) request.getAttribute("course");%>
 <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient"
      style="padding-bottom: 0px;margin-top: -20px;">
-    <div class="container"><a class="navbar-brand logo" href="../partecipante/my-courses.html"><img class="img-fluid"
-                                                                                                    src="assets/img/UniStudy%20Logo%20-%20White.png"
-                                                                                                    style="padding-right: 0px;"
-                                                                                                    width="232"
-                                                                                                    height="91"></a>
+    <div class="container"><a class="navbar-brand logo"
+                              href="<%=request.getContextPath()%>/partecipante/homepage.jsp"><img class="img-fluid"
+                                                                                                  src="<%=request.getContextPath()%>/assets/img/UniStudy%20Logo%20-%20White.png"
+                                                                                                  style="padding-right: 0px;"
+                                                                                                  width="232"
+                                                                                                  height="91"></a>
         <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navbarNav"><span
                 class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="my-courses.html">I miei corsi</a></li>
-                <li class="nav-item"><a class="nav-link" href="../partecipante/info-modify.html">Modifica info
+                <li class="nav-item"><a class="nav-link"
+                                        href="<%=request.getContextPath()%>/CourseControl?action=view&qty=all-objects">Tutti
+                    i corsi</a></li>
+                <li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/partecipante/homepage.jsp">I
+                    miei corsi</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Modifica info
                     personali</a></li>
                 <li class="nav-item">
                     <div class="nav-item dropdown show" style="position: relative;padding: 8px;"><a
                             class="dropdown-toggle text-decoration-none" aria-expanded="true" data-bs-toggle="dropdown"
                             href="#"
-                            style="color: var(--bs-navbar-active-color);display: flex;font-weight: bold;backdrop-filter: opacity(1);-webkit-backdrop-filter: opacity(1);">NomeUtente</a>
+                            style="color: var(--bs-navbar-active-color);display: flex;font-weight: bold;backdrop-filter: opacity(1);-webkit-backdrop-filter: opacity(1);"><%=((User) session.getAttribute("userInSession")).getName()%>
+                    </a>
                         <div class="dropdown-menu show" data-bs-popper="none"><a class="dropdown-item"
-                                                                                 href="../partecipante/select-role.html">Seleziona
-                            permessi</a><a class="dropdown-item" href="#">Logout</a></div>
+                                                                                 href="<%=request.getContextPath()%>/partecipante/select-role.jsp">Seleziona
+                            permessi</a><a class="dropdown-item"
+                                           href="<%=request.getContextPath()%>/UserControl?action=logout">Logout</a>
+                        </div>
                     </div>
                 </li>
             </ul>
@@ -66,17 +74,24 @@
                 <div class="bg-dark border rounded border-0 border-dark overflow-hidden; bg-white">
                     <div class="row g-0">
                         <div class="col-md-6">
-                            <div class="p-4 p-md-5" style="background: white;margin-bottom: 1px;">
-                                <h1 style="margin-bottom: 20px;color: black;"><%=course.getTitle()%>
-                                </h1>
-                                <p class="text-start"><strong>Professori</strong>: <%=course.getProfessors()%>
-                                </p>
-                                <p class="text-start"><strong>Orari</strong>: <%=course.getTimeSchedule()%>
-                                </p>
-                                <div class="my-3"><a class="btn btn-primary btn-lg me-2" role="button" href="#">Disiscrivimi</a>
+                            <form method="post" action="CourseControl">
+                                <div class="p-4 p-md-5" style="background: white;margin-bottom: 1px;">
+                                    <h1 style="margin-bottom: 20px;color: black;"><%=course.getTitle()%>
+                                    </h1>
+                                    <p class="text-start"><strong>Professori</strong>: <%=course.getProfessors()%>
+                                    </p>
+                                    <p class="text-start"><strong>Orari</strong>: <%=course.getTimeSchedule()%>
+                                    </p>
+                                    <input type="hidden" name="action" value="delete-enroll">
+                                    <input type="hidden" name="id" value="<%=course.getId()%>">
+                                    <div class="my-3">
+                                        <button class="btn btn-primary btn-lg me-2" type="submit">Disiscrivimi</button>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
+
                         </div>
+
                         <div class="col-md-6 order-first order-md-last" style="min-height: 250px;"><img
                                 class="w-100 h-100 fit-cover" src="assets/img/nature/image2.jpg"></div>
                     </div>
