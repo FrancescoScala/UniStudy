@@ -81,4 +81,26 @@ public class EnrollmentManager {
             return null;
         }
     }
+
+    public static boolean deleteEnrollment(int userId, int courseId, boolean isGestore) // da testare
+    {
+        try {
+            PreparedStatement ps;
+            if(!isGestore) {
+                ps = conn.prepareStatement("DELETE FROM enrollment WHERE course_id=? AND user_id=?");
+
+            }
+            else {
+                ps = conn.prepareStatement("UPDATE unistudydb.enrollment t SET t.enrollment_type = 'GESTORECORSO' WHERE t.course_id =? AND t.user_id =?");
+            }
+            ps.setInt(1, courseId);
+            ps.setInt(2, userId);
+            ps.executeUpdate();
+            ps.close();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
