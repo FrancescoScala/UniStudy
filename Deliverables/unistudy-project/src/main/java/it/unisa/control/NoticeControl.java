@@ -49,6 +49,7 @@ public class NoticeControl extends HttpServlet {
                 out.print(json.toString());
 
                 break;
+
             case "view":
                 Set<Notice> notices = NoticeManager.retrieveNoticesByCourseId(Integer.parseInt(request.getParameter("id")));
                 System.out.println(notices);
@@ -56,8 +57,19 @@ public class NoticeControl extends HttpServlet {
                 request.setAttribute("notices", notices);
                 dispatcher.forward(request,response);
                 break;
+
             case "delete":
-                System.out.println("delete");
+                System.out.println("Sono in delete notice");
+                System.out.println("Parametri ricevuti: "+request.getParameter("noticeId")+" "+request.getParameter("id"));
+                boolean checkDelete = NoticeManager.deleteNotice(Integer.parseInt(request.getParameter("noticeId")));
+                if(checkDelete)
+                {
+                    int id = Integer.parseInt(request.getParameter("id"));
+                    Set<Notice> notices1 = NoticeManager.retrieveNoticesByCourseId(id);
+                    RequestDispatcher dispatcher1 = this.getServletContext().getRequestDispatcher("/partecipante/corso/gestore/remove-alert.jsp?id="+id);
+                    request.setAttribute("notices", notices1);
+                    dispatcher1.forward(request,response);
+                }
                 break;
 
             default:
