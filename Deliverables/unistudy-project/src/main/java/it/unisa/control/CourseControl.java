@@ -51,6 +51,11 @@ public class CourseControl extends HttpServlet {
                     System.out.println(json1.toString());
                     out1.print(json1.toString());
                 }
+                else if(request.getParameter("qty").equals("all-objects")){
+                    Set<Course> courses = CourseManager.retrieveAll();
+                    request.setAttribute("courses", courses);
+                    request.getRequestDispatcher("/partecipante/all-courses.jsp").forward(request,response);
+                }
                 else if (request.getParameter("qty").equals("one")) {
                     response.setContentType("application/json");
                     PrintWriter out1 = response.getWriter();
@@ -93,6 +98,36 @@ public class CourseControl extends HttpServlet {
                 request.setAttribute("course", course);
                 request.getRequestDispatcher("/partecipante/corso/view_course.jsp?id=" +
                         request.getParameter("id") + "").forward(request, response);
+                break;
+
+            case "delete-enroll":
+                System.out.println("Sono in delete enrolls");
+                User user = (User) request.getSession().getAttribute("userInSession");
+                Set<Enrollment> enrollmentsSet = (Set<Enrollment>) request.getSession().getAttribute("enrollments");
+                System.out.println(enrollmentsSet);
+                int courseId = Integer.parseInt(request.getParameter("id"));
+                System.out.println("courseId: "+courseId);
+                boolean isGestore = false; // da gestire
+
+                for(Enrollment e : enrollmentsSet)
+                {
+                    if(e.getCourseId() == courseId) {
+                        for (Enrollment.EnrollType enrollType : e.getRoles()) {
+                            if (enrollType.toString().equals("GESTORECORSO")) {
+                                System.out.println("trovato gestore");
+                                isGestore = true; //non funziona
+                            }
+                        }
+                    }
+                }
+                System.out.println(isGestore);
+                boolean check1 = EnrollmentManager.deleteEnrollment(user.getId(),courseId,isGestore);
+                if(check1)
+                {
+                    request.getSession().setAttribute("enrollments",EnrollmentManager.retrieveEnrollmentsByUserId(user.getId()));
+                    request.getRequestDispatcher("/partecipante/homepage.jsp").forward(request, response);
+                }
+                // else pagina errore
                 break;
 
             case "modify":
