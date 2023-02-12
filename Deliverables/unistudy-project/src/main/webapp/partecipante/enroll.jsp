@@ -1,4 +1,4 @@
-<%--
+<%@ page import="it.unisa.beans.User" %><%--
   Created by IntelliJ IDEA.
   User: francesco
   Date: 10/02/23
