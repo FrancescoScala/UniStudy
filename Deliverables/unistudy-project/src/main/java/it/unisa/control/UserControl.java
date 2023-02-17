@@ -48,11 +48,8 @@ public class UserControl extends HttpServlet {
                 break;
 
             case "signup":
-                System.out.println("Eseguo signup");
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
-                System.out.println("Parametri ricevuti: "+request.getParameter("email")+request.getParameter("password")
-                        +request.getParameter("name")+ request.getParameter("surname"));
                 boolean check = UserManager.signupUser(request.getParameter("email"), request.getParameter("password"),
                         request.getParameter("name"), request.getParameter("surname"));
                 String mex;
@@ -64,7 +61,6 @@ public class UserControl extends HttpServlet {
                 }
                 JSONObject json = new JSONObject();
                 json.put("result",mex);
-                System.out.println("signup restituisce: "+mex);
                 out.print(json.toString());
                 break;
 

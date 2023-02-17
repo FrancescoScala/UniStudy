@@ -34,23 +34,24 @@ public class UserManager {
                     name.matches(alphabeticRegex) &&
                     surname.matches(alphabeticRegex)) {
                 //se l'email non è presente nel sistema...
-                if (retrieveIdUserByEmail(email) == -1) {
-                    String querySQL1 = "INSERT INTO user(user_email,user_password,user_name,user_surname) VALUES (?,?,?,?)";
-                    PreparedStatement ps1 = conn.prepareStatement(querySQL1);
+                    if (retrieveIdUserByEmail(email) == -1) {
+                        String querySQL1 = "INSERT INTO user(user_email,user_password,user_name,user_surname) VALUES (?,?,?,?)";
+                        PreparedStatement ps1 = conn.prepareStatement(querySQL1);
 
-                    ps1.setString(1, email);
-                    ps1.setString(2, password);
-                    ps1.setString(3, name);
-                    ps1.setString(4, surname);
-                    ps1.executeUpdate();
+                        ps1.setString(1, email);
+                        ps1.setString(2, password);
+                        ps1.setString(3, name);
+                        ps1.setString(4, surname);
+                        ps1.executeUpdate();
 
-                    return true;
+                        return true;
+                    }
+                    //se già presente...
+                    else {
+                        return false;
+                    }
                 }
-                //se già presente...
-                else {
-                    return false;
-                }
-            } else {
+            else {
                 return false;
             }
         } catch (SQLException e) {
@@ -62,10 +63,8 @@ public class UserManager {
 
     public static User loginUser(String email, String password) {
         try {
-            //controllo formato
             if (!email.equals("") &&
                     !password.equals("")) {
-                //
                 int userId = retrieveIdUserByEmail(email);
                 User user;
                 //se l'email è presente nel sistema...
