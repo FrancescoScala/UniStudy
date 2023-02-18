@@ -59,8 +59,6 @@ public class NoticeControl extends HttpServlet {
                 break;
 
             case "delete":
-                System.out.println("Sono in delete notice");
-                System.out.println("Parametri ricevuti: "+request.getParameter("noticeId")+" "+request.getParameter("id"));
                 boolean checkDelete = NoticeManager.deleteNotice(Integer.parseInt(request.getParameter("noticeId")));
                 if(checkDelete)
                 {

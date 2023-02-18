@@ -61,7 +61,7 @@ public class NoteControl extends HttpServlet {
                 if (askerRole == null) {
                     User user = (User) request.getSession().getAttribute("userInSession");
                     int noteAuthorId = Integer.parseInt(request.getParameter("noteAuthorId"));
-                    if (((User) request.getSession().getAttribute("userInSession")).getId() == noteAuthorId) {
+                    if (user.getId() == noteAuthorId) {
                         boolean checkDelete = NoteManager.deleteNote(Integer.parseInt(request.getParameter("noteId")));
                         if (checkDelete) {
                             int id = Integer.parseInt(request.getParameter("id"));

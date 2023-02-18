@@ -29,7 +29,7 @@ public class CourseControl extends HttpServlet {
                 System.out.println("Creo il corso");
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
-                System.out.println("Parametri passati: "+request.getParameter("professors")+request.getParameter("schedule")+request.getParameter("title"));
+                System.out.println("Parametri passati: " + request.getParameter("professors") + request.getParameter("schedule") + request.getParameter("title"));
                 boolean created = CourseManager.createCourse(request.getParameter("professors"), request.getParameter("schedule"), request.getParameter("title"));
                 String mex;
                 if (created) {
@@ -50,13 +50,11 @@ public class CourseControl extends HttpServlet {
                     json1.put("objects", CourseManager.retrieveAll());
                     System.out.println(json1.toString());
                     out1.print(json1.toString());
-                }
-                else if(request.getParameter("qty").equals("all-objects")){
+                } else if (request.getParameter("qty").equals("all-objects")) {
                     Set<Course> courses = CourseManager.retrieveAll();
                     request.setAttribute("courses", courses);
-                    request.getRequestDispatcher("/partecipante/all-courses.jsp").forward(request,response);
-                }
-                else if (request.getParameter("qty").equals("one")) {
+                    request.getRequestDispatcher("/partecipante/all-courses.jsp").forward(request, response);
+                } else if (request.getParameter("qty").equals("one")) {
                     response.setContentType("application/json");
                     PrintWriter out1 = response.getWriter();
                     JSONObject json1 = new JSONObject();
@@ -87,44 +85,51 @@ public class CourseControl extends HttpServlet {
                 break;
 
             case "enroll":
-                int userId =((User) request.getSession().getAttribute("userInSession")).getId();
-                Enrollment enrollment = EnrollmentManager.createEnrollment(userId,Integer.parseInt(request.getParameter("id")),
-                        Enrollment.EnrollType.STUDENTE,request.getParameter("title"));
-
+                int userId = ((User) request.getSession().getAttribute("userInSession")).getId();
+                int courseIdParam = Integer.parseInt(request.getParameter("id"));
                 Set<Enrollment> enrollments = (Set<Enrollment>) request.getSession().getAttribute("enrollments");
-                enrollments.add(enrollment);
-                request.getSession().setAttribute("enrollments",enrollments);
-                Course course = CourseManager.retrieveCourseById(Integer.parseInt(request.getParameter("id")));
+                boolean isStudente = false;
+                Enrollment addedEnrollment = null;
+
+                for (Enrollment enrollment : enrollments) {
+                    if (enrollment.getCourseId() == courseIdParam) {
+                        addedEnrollment = EnrollmentManager.updateEnrollment(enrollment, Enrollment.EnrollType.STUDENTE);
+                        isStudente = true;
+                        break;
+                    }
+                }
+
+                if (!isStudente) {
+                    addedEnrollment = EnrollmentManager.createEnrollment(userId, courseIdParam,
+                            Enrollment.EnrollType.STUDENTE, request.getParameter("title"));
+                    enrollments.add(addedEnrollment);
+                }
+
+                request.getSession().setAttribute("enrollments", enrollments);
+                Course course = CourseManager.retrieveCourseById(courseIdParam);
                 request.setAttribute("course", course);
                 request.getRequestDispatcher("/partecipante/corso/view_course.jsp?id=" +
-                        request.getParameter("id") + "").forward(request, response);
+                        courseIdParam + "").forward(request, response);
                 break;
 
             case "delete-enroll":
-                System.out.println("Sono in delete enrolls");
                 User user = (User) request.getSession().getAttribute("userInSession");
                 Set<Enrollment> enrollmentsSet = (Set<Enrollment>) request.getSession().getAttribute("enrollments");
-                System.out.println(enrollmentsSet);
                 int courseId = Integer.parseInt(request.getParameter("id"));
-                System.out.println("courseId: "+courseId);
-                boolean isGestore = false; // da gestire
+                boolean isGestore = false;
 
-                for(Enrollment e : enrollmentsSet)
-                {
-                    if(e.getCourseId() == courseId) {
+                for (Enrollment e : enrollmentsSet) {
+                    if (e.getCourseId() == courseId) {
                         for (Enrollment.EnrollType enrollType : e.getRoles()) {
                             if (enrollType.toString().equals("GESTORECORSO")) {
-                                System.out.println("trovato gestore");
-                                isGestore = true; //non funziona
+                                isGestore = true;
                             }
                         }
                     }
                 }
-                System.out.println(isGestore);
-                boolean check1 = EnrollmentManager.deleteEnrollment(user.getId(),courseId,isGestore);
-                if(check1)
-                {
-                    request.getSession().setAttribute("enrollments",EnrollmentManager.retrieveEnrollmentsByUserId(user.getId()));
+                boolean check1 = EnrollmentManager.deleteEnrollment(user.getId(), courseId, isGestore);
+                if (check1) {
+                    request.getSession().setAttribute("enrollments", EnrollmentManager.retrieveEnrollmentsByUserId(user.getId()));
                     request.getRequestDispatcher("/partecipante/homepage.jsp").forward(request, response);
                 }
                 // else pagina errore
@@ -134,9 +139,9 @@ public class CourseControl extends HttpServlet {
                 System.out.println("Sono in modify info course");
                 response.setContentType("application/json");
                 PrintWriter out3 = response.getWriter();
-                System.out.println("Eseguo la retrieve su courseId: "+request.getParameter("id"));
+                System.out.println("Eseguo la retrieve su courseId: " + request.getParameter("id"));
                 Course course1 = CourseManager.retrieveCourseById(Integer.parseInt(request.getParameter("id")));
-                System.out.println(course1+request.getParameter("schedule")+request.getParameter("professors"));
+                System.out.println(course1 + request.getParameter("schedule") + request.getParameter("professors"));
                 boolean check = CourseManager.modifyInfoCourse(course1,
                         request.getParameter("professors"),
                         request.getParameter("schedule"));

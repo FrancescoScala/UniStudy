@@ -86,11 +86,10 @@ public class EnrollmentManager {
     {
         try {
             PreparedStatement ps;
-            if(!isGestore) {
+            if (!isGestore) {
                 ps = conn.prepareStatement("DELETE FROM enrollment WHERE course_id=? AND user_id=?");
 
-            }
-            else {
+            } else {
                 ps = conn.prepareStatement("UPDATE unistudydb.enrollment t SET t.enrollment_type = 'GESTORECORSO' WHERE t.course_id =? AND t.user_id =?");
             }
             ps.setInt(1, courseId);
@@ -101,6 +100,28 @@ public class EnrollmentManager {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public static Enrollment updateEnrollment(Enrollment enrollment, Enrollment.EnrollType type) { //da testare
+        try {
+            enrollment.getRoles().add(type);
+            String up = "";
+            for (Enrollment.EnrollType enrollType : enrollment.getRoles())
+                up += enrollType.toString() + ",";
+            System.out.println(up);
+            up=up.substring(0, up.length() -1);
+            System.out.println(up);
+            PreparedStatement ps = conn.prepareStatement("UPDATE unistudydb.enrollment t SET t.enrollment_type = '" + up + "' WHERE t.course_id =? AND t.user_id =?");
+
+            ps.setInt(1, enrollment.getCourseId());
+            ps.setInt(2, enrollment.getUserId());
+            ps.executeUpdate();
+            ps.close();
+            return enrollment;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
