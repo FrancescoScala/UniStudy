@@ -23,7 +23,7 @@ public class AmministratoreFilter implements Filter {
         User user = (User)request1.getSession(false).getAttribute("userInSession");
         for(Role r : user.getRoles())
         {
-            if(r.getRoleName().toString().equals("AMMINISTRATORE"))
+            if(r.getRoleName().toString().equals("AMMINISTRATORE")) //provare equals con Role.AMMINISTRATORE
             {
                 chain.doFilter(request, response);
             }

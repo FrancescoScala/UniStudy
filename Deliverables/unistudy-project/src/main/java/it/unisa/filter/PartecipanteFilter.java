@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
+//userSessionFilter
 @WebFilter(filterName = "PartecipanteFilter",urlPatterns = "/partecipante/*", dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD})
 public class PartecipanteFilter implements Filter {
     @Override
