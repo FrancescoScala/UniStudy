@@ -14,6 +14,6 @@
 </head>
 <body>
 Si e' verificato un errore: <%=response.getStatus() %><br>
-Ci scusiamo per il disagio. Per favore, ritorna sulla <a href="<%=request.getContextPath()%>/login.jsp">pagina di login</a>
+Ci scusiamo per il disagio. Per favore, ritorna sulla <a href="<%=request.getContextPath()%>/user/login.jsp">pagina di login</a>
 </body>
 </html>
