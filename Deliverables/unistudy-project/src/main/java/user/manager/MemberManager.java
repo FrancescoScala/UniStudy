@@ -23,7 +23,7 @@ public class MemberManager {
     }
 
     private static final String alphabeticRegex = "^[a-zA-Z ]+$";
-    private static final String emailRegex = "^((?!\\.)[\\w-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$";
+    private static final String emailRegex = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,15}$";
     private static final String pswRegex = "^(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\\w\\d\\s:])([^\\s]){8,12}$";
 
     public static boolean signupMember(String email, String password, String name, String surname) {

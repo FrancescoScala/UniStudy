@@ -13,10 +13,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>I miei corsi</title>
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/bootstrap/css/bootstrap.min.css">
+ <%--   <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;display=swap">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/fonts/fontawesome-all.min.css">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/-Login-form-Page-BS4--Login-form-Page-BS4.css">
+    <link rel="stylesheet"
+          href="<%=request.getContextPath()%>/assets/css/-Login-form-Page-BS4--Login-form-Page-BS4.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/Banner-Heading-Image-images.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/Custom-File-Upload.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/Cute-Select.css">
@@ -24,10 +25,12 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/Multiple-Input-Select-Pills.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/Search-Input-Responsive-with-Icon.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/Sidebar-Menu-sidebar.css">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/Sidebar-Menu.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/Sidebar-Menu.css">--%>
 </head>
 
 <body>
+<jsp:include page="/header.jsp" flush="true"></jsp:include>
+<%--
 <nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient"
      style="padding-bottom: 0px;margin-top: -20px;">
     <div class="container"><a class="navbar-brand logo" href="<%=request.getContextPath()%>/course/homepage.jsp">
@@ -54,14 +57,14 @@
                         <div class="dropdown-menu" data-bs-popper="none"><a class="dropdown-item"
                                                                             href="<%=request.getContextPath()%>/user/select-role.jsp">Seleziona
                             permessi</a><a class="dropdown-item"
-                                           href="<%=request.getContextPath()%>/MemberControl?action=logout">Logout</a>
+                                           href="<%=request.getContextPath()%>/user/MemberControl?action=logout">Logout</a>
                         </div>
                     </div>
                 </li>
             </ul>
         </div>
     </div>
-</nav>
+</nav>--%>
 <main class="page projects-page">
     <section class="portfolio-block projects-cards">
         <div class="container">
@@ -99,7 +102,7 @@
                                             </button>
                                         </label>
                                         <%
-                                        } else if (role.toString().equals("GESTOREUTENTI")){
+                                        } else if (role.toString().equals("GESTORECORSO")) {
                                         %>
                                         <label class="selectgroup-item"><input
                                                 type="checkbox" name="value" value="HTML" class="selectgroup-input"
@@ -130,11 +133,12 @@
 <footer class="page-footer"><img class="img-fluid"
                                  src="<%=request.getContextPath()%>/assets/img/Elegant%20Education%20Technology%20Logo%20Template%20(1).png"
                                  width="300" height="150"></footer>
+<%--
 <script src="<%=request.getContextPath()%>/assets/bootstrap/js/bootstrap.min.js"></script>
 <script src="<%=request.getContextPath()%>/assets/js/Custom-File-Upload.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/pikaday.min.js"></script>
 <script src="<%=request.getContextPath()%>/assets/js/Sidebar-Menu.js"></script>
-<script src="<%=request.getContextPath()%>/assets/js/theme.js"></script>
+<script src="<%=request.getContextPath()%>/assets/js/theme.js"></script>--%>
 </body>
 
 </html>

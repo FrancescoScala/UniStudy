@@ -43,6 +43,7 @@ public class CourseControl extends HttpServlet {
                 break;
 
             case "view":
+                System.out.println("Vedo il corso");
                 if (request.getParameter("qty").equals("all")) {
                     response.setContentType("application/json");
                     PrintWriter out1 = response.getWriter();
@@ -53,7 +54,7 @@ public class CourseControl extends HttpServlet {
                 } else if (request.getParameter("qty").equals("all-objects")) {
                     Set<Course> courses = CourseManager.retrieveAll();
                     request.setAttribute("courses", courses);
-                    request.getRequestDispatcher("/partecipante/all-courses.jsp").forward(request, response);
+                    request.getRequestDispatcher("/course/all-courses.jsp").forward(request, response);
                 } else if (request.getParameter("qty").equals("one")) {
                     response.setContentType("application/json");
                     PrintWriter out1 = response.getWriter();

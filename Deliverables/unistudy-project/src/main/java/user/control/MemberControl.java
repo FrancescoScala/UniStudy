@@ -23,6 +23,7 @@ public class MemberControl extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("Sono in MEMBERCONTROL "+request.getParameter("action"));
         switch (request.getParameter("action")) {
             case "signup":
                 response.setContentType("application/json");
@@ -63,10 +64,10 @@ public class MemberControl extends HttpServlet {
 
             case "logout":
                 System.out.println("Sono in logout");
-                request.getSession().removeAttribute("userInSession");
+                request.getSession().removeAttribute("memberInSession");
                 request.getSession().removeAttribute("enrollments");
                 System.out.println(request.getContextPath());
-                RequestDispatcher dispatcher1 = this.getServletContext().getRequestDispatcher("/login.jsp");
+                RequestDispatcher dispatcher1 = this.getServletContext().getRequestDispatcher("/user/login.jsp");
                 dispatcher1.forward(request, response);
                 break;
 

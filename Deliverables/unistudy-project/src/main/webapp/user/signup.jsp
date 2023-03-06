@@ -32,7 +32,7 @@
 
             function chiamaControl() {
 
-                $.post("UserControl",
+                $.post("MemberControl",
                     {
                         "action": $("#action").val(),
                         "email": $("#email").val(),
@@ -45,7 +45,7 @@
                         var result = (JSON.stringify(data.result)).localeCompare(success);
 
                         if (result == 0) {
-                            window.location.href = "login.jsp";
+                            window.location.href = "<%=request.getContextPath()+"/user/login.jsp?msg=signupOK"%>";
                         } else {
                             $("#mex").html(data.result);
                         }
