@@ -65,7 +65,7 @@
         </div>
     </div>
 </nav>--%>
-<main class="page projects-page">
+<main class="page projects-page mt-5">
     <section class="portfolio-block projects-cards">
         <div class="container">
             <div class="heading">

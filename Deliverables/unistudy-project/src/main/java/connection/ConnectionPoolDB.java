@@ -26,7 +26,7 @@ public class ConnectionPoolDB {
 
         String db = "unistudydb";
         String username = "root";
-        String password = "Universitario07!";
+        String password = "root";
 
         newConnection = DriverManager.getConnection("jdbc:mysql://" + ip + ":" + port + "/" + db + "",username, password);
         newConnection.setAutoCommit(true); //serve?

@@ -12,6 +12,7 @@ public class MemberInSessionFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request1 = (HttpServletRequest) request;
+        HttpServletResponse response1 = (HttpServletResponse) response;
         if (request1.getRequestURI().startsWith(request1.getContextPath() + "/user/login.jsp") ||
                 request1.getRequestURI().startsWith(request1.getContextPath() + "/user/signup.jsp") ||
                 request1.getRequestURI().equals(request1.getContextPath() + "/") ||
@@ -33,22 +34,27 @@ public class MemberInSessionFilter implements Filter {
             }
         } else {
             //pagina di errore
-            // try {
-            System.out.println("E quinfi..." + request1.getRequestURL().toString() + "...\n" + request1.getSession(false).getAttribute("memberInSession"));
-
-            if (request1.getSession(false).getAttribute("memberInSession") != null) {
-                System.out.println("Utente registrato in sessione: " + request1.getSession(false).getAttribute("memberInSession"));
-                chain.doFilter(request, response);
+            try {
+                System.out.println("E quinfi..." + request1.getRequestURL().toString() + "...\n" + request1.getSession(false).getAttribute("memberInSession"));
+                if (request1.getSession(false).getAttribute("memberInSession") != null) {
+                    System.out.println("Utente registrato in sessione: " + request1.getSession(false).getAttribute("memberInSession"));
+                    chain.doFilter(request, response);
+                }
+                // analizzare l'utilizzo di una funzione per eliminare ridondanza tra le azioni del blocco else sottostante e il catch dell'eccezione
+                else {
+                    redirectToLogin(request1, response1);
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                redirectToLogin(request1, response1);
             }
-         /*   } catch (NullPointerException e) {
-                //e.printStackTrace();
-                System.out.println("Sessione non ancora creata. La creo..");
-                //request1.getSession(true).getServletContext().getRequestDispatcher("/login.jsp").forward(request1, response);
-                HttpServletResponse response1 = (HttpServletResponse) response;
-                System.out.println(request1.getContextPath());
-                response1.sendRedirect(request1.getContextPath() + "/login.jsp");
-            }*/
         }
+    }
+
+    private void redirectToLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        System.out.println("Sessione non ancora creata. La creo..");
+        System.out.println(request.getContextPath());
+        response.sendRedirect(request.getContextPath() + "/user/login.jsp");
     }
 
     @Override

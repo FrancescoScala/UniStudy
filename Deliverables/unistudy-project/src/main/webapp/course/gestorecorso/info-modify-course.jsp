@@ -83,35 +83,8 @@
 </head>
 
 <body>
-<nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient"
-     style="padding-bottom: 0px;margin-top: -20px;">
-    <div class="container"><a class="navbar-brand logo" href="<%=request.getContextPath()%>/partecipante/homepage.jsp"><img class="img-fluid"
-                                                                                                                            src="<%=request.getContextPath()%>/assets/img/UniStudy%20Logo%20-%20White.png"
-                                                                                                                            style="padding-right: 0px;"
-                                                                                                                            width="232"
-                                                                                                                            height="91"></a>
-        <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navbarNav"><span
-                class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/CourseControl?action=view&qty=all-objects">Tutti i corsi</a></li>
-                <li class="nav-item"><a class="nav-link" href="<%=request.getContextPath()%>/partecipante/homepage.jsp">I miei corsi</a></li>
-                <li class="nav-item">
-                    <div class="nav-item dropdown show" style="position: relative;padding: 8px;"><a
-                            class="dropdown-toggle text-decoration-none" aria-expanded="true" data-bs-toggle="dropdown"
-                            href="#"
-                            style="color: var(--bs-navbar-active-color);display: flex;font-weight: bold;backdrop-filter: opacity(1);-webkit-backdrop-filter: opacity(1);"><%=((Member) session.getAttribute("userInSession")).getName()%>
-                    </a>
-                        <div class="dropdown-menu" data-bs-popper="none"><a class="dropdown-item"
-                                                                            href="<%=request.getContextPath()%>/partecipante/select-role.jsp">Seleziona
-                            permessi</a><a class="dropdown-item" href="<%=request.getContextPath()%>/UserControl?action=logout">Logout</a></div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-<main class="page hire-me-page">
+<jsp:include page="/header.jsp" flush="true"></jsp:include>
+<main class="page hire-me-page mt-5">
     <section class="portfolio-block hire-me" style="padding-top: 0px;">
         <section class="portfolio-block projects-with-sidebar" style="padding-top: 0px;">
             <div class="container">

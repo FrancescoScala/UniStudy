@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/Sidebar-Menu.css">
 </head>
 <body>
-<nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient"
+<nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-white portfolio-navbar gradient mb-2"
      style="padding-bottom: 0px;margin-top: -20px;">
     <div class="container"><a class="navbar-brand logo" href="<%=request.getContextPath()%>/course/homepage.jsp">
         <img class="img-fluid"
