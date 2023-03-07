@@ -11,8 +11,8 @@ import java.util.Set;
 public class NoticeManager {
     private static Connection conn; //final?
 
-    private static final String alphabeticTitleRegex = "^[a-zA-Z ]+${8,12}";
-
+    private static final String TitleRegex = "^.{1,50}$"; //"^[a-zA-Z ]+${8,12}";
+    private static final String DescriptionRegex = "^.{1,300}$";
 
     static {
         try {
@@ -25,9 +25,8 @@ public class NoticeManager {
     //notice needs to be unique. Can't be added if there's already a notice in the coruse with the same title...diagram?
     public static boolean createNotice(String title, Timestamp creationDate, String description, Course course) {
         //control in db by title
-        if ((description.length() != 0) &&
-                (description.length() <= 300) &&
-                title.matches(alphabeticTitleRegex)) {
+        if (description.matches(DescriptionRegex) &&
+                title.matches(TitleRegex)) {
             try {
                 String querySQL1 = "INSERT INTO notice(notice_description,notice_creation_date,notice_title,course_id) VALUES (?,?,?,?)";
                 PreparedStatement ps1 = conn.prepareStatement(querySQL1);

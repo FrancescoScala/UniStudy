@@ -45,7 +45,7 @@ public class NoticeControl extends HttpServlet {
                     mex="AVVISO NON CREATO VERIFICA CHE IL FORMATO DEI DATI SIA CORRETTO";
                 }
                 json.put("result",mex);
-                System.out.println("signup restituisce: "+mex);
+                System.out.println("CreateNotice: action=add restituisce: "+mex);
                 out.print(json.toString());
 
                 break;
