@@ -68,7 +68,7 @@ public class CourseControl extends HttpServlet {
                     int id = Integer.parseInt(request.getParameter("id"));
                     Course course = CourseManager.retrieveCourseById(id);
                     request.setAttribute("course", course);
-                    request.getRequestDispatcher("/partecipante/corso/view_course.jsp?id=" + course.getId() + "").forward(request, response);
+                    request.getRequestDispatcher("/course/studente/view_course.jsp?id=" + course.getId() + "").forward(request, response);
                 }
                 break;
 
@@ -146,7 +146,7 @@ public class CourseControl extends HttpServlet {
                 boolean check = CourseManager.modifyInfoCourse(course1,
                         request.getParameter("professors"),
                         request.getParameter("schedule"));
-                if (true)
+                if (check)
                     mex = "OK";
                 else
                     mex = "Errore nella modifica delle info del corso. Riprovare.";

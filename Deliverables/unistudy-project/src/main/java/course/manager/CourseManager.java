@@ -23,7 +23,7 @@ public class CourseManager {
         }
     }
 
-    private static final String professorsRegex = "^[a-zA-Z\\s,]+$";
+    private static final String professorsRegex = "^(?:[a-zA-Z](?:\\s[a-zA-Z]+)?(?:,\\s?(?=[a-zA-Z]))?)+(?!,$)$";//^[a-zA-Z\s,]+$
 
     private static final String scheduleRegex = "^((Lun|Mar|Mer|Gio|Ven)\\s(0[0-9]|1[0-9]|2[0-4]):[0-5][0-9]\\s-\\s(0[0-9]|1[0-9]|2[0-4]):[0-5][0-9],?\\s?)*$";
 

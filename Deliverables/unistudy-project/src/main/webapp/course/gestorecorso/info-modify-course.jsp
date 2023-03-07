@@ -1,4 +1,3 @@
-<%@ page import="member.beans.Member" %>
 <%@ page import="user.beans.Member" %><%--
   Created by IntelliJ IDEA.
   Member: nickm
@@ -13,18 +12,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Hire me - Brand</title>
-    <link rel="stylesheet" href="../../assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;display=swap">
-    <link rel="stylesheet" href="../../assets/css/-Login-form-Page-BS4--Login-form-Page-BS4.css">
-    <link rel="stylesheet" href="../../assets/css/Banner-Heading-Image-images.css">
-    <link rel="stylesheet" href="../../assets/css/Custom-File-Upload.css">
-    <link rel="stylesheet" href="../../assets/css/Cute-Select.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/css/pikaday.min.css">
-    <link rel="stylesheet" href="../../assets/css/Multiple-Input-Select-Pills.css">
-    <link rel="stylesheet" href="../../assets/css/Search-Input-Responsive-with-Icon.css">
-    <link rel="stylesheet" href="../../assets/css/Sidebar-Menu-sidebar.css">
-    <link rel="stylesheet" href="../../assets/css/Sidebar-Menu.css">
+    <title>Modifica info corso</title>
 
     <script
             src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
@@ -37,7 +25,7 @@
 
             function loadCourseInfo() {
                 console.log("loadCourseInfo()");
-                var jqxhr = $.post("<%=request.getContextPath()%>/CourseControl",
+                $.post("<%=request.getContextPath()%>/CourseControl",
                     {
                         "action": "view",
                         "qty": "one",
@@ -58,7 +46,7 @@
 
             function chiamaControl() {
                 console.log("chiamaControl");
-                var jqxhr = $.post("<%=request.getContextPath()%>/CourseControl",
+                $.post("<%=request.getContextPath()%>/CourseControl",
                     {
                         "action": "modify",
                         "id": $("#id").val(),
@@ -71,7 +59,7 @@
 
                         if (result == 0) {
                             console.log("ok!");
-                            $("#mex").html("Aggiunta avviso effettuata");
+                            $("#mex").html("Aggiornamento corso effettuato");
                         } else {
                             $("#mex").html(data.result);
                         }
@@ -79,28 +67,30 @@
             }
         });
     </script>
-
 </head>
-
 <body>
 <jsp:include page="/header.jsp" flush="true"></jsp:include>
 <main class="page hire-me-page mt-5">
-    <section class="portfolio-block hire-me" style="padding-top: 0px;">
+    <section class="portfolio-block hire-me">
         <section class="portfolio-block projects-with-sidebar" style="padding-top: 0px;">
             <div class="container">
                 <div class="heading"></div>
                 <div class="row">
                     <div class="col-md-3">
                         <ul class="list-unstyled fs-5 sidebar">
-                            <%String contextPath = request.getContextPath()+"/partecipante/corso/gestore/";%>
-                            <li><a class="active" href="<%=contextPath%>info-modify-course.jsp?id=<%=request.getParameter("id")%>">Modifica info
+                            <%String contextPath = request.getContextPath() + "/course/gestorecorso/";%>
+                            <li><a class="active"
+                                   href="<%=contextPath%>info-modify-course.jsp?id=<%=request.getParameter("id")%>">Modifica
+                                info
                                 corso</a></li>
                             <li><a href="<%=contextPath%>publish-alert.jsp?id=<%=request.getParameter("id")%>">Pubblica
                                 avviso</a></li>
                             <li>
                                 <a href="<%=request.getContextPath()%>/NoticeControl?action=view&id=<%=request.getParameter("id")%>">Rimuovi
                                     avviso</a></li>
-                            <li><a href="<%=request.getContextPath()%>/NoteControl?action=view&id=<%=request.getParameter("id")%>">Rimuovi appunto</a></li>
+                            <li>
+                                <a href="<%=request.getContextPath()%>/NoteControl?action=view&id=<%=request.getParameter("id")%>">Rimuovi
+                                    appunto</a></li>
                         </ul>
                     </div>
                     <div class="col-md-9">
@@ -115,17 +105,24 @@
                                         <h3 id="title"></h3></div>
                                     <div id="schedule-div" class="mb-3"><label id="schedule-label" class="form-label"
                                                                                for="schedule">Orario</label><input
-                                            class="form-control" type="text" name="schedule" id="schedule" value="">
+                                            class="form-control" type="text" name="schedule" required=""
+                                            pattern="^((Lun|Mar|Mer|Gio|Ven)\s(0[0-9]|1[0-9]|2[0-4]):[0-5][0-9]\s-\s(0[0-9]|1[0-9]|2[0-4]):[0-5][0-9],?\s?)*$"
+                                            oninvalid="this.setCustomValidity('Il campo evidenziato deve rispettare il formato. Es: Lun 09:00 - 10:00')"
+                                            onchange="this.setCustomValidity('')" id="schedule" value="">
                                     </div>
                                     <div id=" professors-div" class="mb-3"><label class="form-label"
                                                                                   id="professors-label"
                                                                                   for="professors">Professori</label><input
-                                            class='form-control' type='text' name='professors' id='professors' value="">
+                                            class='form-control' type='text' name='professors' required=""
+                                            pattern="^^(?:[a-zA-Z](?:\s[a-zA-Z]+)?(?:,\s?(?=[a-zA-Z]))?)+(?!,$)$"
+                                            oninvalid="this.setCustomValidity('Il campo evidenziato contenere solo lettere e/o spazi al suo interno. In caso di più docenti, separarli tramite una virgola')"
+                                            onchange="this.setCustomValidity('')" id='professors' value="">
                                     </div>
                                     <div class="mb-3">
                                         <div class="row">
                                             <div class="col-md-12 col-xl-12 justify-content-center button">
-                                                <button id="confirmButton" class="btn btn-primary d-block w-100" type="submit">Conferma
+                                                <button id="confirmButton" class="btn btn-primary d-block w-100"
+                                                        type="submit">Conferma
                                                 </button>
                                             </div>
                                         </div>
@@ -142,11 +139,5 @@
 <footer class="page-footer"><img class="img-fluid"
                                  src="../../assets/img/Elegant%20Education%20Technology%20Logo%20Template%20(1).png"
                                  width="300" height="150"></footer>
-<script src="../../assets/bootstrap/js/bootstrap.min.js"></script>
-<script src="../../assets/js/Custom-File-Upload.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pikaday/1.6.1/pikaday.min.js"></script>
-<script src="../../assets/js/Sidebar-Menu.js"></script>
-<script src="../../assets/js/theme.js"></script>
 </body>
-
 </html>
