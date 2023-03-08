@@ -32,13 +32,13 @@ public class CourseFilter implements Filter {
                             chain.doFilter(request, response);
                             return;
                         }
-                    } else {
+                    } else if (request1.getRequestURI().startsWith(request1.getContextPath() + "/course/studente")){
                         if ((role.toString()).equals("STUDENTE")) {
                             //            System.out.println("Hai il permesso " + request1.getParameter("role"));
                             chain.doFilter(request, response);
                             return;
                         }
-                    }
+                    }//else?
                 }
             }
         }
@@ -57,6 +57,4 @@ public class CourseFilter implements Filter {
 
     public void destroy() {
     }
-
-
 }
