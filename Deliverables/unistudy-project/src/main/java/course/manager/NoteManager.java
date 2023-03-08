@@ -1,6 +1,5 @@
 package course.manager;
 
-import course.beans.Course;
 import course.beans.Note;
 import connection.ConnectionPoolDB;
 
@@ -43,8 +42,6 @@ public class NoteManager {
                 ps1.setInt(6, authorId);
                 ps1.executeUpdate();
                 ps1.close();
-                ResultSet resultSet = conn.prepareStatement("SELECT note_id FROM note WHERE user_id='" + authorId + "' AND note_creation_date='" + creationDate + "'").executeQuery();
-                resultSet.next();
                 return true;
             } else
                 return false;

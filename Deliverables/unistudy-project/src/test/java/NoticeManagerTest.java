@@ -53,6 +53,7 @@ class NoticeManagerTest {
     @Order(1)
     void createNoticeSuccess() {
         boolean check = NoticeManager.createNotice(noticeForTesting.getTitle(), noticeForTesting.getCreationDate(), noticeForTesting.getDescription(), courseForTesting.getId());
+        courseForTesting = CourseManager.retrieveCourseById(courseForTestingId);
         assertTrue(check);
     }
 
@@ -99,7 +100,6 @@ class NoticeManagerTest {
     @Test
     void retrieveNoticesByCourseIdSuccess() {
         Set<Notice> notices = NoticeManager.retrieveNoticesByCourseId(courseForTesting.getId());
-        courseForTesting = CourseManager.retrieveCourseById(courseForTestingId);
         assertEquals(courseForTesting.getNotices(), notices);
     }
 

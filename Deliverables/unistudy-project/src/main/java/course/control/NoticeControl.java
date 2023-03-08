@@ -27,8 +27,6 @@ public class NoticeControl extends HttpServlet {
                         "Id: "+ request.getParameter("id")+ "descrizione: "+ request.getParameter("description"));
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
-                //Course course = CourseManager.retrieveCourseById(Integer.parseInt(request.getParameter("id")));
-                //System.out.println(course);
                 boolean check = NoticeManager.createNotice(request.getParameter("title"),
                         new Timestamp(System.currentTimeMillis()),
                         request.getParameter("description"),

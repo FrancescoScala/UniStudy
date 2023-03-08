@@ -1,6 +1,5 @@
 package course.manager;
 
-import course.beans.Course;
 import course.beans.Notice;
 import connection.ConnectionPoolDB;
 
@@ -38,8 +37,6 @@ public class NoticeManager {
                 ps1.executeUpdate();
                 ps1.close();
 
-                ResultSet resultSet = conn.prepareStatement("SELECT notice_id FROM notice WHERE notice_creation_date='" + creationDate + "'").executeQuery();
-                resultSet.next();
                 return true;
             } catch (SQLException e) {
                 e.printStackTrace();

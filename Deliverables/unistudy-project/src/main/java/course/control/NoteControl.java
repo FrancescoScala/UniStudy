@@ -28,7 +28,7 @@ public class NoteControl extends HttpServlet {
             case "add":
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
-                //Course course = CourseManager.retrieveCourseById(Integer.parseInt(request.getParameter("id")));
+
                 Member author = (Member) request.getSession().getAttribute("memberInSession");
                 System.out.println("Dati arrivati a addNote: " +
                         request.getParameter("description") +
@@ -67,7 +67,7 @@ public class NoteControl extends HttpServlet {
                             int id = Integer.parseInt(request.getParameter("id"));
                             Course course1 = CourseManager.retrieveCourseById(id);
                             request.setAttribute("course", course1);
-                            request.getRequestDispatcher("/partecipante/corso/view_course.jsp?id=" + course1.getId() + "").forward(request, response);
+                            request.getRequestDispatcher("/course/studente/view_course.jsp?id=" + course1.getId() + "").forward(request, response);
                         }
                         // else pagina di errore
                     }

@@ -27,7 +27,7 @@ public class CourseManager {
 
     private static final String scheduleRegex = "^((Lun|Mar|Mer|Gio|Ven)\\s(0[0-9]|1[0-9]|2[0-4]):[0-5][0-9]\\s-\\s(0[0-9]|1[0-9]|2[0-4]):[0-5][0-9],?\\s?)*$";
 
-    private static final String alphanumericRegex = "^.{1,50}$";//""^[a-zA-Z0-9\\s]+$";
+    private static final String alphanumericRegex = "^.{1,50}$";//"^[a-zA-Z0-9\\s]+$";
 
     public static boolean createCourse(String professors, String schedule, String title) {
         try {

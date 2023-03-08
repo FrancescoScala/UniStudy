@@ -67,7 +67,6 @@
                         <div class="col-md-6 col-lg-9">
                             <h3><%=notice.getTitle()%>
                             </h3>
-                            <h4 class="organization">Special Inc.</h4>
                         </div>
                         <div class="col-md-6 col-lg-3"><span class="period"><%=notice.getCreationDate()%></span></div>
                     </div>
