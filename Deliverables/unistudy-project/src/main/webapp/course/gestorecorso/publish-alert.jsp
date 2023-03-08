@@ -63,7 +63,7 @@
                             <li>
                                 <a href="<%=request.getContextPath()%>/NoticeControl?action=view&id=<%=request.getParameter("id")%>">Rimuovi
                                     avviso</a></li>
-                            <li><a href="<%=contextPath%>remove-note.html?id=<%=request.getParameter("id")%>">Rimuovi
+                            <li><a href="<%=request.getContextPath()%>/NoteControl?action=view&id=<%=request.getParameter("id")%>">Rimuovi
                                 appunto</a></li>
                         </ul>
                     </div>

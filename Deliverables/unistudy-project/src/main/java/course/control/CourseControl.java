@@ -109,7 +109,7 @@ public class CourseControl extends HttpServlet {
                 request.getSession().setAttribute("enrollments", enrollments);
                 Course course = CourseManager.retrieveCourseById(courseIdParam);
                 request.setAttribute("course", course);
-                request.getRequestDispatcher("/partecipante/corso/view_course.jsp?id=" +
+                request.getRequestDispatcher("/course/studente/view_course.jsp?id=" +
                         courseIdParam + "").forward(request, response);
                 break;
 
@@ -131,7 +131,7 @@ public class CourseControl extends HttpServlet {
                 boolean check1 = EnrollmentManager.deleteEnrollment(member.getId(), courseId, isGestore);
                 if (check1) {
                     request.getSession().setAttribute("enrollments", EnrollmentManager.retrieveEnrollmentsByMemberId(member.getId()));
-                    request.getRequestDispatcher("/partecipante/homepage.jsp").forward(request, response);
+                    request.getRequestDispatcher("/course/homepage.jsp").forward(request, response);
                 }
                 // else pagina errore
                 break;

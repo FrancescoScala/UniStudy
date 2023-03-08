@@ -1,8 +1,6 @@
 package course.control;
 
-import course.beans.Course;
 import course.beans.Notice;
-import course.manager.CourseManager;
 import course.manager.NoticeManager;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -29,12 +27,12 @@ public class NoticeControl extends HttpServlet {
                         "Id: "+ request.getParameter("id")+ "descrizione: "+ request.getParameter("description"));
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
-                Course course = CourseManager.retrieveCourseById(Integer.parseInt(request.getParameter("id")));
-                System.out.println(course);
+                //Course course = CourseManager.retrieveCourseById(Integer.parseInt(request.getParameter("id")));
+                //System.out.println(course);
                 boolean check = NoticeManager.createNotice(request.getParameter("title"),
                         new Timestamp(System.currentTimeMillis()),
                         request.getParameter("description"),
-                        course); // forse inutile...
+                        Integer.parseInt(request.getParameter("id"))); // forse inutile...MA ORA RISOLTO?
 
                 JSONObject json = new JSONObject();
                 String mex;
@@ -53,7 +51,7 @@ public class NoticeControl extends HttpServlet {
             case "view":
                 Set<Notice> notices = NoticeManager.retrieveNoticesByCourseId(Integer.parseInt(request.getParameter("id")));
                 System.out.println(notices);
-                RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/partecipante/corso/gestore/remove-alert.jsp?id="+request.getParameter("id"));
+                RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/course/gestorecorso/remove-alert.jsp?id="+request.getParameter("id"));
                 request.setAttribute("notices", notices);
                 dispatcher.forward(request,response);
                 break;
@@ -64,7 +62,7 @@ public class NoticeControl extends HttpServlet {
                 {
                     int id = Integer.parseInt(request.getParameter("id"));
                     Set<Notice> notices1 = NoticeManager.retrieveNoticesByCourseId(id);
-                    RequestDispatcher dispatcher1 = this.getServletContext().getRequestDispatcher("/partecipante/corso/gestore/remove-alert.jsp?id="+id);
+                    RequestDispatcher dispatcher1 = this.getServletContext().getRequestDispatcher("/course/gestorecorso/remove-alert.jsp?id="+id);
                     request.setAttribute("notices", notices1);
                     dispatcher1.forward(request,response);
                 }

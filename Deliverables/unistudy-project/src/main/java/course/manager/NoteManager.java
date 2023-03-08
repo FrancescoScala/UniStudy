@@ -10,9 +10,10 @@ import java.util.Set;
 
 public class NoteManager {
     private static Connection conn; //final?
-    private static final String alphabeticRegex = "^[a-zA-Z ]+$";
+    private static final String titleRegex = "^.{1,50}$";
+    private static final String authorRegex = "^[a-zA-Z ]+$";
     private static final String pathRegex = "^(\\/[A-Za-z0-9_-]+)+\\.(txt|pdf|png|docx|doc|jpeg|jpg|img)$";
-    private static final String alphanumericRegex = "^[a-zA-Z0-9\\s]+$";
+    private static final String descriptionRegex = "^.{1,300}$";
 
     static {
         try {
@@ -24,13 +25,11 @@ public class NoteManager {
 
     //note needs to be unique. Can't be added if there's already a note in the course with the same title...diagram?
     //controllo formato sul path? O sulla dimensione della description e del titolo?
-    public static boolean createNote(String description, Timestamp creationDate, String filepath, String title, int authorId, String authorInfo, Course course) {
+    public static boolean createNote(String description, Timestamp creationDate, String filepath, String title, int authorId, String authorInfo, int courseId) {
         try {
-            if (authorInfo.matches(alphabeticRegex) &&
-                    (description.length()!=0) &&
-                    (description.length() <= 300) &&
-                    title.matches(alphanumericRegex) &&
-                    title.length()!=0 &&
+            if (authorInfo.matches(authorRegex) &&
+                    description.matches(descriptionRegex) &&
+                    title.matches(titleRegex) &&
                     filepath.matches(pathRegex)) {
 
                 String querySQL1 = "INSERT INTO note(note_title, note_description, note_creation_date, note_path, course_id, user_id) VALUES (?,?,?,?,?,?)";
@@ -40,14 +39,12 @@ public class NoteManager {
                 ps1.setString(2, description);
                 ps1.setTimestamp(3, creationDate);
                 ps1.setString(4, filepath);
-                ps1.setInt(5, course.getId());
+                ps1.setInt(5, courseId);
                 ps1.setInt(6, authorId);
                 ps1.executeUpdate();
                 ps1.close();
                 ResultSet resultSet = conn.prepareStatement("SELECT note_id FROM note WHERE user_id='" + authorId + "' AND note_creation_date='" + creationDate + "'").executeQuery();
                 resultSet.next();
-                int noteId = resultSet.getInt("note_id");
-                course.addNote(new Note(noteId, description, creationDate, filepath, title, authorId, authorInfo));
                 return true;
             } else
                 return false;
@@ -67,7 +64,7 @@ public class NoteManager {
             PreparedStatement ps = conn.prepareStatement(querySQL);
             ps.setInt(1, courseId);
             ResultSet rs = ps.executeQuery();
-            if(rs.next()) {
+            if (rs.next()) {
                 do {
                     int id = rs.getInt("note_id");
                     String description = rs.getString("note_description");
@@ -75,8 +72,8 @@ public class NoteManager {
                     String filepath = rs.getString("note_path");
                     String title = rs.getString("note_title");
                     int authorId = rs.getInt("user_id");
-                    String authorinfo = rs.getString("user_name") + " " + rs.getString("user_surname");
-                    Note note = new Note(id, description, creationDate, filepath, title, authorId, authorinfo);
+                    String authorInfo = rs.getString("user_name") + " " + rs.getString("user_surname");
+                    Note note = new Note(id, description, creationDate, filepath, title, authorId, authorInfo);
                     notes.add(note);
                 } while (rs.next());
             }

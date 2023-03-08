@@ -11,8 +11,8 @@ import java.util.Set;
 public class NoticeManager {
     private static Connection conn; //final?
 
-    private static final String TitleRegex = "^.{1,50}$"; //"^[a-zA-Z ]+${8,12}";
-    private static final String DescriptionRegex = "^.{1,300}$";
+    private static final String titleRegex = "^.{1,50}$"; //"^[a-zA-Z ]+${8,12}";
+    private static final String descriptionRegex = "^.{1,300}$";
 
     static {
         try {
@@ -23,10 +23,10 @@ public class NoticeManager {
     }
 
     //notice needs to be unique. Can't be added if there's already a notice in the coruse with the same title...diagram?
-    public static boolean createNotice(String title, Timestamp creationDate, String description, Course course) {
+    public static boolean createNotice(String title, Timestamp creationDate, String description, int courseId) {
         //control in db by title
-        if (description.matches(DescriptionRegex) &&
-                title.matches(TitleRegex)) {
+        if (description.matches(descriptionRegex) &&
+                title.matches(titleRegex)) {
             try {
                 String querySQL1 = "INSERT INTO notice(notice_description,notice_creation_date,notice_title,course_id) VALUES (?,?,?,?)";
                 PreparedStatement ps1 = conn.prepareStatement(querySQL1);
@@ -34,14 +34,12 @@ public class NoticeManager {
                 ps1.setString(1, description);
                 ps1.setTimestamp(2, creationDate);
                 ps1.setString(3, title);
-                ps1.setInt(4, course.getId());
+                ps1.setInt(4, courseId);
                 ps1.executeUpdate();
                 ps1.close();
 
                 ResultSet resultSet = conn.prepareStatement("SELECT notice_id FROM notice WHERE notice_creation_date='" + creationDate + "'").executeQuery();
                 resultSet.next();
-                int noticeId = resultSet.getInt("notice_id");
-                course.addNotice(new Notice(noticeId, title, creationDate, description));
                 return true;
             } catch (SQLException e) {
                 e.printStackTrace();

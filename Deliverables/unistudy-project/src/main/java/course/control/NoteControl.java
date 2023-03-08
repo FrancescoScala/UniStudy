@@ -28,14 +28,14 @@ public class NoteControl extends HttpServlet {
             case "add":
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
-                Course course = CourseManager.retrieveCourseById(Integer.parseInt(request.getParameter("id")));
+                //Course course = CourseManager.retrieveCourseById(Integer.parseInt(request.getParameter("id")));
                 Member author = (Member) request.getSession().getAttribute("memberInSession");
                 System.out.println("Dati arrivati a addNote: " +
                         request.getParameter("description") +
                         request.getParameter("title") +
                         author.getId() +
                         author.getName() + author.getSurname() +
-                        course);
+                        Integer.parseInt(request.getParameter("id")));
 
                 boolean check = NoteManager.createNote(request.getParameter("description"),
                         new Timestamp(System.currentTimeMillis()),
@@ -43,7 +43,7 @@ public class NoteControl extends HttpServlet {
                         request.getParameter("title"),
                         author.getId(),
                         author.getName() + " " + author.getSurname(),
-                        course);
+                        Integer.parseInt(request.getParameter("id")));
                 String mex;
                 if (check) {
                     mex = "OK";
@@ -77,7 +77,7 @@ public class NoteControl extends HttpServlet {
                         int id = Integer.parseInt(request.getParameter("id"));
                         Set<Note> notes = NoteManager.retrieveNotesByCourseId(id);
                         System.out.println(notes);
-                        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/partecipante/corso/gestore/remove-note.jsp?id=" + id);
+                        RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/course/gestorecorso/remove-note.jsp?id=" + id);
                         request.setAttribute("notes", notes);
                         dispatcher.forward(request, response);
                     }
@@ -89,7 +89,7 @@ public class NoteControl extends HttpServlet {
                 Set<Note> notes = NoteManager.retrieveNotesByCourseId(Integer.parseInt(request.getParameter("id")));
                 System.out.println("Note:" + notes);
                 RequestDispatcher dispatcher = this.getServletContext()
-                        .getRequestDispatcher("/partecipante/corso/gestore/remove-note.jsp?id=" + request.getParameter("id"));
+                        .getRequestDispatcher("/course/gestorecorso/remove-note.jsp?id=" + request.getParameter("id"));
                 request.setAttribute("notes", notes);
                 dispatcher.forward(request, response);
                 break;
