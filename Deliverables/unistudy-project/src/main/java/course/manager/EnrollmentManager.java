@@ -81,16 +81,37 @@ public class EnrollmentManager {
         }
     }
 
-    public static boolean deleteEnrollment(int memberId, int courseId, boolean isGestore) // da testare
+    public static boolean unenroll(Enrollment.EnrollType enrollType, Enrollment e) {
+        if (e.getRoles().size() > 1)
+            return removeRoleEnrollment(e.getMemberId(), e.getCourseId(), enrollType); // aggiornare l'istanza rimuovendo il ruolo passato
+        else
+            return deleteEnrollment(e.getMemberId(), e.getCourseId()); // elimina la istanza di Enrollment
+    }
+
+    private static boolean removeRoleEnrollment(int memberId, int courseId, Enrollment.EnrollType enrollType) // da testare
     {
         try {
             PreparedStatement ps;
-            if (!isGestore) {
-                ps = conn.prepareStatement("DELETE FROM enrollment WHERE course_id=? AND user_id=?");
-
-            } else {
+            if(enrollType.toString().equals("STUDENTE"))
                 ps = conn.prepareStatement("UPDATE unistudydb.enrollment t SET t.enrollment_type = 'GESTORECORSO' WHERE t.course_id =? AND t.user_id =?");
-            }
+            else
+                ps = conn.prepareStatement("UPDATE unistudydb.enrollment t SET t.enrollment_type = 'STUDENTE' WHERE t.course_id =? AND t.user_id =?");
+            ps.setInt(1, courseId);
+            ps.setInt(2, memberId);
+            ps.executeUpdate();
+            ps.close();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private static boolean deleteEnrollment(int memberId, int courseId) // da testare
+    {
+        try {
+            PreparedStatement ps;
+            ps = conn.prepareStatement("DELETE FROM enrollment WHERE course_id=? AND user_id=?");
             ps.setInt(1, courseId);
             ps.setInt(2, memberId);
             ps.executeUpdate();
@@ -109,7 +130,7 @@ public class EnrollmentManager {
             for (Enrollment.EnrollType enrollType : enrollment.getRoles())
                 up += enrollType.toString() + ",";
             System.out.println(up);
-            up=up.substring(0, up.length() -1);
+            up = up.substring(0, up.length() - 1);
             System.out.println(up);
             PreparedStatement ps = conn.prepareStatement("UPDATE unistudydb.enrollment t SET t.enrollment_type = '" + up + "' WHERE t.course_id =? AND t.user_id =?");
 

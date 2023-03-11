@@ -117,23 +117,15 @@ public class CourseControl extends HttpServlet {
                 Member member = (Member) request.getSession().getAttribute("memberInSession");
                 Set<Enrollment> enrollmentsSet = (Set<Enrollment>) request.getSession().getAttribute("enrollments");
                 int courseId = Integer.parseInt(request.getParameter("id"));
-                boolean isGestore = false;
 
                 for (Enrollment e : enrollmentsSet) {
                     if (e.getCourseId() == courseId) {
-                        for (Enrollment.EnrollType enrollType : e.getRoles()) {
-                            if (enrollType.toString().equals("GESTORECORSO")) {
-                                isGestore = true;
-                            }
-                        }
+                        EnrollmentManager.unenroll(Enrollment.EnrollType.STUDENTE, e);
+                        request.getSession().setAttribute("enrollments", EnrollmentManager.retrieveEnrollmentsByMemberId(member.getId()));
+                        request.getRequestDispatcher("/course/homepage.jsp").forward(request, response);
                     }
                 }
-                boolean check1 = EnrollmentManager.deleteEnrollment(member.getId(), courseId, isGestore);
-                if (check1) {
-                    request.getSession().setAttribute("enrollments", EnrollmentManager.retrieveEnrollmentsByMemberId(member.getId()));
-                    request.getRequestDispatcher("/course/homepage.jsp").forward(request, response);
-                }
-                // else pagina errore
+                // pagina errore
                 break;
 
             case "modify":
