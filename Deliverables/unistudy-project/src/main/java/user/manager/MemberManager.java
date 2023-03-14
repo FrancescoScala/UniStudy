@@ -23,7 +23,7 @@ public class MemberManager {
     }
 
     private static final String alphabeticRegex = "^[a-zA-Z ]+$";
-    private static final String emailRegex = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,15}$";
+    private static final String emailRegex = "[a-zA-z0-9._%+-]+@[a-zA-z0-9.-]+\\.[a-z]{2,15}$";
     private static final String pswRegex = "^(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\\w\\d\\s:])([^\\s]){8,12}$";
 
     public static boolean signupMember(String email, String password, String name, String surname) {
@@ -48,12 +48,14 @@ public class MemberManager {
                 }
                 //se l'email è già presente...
                 else {
+                    //throw new RuntimeException("Email già errato");
                     return false;
                 }
             }
             //se il formato è sbagliato
             else {
                 return false;
+                //throw new RuntimeException("Formato errato");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -63,8 +65,8 @@ public class MemberManager {
 
     public static Member loginMember(String email, String password) {
         try {
-            if (!email.equals("") &&
-                    !password.equals("")) {
+            if (email.matches(emailRegex) &&
+                    password.matches(pswRegex)) {
                 int memberId = retrieveIdMemberByEmail(email);
                 Member member;
                 //se l'email è presente nel sistema...
@@ -97,15 +99,18 @@ public class MemberManager {
                         //password non corretta...
                     } else {
                         return null;
+                        //throw new RuntimeException("Password non corretta");
                     }
                     return member;
                 }
-                //se già presente...
+                //se email non presente...
                 else {
                     return null;
+                    //throw new RuntimeException("Email non presente");
                 }
             } else {
                 return null;
+                //throw new RuntimeException("Formato errato");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -136,7 +141,8 @@ public class MemberManager {
         if (oldPassword.matches(pswRegex) &&
                 newPassword.matches(pswRegex) &&
                 name.matches(alphabeticRegex) &&
-                surname.matches(alphabeticRegex)) {
+                surname.matches(alphabeticRegex)  &&
+                retrieveIdMemberByEmail(member.getEmail())!=-1) {
 
             if (member.getPassword().equals(oldPassword)) {
                 try {
@@ -146,10 +152,13 @@ public class MemberManager {
                     ps.setString(2, surname);
                     ps.setString(3, newPassword);
                     ps.setInt(4, member.getId());
+                    System.out.println(member+"E");
                     ps.executeUpdate();
+                    System.out.println("A");
                     return true;
                 } catch (SQLException e) {
                     e.printStackTrace();
+                    System.out.println("I");
                     return false;
                 }
             } else {

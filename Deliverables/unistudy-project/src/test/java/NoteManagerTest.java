@@ -44,7 +44,7 @@ class NoteManagerTest {
         String name = "Name";
         String surname = "Surname";
         Set<Role> roles = new HashSet<Role>();
-        roles.add(new Role(1, "PARTECIPANTE"));
+        //roles.add(new Role(1, "PARTECIPANTE"));
         authorForTesting = new Member(-1, email, password, name, surname, roles);
 
         //save the author in the db. Take the real id

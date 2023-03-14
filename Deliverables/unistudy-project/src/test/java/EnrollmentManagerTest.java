@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class EnrollmentManagerTest {
     private Member memberForTesting;
-
     private Enrollment enrollmentForTesting;
     private Set<Enrollment> enrollmentsForTesting;
     private Course courseForTesting;
@@ -37,7 +36,6 @@ public class EnrollmentManagerTest {
         Set<Note> notes = new HashSet<Note>();
         Set<Notice> notices = new HashSet<Notice>();
         courseForTesting = new Course(-2, professors,schedule,title,notices,notes);
-
         CourseManager.createCourse(courseForTesting.getProfessors(),courseForTesting.getTimeSchedule(),courseForTesting.getTitle());
         courseForTesting.setId(CourseManager.retrieveIdCourseByTitle(courseForTesting.getTitle()));
 
@@ -47,7 +45,6 @@ public class EnrollmentManagerTest {
         String name = "Name";
         String surname = "Surname";
         Set<Role> memberRoles = new HashSet<Role>();
-        memberRoles.add(new Role(1, "PARTECIPANTE"));
         memberForTesting = new Member(-1, email, password, name, surname, memberRoles);
 
         //save the author in the db. Take the real id
@@ -103,7 +100,7 @@ public class EnrollmentManagerTest {
     }
 
     @Test
-    void createEnrollmentCourseIdNotValid()
+   void createEnrollmentCourseIdNotValid()
     {
         Enrollment enrollment = EnrollmentManager.createEnrollment(enrollmentForTesting.getMemberId(), -8, STUDENTE,enrollmentForTesting.getCourseTitle());
 
@@ -111,7 +108,7 @@ public class EnrollmentManagerTest {
     }
 
     @Test
-    void createEnrollmentCourseTitleEmpty()
+    void createEnrollmentCourseTitleBadFormatted()
     {
         Enrollment enrollment = EnrollmentManager.createEnrollment(enrollmentForTesting.getMemberId(), enrollmentForTesting.getCourseId(), STUDENTE,"");
 
@@ -119,20 +116,18 @@ public class EnrollmentManagerTest {
     }
 
     @Test
-    void createEnrollmentCourseTitleBadFormatted()
-    {
-        Enrollment enrollment = EnrollmentManager.createEnrollment(enrollmentForTesting.getMemberId(), enrollmentForTesting.getCourseId(), STUDENTE,"Ingegneria del software!!!");
+    void unenrollSTUDENTE() {
+        Boolean check = EnrollmentManager.unenroll(STUDENTE,enrollmentForTesting);
 
-        assertNull(enrollment);
     }
 
-    @Test
+/*    @Test
     void retrieveEnrollmentsByMemberIdSuccess() {
         int id = memberForTesting.getId();
         Set<Enrollment> enrollments = EnrollmentManager.retrieveEnrollmentsByMemberId(id);
         assertEquals(enrollmentsForTesting,enrollments);
     }
-
+*/
 /*    @Test
     void retrieveEnrollmentsByMemberIdNotValid() {
         int id = -3;

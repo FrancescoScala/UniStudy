@@ -21,10 +21,10 @@ public class EnrollmentManager {
         }
     }
 
-    private static final String alphanumericRegex = "^[a-zA-Z0-9\\s]+$";
+    private static final String alphanumericRegex = "^.{1,50}$";//^[a-zA-Z0-9\s]+$
 
     public static Enrollment createEnrollment(int memberId, int courseId, Enrollment.EnrollType enrollType, String courseTitle) {
-        if (courseTitle.matches(alphanumericRegex)) {
+        if (courseTitle.matches(alphanumericRegex)) {System.out.println("llllllllllll");
             try {
                 String querySQL1 = "INSERT INTO enrollment(user_id, course_id, enrollment_type) VALUES (?,?,?)";
                 PreparedStatement ps1 = conn.prepareStatement(querySQL1);
@@ -43,9 +43,11 @@ public class EnrollmentManager {
 
             } catch (SQLException e) {
                 e.printStackTrace();
+                System.out.println("Mpppppp");
                 return null;
             }
         } else {
+            System.out.println("MDOMO");
             return null;
         }
     }
@@ -85,10 +87,10 @@ public class EnrollmentManager {
         if (e.getRoles().size() > 1)
             return removeRoleEnrollment(e.getMemberId(), e.getCourseId(), enrollType); // aggiornare l'istanza rimuovendo il ruolo passato
         else
-            return deleteEnrollment(e.getMemberId(), e.getCourseId()); // elimina la istanza di Enrollment
+            return deleteEnrollment(e.getMemberId(), e.getCourseId()); // elimina la istanza di Enrollment  3 CASI DI TEST
     }
 
-    private static boolean removeRoleEnrollment(int memberId, int courseId, Enrollment.EnrollType enrollType) // da testare
+    private static boolean removeRoleEnrollment(int memberId, int courseId, Enrollment.EnrollType enrollType) // da testare con xategory su enrolltype
     {
         try {
             PreparedStatement ps;
