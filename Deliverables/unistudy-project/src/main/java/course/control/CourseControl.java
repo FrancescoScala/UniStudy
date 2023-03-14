@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,16 +31,18 @@ public class CourseControl extends HttpServlet {
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
                 System.out.println("Parametri passati: " + request.getParameter("professors") + request.getParameter("schedule") + request.getParameter("title"));
-                boolean created = CourseManager.createCourse(request.getParameter("professors"), request.getParameter("schedule"), request.getParameter("title"));
-                String mex;
-                if (created) {
+                String mex = "";
+                try {
+                    CourseManager.createCourse(request.getParameter("professors"), request.getParameter("schedule"), request.getParameter("title"));
                     mex = "OK";
-                } else {
+                } catch (SQLException | RuntimeException e) {
+                    e.printStackTrace();
                     mex = "Aggiunta fallita. Inserisci i dati nel formato corretto";
+                } finally {
+                    JSONObject json = new JSONObject();
+                    json.put("result", mex);
+                    out.print(json.toString());
                 }
-                JSONObject json = new JSONObject();
-                json.put("result", mex);
-                out.print(json.toString());
                 break;
 
             case "view":
@@ -75,14 +78,18 @@ public class CourseControl extends HttpServlet {
             case "delete":
                 response.setContentType("application/json");
                 PrintWriter out2 = response.getWriter();
-                boolean deleted = CourseManager.deleteCourse(Integer.parseInt(request.getParameter("id")));
-                if (deleted)
-                    mex = "OK";
-                else
-                    mex = "Errore nella rimozione del corso. Riprovare.";
-                JSONObject json2 = new JSONObject();
-                json2.put("result", mex);
-                out2.print(json2.toString());
+                String mex2 = "";
+                try {
+                    CourseManager.deleteCourse(Integer.parseInt(request.getParameter("id")));
+                    mex2 = "OK";
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    mex2 = "Errore nella rimozione del corso. Riprovare.";
+                } finally {
+                    JSONObject json2 = new JSONObject();
+                    json2.put("result", mex2);
+                    out2.print(json2.toString());
+                }
                 break;
 
             case "enroll":
@@ -94,9 +101,13 @@ public class CourseControl extends HttpServlet {
 
                 for (Enrollment enrollment : enrollments) {
                     if (enrollment.getCourseId() == courseIdParam) {
-                        addedEnrollment = EnrollmentManager.updateEnrollment(enrollment, Enrollment.EnrollType.STUDENTE);
-                        isStudente = true;
-                        break;
+                        try {
+                            addedEnrollment = EnrollmentManager.updateEnrollment(enrollment, Enrollment.EnrollType.STUDENTE);
+                            isStudente = true;
+                            break;
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
 
@@ -120,12 +131,15 @@ public class CourseControl extends HttpServlet {
 
                 for (Enrollment e : enrollmentsSet) {
                     if (e.getCourseId() == courseId) {
-                        EnrollmentManager.unenroll(Enrollment.EnrollType.STUDENTE, e);
-                        request.getSession().setAttribute("enrollments", EnrollmentManager.retrieveEnrollmentsByMemberId(member.getId()));
-                        request.getRequestDispatcher("/course/homepage.jsp").forward(request, response);
+                        try {
+                            EnrollmentManager.unenroll(Enrollment.EnrollType.STUDENTE, e);
+                            request.getSession().setAttribute("enrollments", EnrollmentManager.retrieveEnrollmentsByMemberId(member.getId()));
+                            request.getRequestDispatcher("/course/homepage.jsp").forward(request, response);
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
+                        }
                     }
                 }
-                // pagina errore
                 break;
 
             case "modify":
@@ -135,20 +149,24 @@ public class CourseControl extends HttpServlet {
                 System.out.println("Eseguo la retrieve su courseId: " + request.getParameter("id"));
                 Course course1 = CourseManager.retrieveCourseById(Integer.parseInt(request.getParameter("id")));
                 System.out.println(course1 + request.getParameter("schedule") + request.getParameter("professors"));
-                boolean check = CourseManager.modifyInfoCourse(course1,
-                        request.getParameter("professors"),
-                        request.getParameter("schedule"));
-                if (check)
-                    mex = "OK";
-                else
-                    mex = "Errore nella modifica delle info del corso. Riprovare.";
-                JSONObject json3 = new JSONObject();
-                System.out.println(mex);
-                json3.put("result", mex);
-                out3.print(json3.toString());
+                String mex1 = "";
+                try {
+                    CourseManager.modifyInfoCourse(course1,
+                            request.getParameter("professors"),
+                            request.getParameter("schedule"));
+                    mex1 = "OK";
+                } catch (SQLException | RuntimeException e) {
+                    e.printStackTrace();
+                    mex1 = "Errore nella modifica delle info del corso. Riprovare.";
+                } finally {
+                    JSONObject json3 = new JSONObject();
+                    json3.put("result", mex1);
+                    out3.print(json3.toString());
+                }
                 break;
+
             default:
-                // pagina 404
+                throw new RuntimeException("Nessuna action definita.");
         }
     }
 }

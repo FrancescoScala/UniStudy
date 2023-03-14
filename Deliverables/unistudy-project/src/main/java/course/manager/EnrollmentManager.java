@@ -24,7 +24,7 @@ public class EnrollmentManager {
     private static final String alphanumericRegex = "^.{1,50}$";//^[a-zA-Z0-9\s]+$
 
     public static Enrollment createEnrollment(int memberId, int courseId, Enrollment.EnrollType enrollType, String courseTitle) {
-        if (courseTitle.matches(alphanumericRegex)) {System.out.println("llllllllllll");
+        if (courseTitle.matches(alphanumericRegex)) {
             try {
                 String querySQL1 = "INSERT INTO enrollment(user_id, course_id, enrollment_type) VALUES (?,?,?)";
                 PreparedStatement ps1 = conn.prepareStatement(querySQL1);
@@ -43,107 +43,83 @@ public class EnrollmentManager {
 
             } catch (SQLException e) {
                 e.printStackTrace();
-                System.out.println("Mpppppp");
                 return null;
             }
         } else {
-            System.out.println("MDOMO");
             return null;
         }
     }
 
-    public static Set<Enrollment> retrieveEnrollmentsByMemberId(int memberId) { // test case not valid...
-        try {
-            Set<Enrollment> enrollments = new HashSet<Enrollment>();
-            String querySQL1 = "SELECT e.user_id,e.course_id,e.enrollment_type,c.course_title FROM enrollment AS e,course AS c WHERE e.user_id = ? AND e.course_id=c.course_id";
-            PreparedStatement ps1 = conn.prepareStatement(querySQL1);
-            ps1.setInt(1, memberId);
-            ResultSet rs1 = ps1.executeQuery();
-            if (rs1.next()) {
-                do {
-                    int courseId = rs1.getInt("e.course_id");
-                    String courseTitle = rs1.getString("c.course_title");
-                    String[] enrollTypeName = rs1.getString("e.enrollment_type").split(",");
-                    Set<Enrollment.EnrollType> enrollTypes = new HashSet<>();
-                    for (String s : enrollTypeName) {
-                        Enrollment.EnrollType enrollType = Enrollment.createRoleType(s);
-                        enrollTypes.add(enrollType);
-                    }
-                    Enrollment enrollment = new Enrollment(memberId, courseId, courseTitle, enrollTypes);
-                    enrollments.add(enrollment);
+    public static Set<Enrollment> retrieveEnrollmentsByMemberId(int memberId) throws SQLException { // test case not valid...
+        Set<Enrollment> enrollments = new HashSet<Enrollment>();
+        String querySQL1 = "SELECT e.user_id,e.course_id,e.enrollment_type,c.course_title FROM enrollment AS e,course AS c WHERE e.user_id = ? AND e.course_id=c.course_id";
+        PreparedStatement ps1 = conn.prepareStatement(querySQL1);
+        ps1.setInt(1, memberId);
+        ResultSet rs1 = ps1.executeQuery();
+        if (rs1.next()) {
+            do {
+                int courseId = rs1.getInt("e.course_id");
+                String courseTitle = rs1.getString("c.course_title");
+                String[] enrollTypeName = rs1.getString("e.enrollment_type").split(",");
+                Set<Enrollment.EnrollType> enrollTypes = new HashSet<>();
+                for (String s : enrollTypeName) {
+                    Enrollment.EnrollType enrollType = Enrollment.createRoleType(s);
+                    enrollTypes.add(enrollType);
                 }
-                while (rs1.next());
+                Enrollment enrollment = new Enrollment(memberId, courseId, courseTitle, enrollTypes);
+                enrollments.add(enrollment);
             }
-            // eliminazione return null. Il codice da null anche quando non sono presenti iscrizioni per un utente,
-            // quindi non soltanto in caso di errore
-            return enrollments;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+            while (rs1.next());
         }
+        return enrollments;
     }
 
-    public static boolean unenroll(Enrollment.EnrollType enrollType, Enrollment e) {
+    public static boolean unenroll(Enrollment.EnrollType enrollType, Enrollment e) throws SQLException {
         if (e.getRoles().size() > 1)
             return removeRoleEnrollment(e.getMemberId(), e.getCourseId(), enrollType); // aggiornare l'istanza rimuovendo il ruolo passato
         else
             return deleteEnrollment(e.getMemberId(), e.getCourseId()); // elimina la istanza di Enrollment  3 CASI DI TEST
     }
 
-    private static boolean removeRoleEnrollment(int memberId, int courseId, Enrollment.EnrollType enrollType) // da testare con xategory su enrolltype
+    private static boolean removeRoleEnrollment(int memberId, int courseId, Enrollment.EnrollType enrollType) throws SQLException // da testare con xategory su enrolltype
     {
-        try {
-            PreparedStatement ps;
-            if(enrollType.toString().equals("STUDENTE"))
-                ps = conn.prepareStatement("UPDATE unistudydb.enrollment t SET t.enrollment_type = 'GESTORECORSO' WHERE t.course_id =? AND t.user_id =?");
-            else
-                ps = conn.prepareStatement("UPDATE unistudydb.enrollment t SET t.enrollment_type = 'STUDENTE' WHERE t.course_id =? AND t.user_id =?");
-            ps.setInt(1, courseId);
-            ps.setInt(2, memberId);
-            ps.executeUpdate();
-            ps.close();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        PreparedStatement ps;
+        if (enrollType.toString().equals("STUDENTE"))
+            ps = conn.prepareStatement("UPDATE unistudydb.enrollment t SET t.enrollment_type = 'GESTORECORSO' WHERE t.course_id =? AND t.user_id =?");
+        else
+            ps = conn.prepareStatement("UPDATE unistudydb.enrollment t SET t.enrollment_type = 'STUDENTE' WHERE t.course_id =? AND t.user_id =?");
+        ps.setInt(1, courseId);
+        ps.setInt(2, memberId);
+        ps.executeUpdate();
+        ps.close();
+        return true;
     }
 
-    private static boolean deleteEnrollment(int memberId, int courseId) // da testare
+    private static boolean deleteEnrollment(int memberId, int courseId) throws SQLException // da testare
     {
-        try {
-            PreparedStatement ps;
-            ps = conn.prepareStatement("DELETE FROM enrollment WHERE course_id=? AND user_id=?");
-            ps.setInt(1, courseId);
-            ps.setInt(2, memberId);
-            ps.executeUpdate();
-            ps.close();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        PreparedStatement ps;
+        ps = conn.prepareStatement("DELETE FROM enrollment WHERE course_id=? AND user_id=?");
+        ps.setInt(1, courseId);
+        ps.setInt(2, memberId);
+        ps.executeUpdate();
+        ps.close();
+        return true;
     }
 
-    public static Enrollment updateEnrollment(Enrollment enrollment, Enrollment.EnrollType type) { //da testare
-        try {
-            enrollment.getRoles().add(type);
-            String up = "";
-            for (Enrollment.EnrollType enrollType : enrollment.getRoles())
-                up += enrollType.toString() + ",";
-            System.out.println(up);
-            up = up.substring(0, up.length() - 1);
-            System.out.println(up);
-            PreparedStatement ps = conn.prepareStatement("UPDATE unistudydb.enrollment t SET t.enrollment_type = '" + up + "' WHERE t.course_id =? AND t.user_id =?");
+    public static Enrollment updateEnrollment(Enrollment enrollment, Enrollment.EnrollType type) throws SQLException { //da testare
+        enrollment.getRoles().add(type);
+        String up = "";
+        for (Enrollment.EnrollType enrollType : enrollment.getRoles())
+            up += enrollType.toString() + ",";
+        System.out.println(up);
+        up = up.substring(0, up.length() - 1);
+        System.out.println(up);
+        PreparedStatement ps = conn.prepareStatement("UPDATE unistudydb.enrollment t SET t.enrollment_type = '" + up + "' WHERE t.course_id =? AND t.user_id =?");
 
-            ps.setInt(1, enrollment.getCourseId());
-            ps.setInt(2, enrollment.getMemberId());
-            ps.executeUpdate();
-            ps.close();
-            return enrollment;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+        ps.setInt(1, enrollment.getCourseId());
+        ps.setInt(2, enrollment.getMemberId());
+        ps.executeUpdate();
+        ps.close();
+        return enrollment;
     }
 }

@@ -63,10 +63,12 @@ public class MemberInSessionFilter implements Filter {
                 System.out.println("Utente registrato in sessione: " + request.getSession(false).getAttribute("memberInSession"));
                 chain.doFilter(request, response);
             }
+            else{
+                response.sendRedirect(request.getContextPath() + "/user/login.jsp");
+            }
         } catch (NullPointerException e) {
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/user/login.jsp");
-            //redirectToLogin(request1, response1);
         }
     }
 

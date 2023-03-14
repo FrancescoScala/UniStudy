@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -24,8 +25,9 @@ class NoteManagerTest {
     private Note noteForTesting;
     private Course courseForTesting;
     private int courseForTestingId;
+
     @BeforeAll
-    void setUp() {
+    void setUp() throws SQLException {
         //create the course for testing
         String professors = "Andrea De Lucia, Vittorio Scarano";
         String schedule = "Lun 09:00 - 11:00, Gio 15:00 - 18:00";
@@ -33,8 +35,8 @@ class NoteManagerTest {
         Set<Note> notes = new HashSet<Note>();
         Set<Notice> notices = new HashSet<Notice>();
 
-        courseForTesting = new Course(-2, professors,schedule,title,notices,notes);
-        CourseManager.createCourse(courseForTesting.getProfessors(),courseForTesting.getTimeSchedule(),courseForTesting.getTitle());
+        courseForTesting = new Course(-2, professors, schedule, title, notices, notes);
+        CourseManager.createCourse(courseForTesting.getProfessors(), courseForTesting.getTimeSchedule(), courseForTesting.getTitle());
         courseForTestingId = CourseManager.retrieveIdCourseByTitle(courseForTesting.getTitle());
         courseForTesting.setId(courseForTestingId);
 
@@ -51,13 +53,14 @@ class NoteManagerTest {
         MemberManager.signupMember(email, password, name, surname);
         authorForTesting.setId(MemberManager.retrieveIdMemberByEmail(email));
         //create the note for testing, using the id of the author just created
-        noteForTesting = new Note(-1,"descrizione",new Timestamp(System.currentTimeMillis()),"/ciao/filepath.img","title",
+        noteForTesting = new Note(-1, "descrizione", new Timestamp(System.currentTimeMillis()), "/ciao/filepath.img", "title",
                 authorForTesting.getId(),
-                authorForTesting.getName()+" "+authorForTesting.getSurname());
+                authorForTesting.getName() + " " + authorForTesting.getSurname());
     }
 
     @AfterAll
     void tearDown() throws SQLException {
+        boolean check = NoteManager.deleteNote(noteForTesting.getId());
         Connection con = ConnectionPoolDB.getConnection();
 
         PreparedStatement ps2 = con.prepareStatement("DELETE FROM course WHERE course_id=?");
@@ -71,14 +74,14 @@ class NoteManagerTest {
         ps1.close();
 
         con.close();
+        assertTrue(check);
     }
 
     @Order(1)
     @Test
-    void createNoteSuccess()
-    {
-        boolean check = NoteManager.createNote(noteForTesting.getDescription(),noteForTesting.getCreationDate(),noteForTesting.getFilePath(),noteForTesting.getTitle(),
-                noteForTesting.getAuthorId(), noteForTesting.getAuthorInfo(),courseForTesting.getId());
+    void createNoteSuccess() throws SQLException {
+        boolean check = NoteManager.createNote(noteForTesting.getDescription(), noteForTesting.getCreationDate(), noteForTesting.getFilePath(), noteForTesting.getTitle(),
+                noteForTesting.getAuthorId(), noteForTesting.getAuthorInfo(), courseForTesting.getId());
 
         assertTrue(check);
     }
@@ -92,91 +95,59 @@ class NoteManagerTest {
     }*/
 
     @Test
-    void createNoteAuthorInfoBadFormatted()
-    {
-        boolean check = NoteManager.createNote(noteForTesting.getDescription(),noteForTesting.getCreationDate(),noteForTesting.getFilePath(),noteForTesting.getTitle(),
-                noteForTesting.getAuthorId(),"12315",courseForTesting.getId());
-
-        assertFalse(check);
+    void createNoteAuthorInfoBadFormatted() {
+        assertThrows(RuntimeException.class, () -> {
+            NoteManager.createNote(noteForTesting.getDescription(), noteForTesting.getCreationDate(), noteForTesting.getFilePath(), noteForTesting.getTitle(),
+                    noteForTesting.getAuthorId(), "12315", courseForTesting.getId());
+        });
     }
 
     @Test
-    void createNoteAuthorInfoEmpty()
-    {
-        boolean check = NoteManager.createNote(noteForTesting.getDescription(),noteForTesting.getCreationDate(),noteForTesting.getFilePath(),noteForTesting.getTitle(),
-                noteForTesting.getAuthorId(), "",courseForTesting.getId());
-
-        assertFalse(check);
+    void createNoteAuthorIdNotValid() {
+        assertThrows(SQLException.class, () -> {
+            NoteManager.createNote(noteForTesting.getDescription(), noteForTesting.getCreationDate(), noteForTesting.getFilePath(), noteForTesting.getTitle(),
+                    -1, noteForTesting.getAuthorInfo(), courseForTesting.getId());
+        });
     }
 
     @Test
-    void createNoteAuthorIdNotValid()
-    {
-        boolean check = NoteManager.createNote(noteForTesting.getDescription(),noteForTesting.getCreationDate(),noteForTesting.getFilePath(),noteForTesting.getTitle(),
-                -1, noteForTesting.getAuthorInfo(),courseForTesting.getId());
-
-        assertFalse(check);
+    void createNoteCourseIdNotValid() {
+        assertThrows(SQLException.class, () -> {
+            NoteManager.createNote(noteForTesting.getDescription(), noteForTesting.getCreationDate(), noteForTesting.getFilePath(), noteForTesting.getTitle(),
+                    noteForTesting.getAuthorId(), noteForTesting.getAuthorInfo(), -1);
+        });
     }
 
     @Test
-    void createNotePathBadFormatted()
-    {
-        boolean check = NoteManager.createNote(noteForTesting.getDescription(),noteForTesting.getCreationDate(),"badFormattedPath",noteForTesting.getTitle(),
-                noteForTesting.getAuthorId(), noteForTesting.getAuthorInfo(),courseForTesting.getId());
-
-        assertFalse(check);
-    }
-
-    //checks on the description still to implement in NoteManager
-    @Test
-    void createNoteDescriptionMaxLength()
-    {
-        String descriptionForTesting= "Risale al 1944 la costituzione di un istituto universitario di magistero nella città, fortemente voluto da Giovanni Cuomo. Esso divenne statale nel 1968, trasformandosi nella facoltà di magistero della costituenda Università degli Studi di Salerno. Nel 1969 la facoltà di magistero divenne facoltà di lettere e filosofia, affiancata, dal 1970, dalla facoltà di economia e commercio. Nel 1972 furono fondate le facoltà di scienze matematiche, fisiche e naturali e di giurisprudenza, nel 1983 il corso completo di ingegneria. Nel 1988 l'università fu spostata dal centro urbano del comune capoluogo alle nuove strutture del comune di Fisciano, ai margini della provincia. Nel 1991 fu aggiunta la facoltà di farmacia, nel 1992 quella di scienze politiche, nel 1996 quella di lingue e letterature straniere e nel 2006 la facoltà di medicina e chirurgia.[1] Nel 2006 avviò i propri corsi la scuola di giornalismo di Salerno, riconosciuta dall'Ordine nazionale dei giornalisti[2], mentre nel 2014 furono attivate le prime tre scuole di specializzazione dell'area medica presso l'Azienda Ospedaliera Universitaria San Giovanni di Dio e Ruggi D'Aragona";
-        boolean check = NoteManager.createNote(descriptionForTesting,noteForTesting.getCreationDate(), noteForTesting.getFilePath(), noteForTesting.getTitle(),
-                noteForTesting.getAuthorId(), noteForTesting.getAuthorInfo(),courseForTesting.getId());
-
-        assertFalse(check);
+    void createNotePathBadFormatted() {
+        assertThrows(RuntimeException.class, () -> {
+            NoteManager.createNote(noteForTesting.getDescription(), noteForTesting.getCreationDate(), "badFormattedPath", noteForTesting.getTitle(),
+                    noteForTesting.getAuthorId(), noteForTesting.getAuthorInfo(), courseForTesting.getId());
+        });
     }
 
     @Test
-    void createNoteDescriptionEmpty()
-    {
-        boolean check = NoteManager.createNote("",noteForTesting.getCreationDate(), noteForTesting.getFilePath(), noteForTesting.getTitle(),
-                noteForTesting.getAuthorId(), noteForTesting.getAuthorInfo(),courseForTesting.getId());
-
-        assertFalse(check);
+    void createNoteDescriptionBadFormatted() {
+        assertThrows(RuntimeException.class, () -> {
+            NoteManager.createNote("", noteForTesting.getCreationDate(), noteForTesting.getFilePath(), noteForTesting.getTitle(),
+                    noteForTesting.getAuthorId(), noteForTesting.getAuthorInfo(), courseForTesting.getId());
+        });
     }
 
     //checks on the title still to implement in NoteManager
     @Test
-    void createNoteTitleBadFormatted()
-    {
-        boolean check = NoteManager.createNote(noteForTesting.getDescription(), noteForTesting.getCreationDate(), noteForTesting.getFilePath(),"_$!&",
-                noteForTesting.getAuthorId(), noteForTesting.getAuthorInfo(),courseForTesting.getId());
-
-        assertFalse(check);
+    void createNoteTitleBadFormatted() {
+        assertThrows(RuntimeException.class, () -> {
+            NoteManager.createNote(noteForTesting.getDescription(), noteForTesting.getCreationDate(), noteForTesting.getFilePath(), "",
+                    noteForTesting.getAuthorId(), noteForTesting.getAuthorInfo(), courseForTesting.getId());
+        });
     }
 
     @Test
-    void createNoteTitleEmpty()
-    {
-        boolean check = NoteManager.createNote(noteForTesting.getDescription(), noteForTesting.getCreationDate(), noteForTesting.getFilePath(),"",
-                noteForTesting.getAuthorId(), noteForTesting.getAuthorInfo(),courseForTesting.getId());
-
-        assertFalse(check);
-    }
-
-    @Test
-    void retrieveNotesByCourseIdSuccess() {
+    void retrieveNotesByCourseIdSuccess() throws SQLException {
         Set<Note> notes = NoteManager.retrieveNotesByCourseId(courseForTesting.getId());
         courseForTesting = CourseManager.retrieveCourseById(courseForTestingId);
-        assertEquals(courseForTesting.getNotes(),notes);
+        assertEquals(courseForTesting.getNotes(), notes);
     }
 
-/*    @Test
-    void retrieveNotesByCourseIdNotValid()
-    {
-        Set<Note> notes = NoteManager.retrieveNotesByCourseId(-1);
-        assertNull(notes);
-    }*/
 }

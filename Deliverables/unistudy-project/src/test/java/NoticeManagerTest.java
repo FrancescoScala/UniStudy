@@ -20,7 +20,7 @@ class NoticeManagerTest {
     private Notice noticeForTesting;
 
     @BeforeAll
-    void setUp() {
+    void setUp() throws SQLException {
         String professors = "Andrea De Lucia, Vittorio Scarano";
         String schedule = "Lun 09:00 - 11:00, Gio 15:00 - 18:00";
         String title = "Ingegneria del software";
@@ -37,12 +37,14 @@ class NoticeManagerTest {
     @AfterAll
     void tearDown() {
         try {
+            boolean check = NoticeManager.deleteNotice(courseForTestingId);
             Connection con = ConnectionPoolDB.getConnection();
             PreparedStatement ps = con.prepareStatement("DELETE FROM course WHERE course_id=?");
             ps.setInt(1, courseForTesting.getId());
             ps.executeUpdate();
             ps.close();
             con.close();
+            assertTrue(check);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -51,7 +53,7 @@ class NoticeManagerTest {
 
     @Test
     @Order(1)
-    void createNoticeSuccess() {
+    void createNoticeSuccess() throws SQLException {
         boolean check = NoticeManager.createNotice(noticeForTesting.getTitle(), noticeForTesting.getCreationDate(), noticeForTesting.getDescription(), courseForTesting.getId());
         courseForTesting = CourseManager.retrieveCourseById(courseForTestingId);
         assertTrue(check);
@@ -59,30 +61,26 @@ class NoticeManagerTest {
 
     @Test
     void createNoticeCourseNotValid() {
-       // courseForTesting.setId(-1);
-
-        boolean check = NoticeManager.createNotice(noticeForTesting.getTitle(), noticeForTesting.getCreationDate(), noticeForTesting.getDescription(),-1);
-        courseForTesting.setId(courseForTestingId);
-
-        assertFalse(check);
+        assertThrows(SQLException.class, () -> {
+            NoticeManager.createNotice(noticeForTesting.getTitle(), noticeForTesting.getCreationDate(), noticeForTesting.getDescription(), -1);
+        });
     }
 
     @Test
     void createNoticeTitleBadFormatted() {
         String titleForTesting = "";
-        boolean check = NoticeManager.createNotice(titleForTesting, noticeForTesting.getCreationDate(), noticeForTesting.getDescription(), courseForTesting.getId());
-
-        assertFalse(check);
+        assertThrows(RuntimeException.class, () -> {
+            NoticeManager.createNotice(titleForTesting, noticeForTesting.getCreationDate(), noticeForTesting.getDescription(), courseForTesting.getId());
+        });
     }
 
     @Test
     void createNoticeDescrBadFormatted() {
         String descriptionForTesting = "";
-        boolean check = NoticeManager.createNotice(noticeForTesting.getTitle(), noticeForTesting.getCreationDate(), descriptionForTesting, courseForTesting.getId());
-
-        assertFalse(check);
+        assertThrows(RuntimeException.class, () -> {
+            NoticeManager.createNotice(noticeForTesting.getTitle(), noticeForTesting.getCreationDate(), descriptionForTesting, courseForTesting.getId());
+        });
     }
-
 
 /*
     @Test

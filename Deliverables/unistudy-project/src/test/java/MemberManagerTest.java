@@ -48,10 +48,9 @@ class MemberManagerTest {
 
     @Order(1)
     @Test
-    void signupMemberSuccess() {
+    void signupMemberSuccess() throws SQLException {
         boolean check = MemberManager.signupMember(memberForTesting.getEmail(), memberForTesting.getPassword(), memberForTesting.getName(), memberForTesting.getSurname());
         memberForTesting.setId(MemberManager.retrieveIdMemberByEmail(memberForTesting.getEmail()));
-
         assertTrue(check);
     }
 
@@ -62,9 +61,9 @@ class MemberManagerTest {
         String name = "Name";
         String surname = "Surname";
 
-        boolean check = MemberManager.signupMember(email, password, name, surname);
-
-        assertFalse(check);
+        assertThrows(RuntimeException.class, () -> {
+            MemberManager.signupMember(email, password, name, surname);
+        });
     }
 
     @Test
@@ -74,12 +73,9 @@ class MemberManagerTest {
         String name = "Name";
         String surname = "Surname";
 
-        boolean check = MemberManager.signupMember(email, password, name, surname);
-        assertFalse(check);
-        /*assertThrows(RuntimeException.class, () -> {
+        assertThrows(RuntimeException.class, () -> {
             MemberManager.signupMember(email, password, name, surname);
-        });*/
-
+        });
     }
 
     @Test
@@ -89,9 +85,9 @@ class MemberManagerTest {
         String name = "Name";
         String surname = "Surname";
 
-        boolean check = MemberManager.signupMember(email, password, name, surname);
-
-        assertFalse(check);
+        assertThrows(RuntimeException.class, () -> {
+            MemberManager.signupMember(email, password, name, surname);
+        });
     }
 
     @Test
@@ -101,9 +97,9 @@ class MemberManagerTest {
         String name = "Name8";
         String surname = "Surname";
 
-        boolean check = MemberManager.signupMember(email, password, name, surname);
-
-        assertFalse(check);
+        assertThrows(RuntimeException.class, () -> {
+            MemberManager.signupMember(email, password, name, surname);
+        });
     }
 
     @Test
@@ -113,25 +109,22 @@ class MemberManagerTest {
         String name = "Name";
         String surname = "Surname8";
 
-        boolean check = MemberManager.signupMember(email, password, name, surname);
-
-        assertFalse(check);
+        assertThrows(RuntimeException.class, () -> {
+            MemberManager.signupMember(email, password, name, surname);
+        });
     }
 
     //Login
     @Order(2)
     @Test
-    void loginMemberSuccess() {
-        try {
-            Connection con = ConnectionPoolDB.getConnection();
-            PreparedStatement ps = con.prepareStatement("INSERT INTO has_role(user_id,role_id) VALUES (?,2)");
-            ps.setInt(1, memberForTesting.getId());
-            ps.executeUpdate();
-            ps.close();
-            con.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    void loginMemberSuccess() throws SQLException, RuntimeException {
+        Connection con = ConnectionPoolDB.getConnection();
+        PreparedStatement ps = con.prepareStatement("INSERT INTO has_role(user_id,role_id) VALUES (?,2)");
+        ps.setInt(1, memberForTesting.getId());
+        ps.executeUpdate();
+        ps.close();
+        con.close();
+
         Member member = MemberManager.loginMember(memberForTesting.getEmail(), memberForTesting.getPassword());
 
         assertEquals(memberForTesting, member);
@@ -142,9 +135,9 @@ class MemberManagerTest {
         String email = "test@notExistingEmail.com";
         String password = "P@ssword8";
 
-        Member member = MemberManager.loginMember(email, password);
-
-        assertNull(member);
+        assertThrows(RuntimeException.class, () -> {
+            Member member = MemberManager.loginMember(email, password);
+        });
     }
 
     @Test
@@ -152,9 +145,9 @@ class MemberManagerTest {
         String email = "testemail.com";
         String password = "P@ssword8";
 
-        Member user = MemberManager.loginMember(email, password);
-
-        assertNull(user);
+        assertThrows(RuntimeException.class, () -> {
+            Member member = MemberManager.loginMember(email, password);
+        });
     }
 
 
@@ -163,9 +156,9 @@ class MemberManagerTest {
         String email = "test@email.com";
         String password = "P@ssword1";
 
-        Member member = MemberManager.loginMember(email, password);
-
-        assertNull(member);
+        assertThrows(RuntimeException.class, () -> {
+            Member member = MemberManager.loginMember(email, password);
+        });
     }
 
     @Test
@@ -173,13 +166,13 @@ class MemberManagerTest {
         String email = "test@email.com";
         String password = "Password8";
 
-        Member user = MemberManager.loginMember(email, password);
-
-        assertNull(user);
+        assertThrows(RuntimeException.class, () -> {
+            Member member = MemberManager.loginMember(email, password);
+        });
     }
 
     @Test
-    void modifyInfoMemberSuccess() {
+    void modifyInfoMemberSuccess() throws SQLException {
         String oldPassword = "P@ssword8";
         String newPassword = "P@ssword888";
         String name = "Pinco";
@@ -197,9 +190,9 @@ class MemberManagerTest {
         String name = "Pinco";
         String surname = "Pallino89";
 
-        boolean check = MemberManager.modifyInfoMember(memberForTesting, name, surname, newPassword, oldPassword);
-
-        assertFalse(check);
+        assertThrows(RuntimeException.class, () -> {
+            MemberManager.modifyInfoMember(memberForTesting, name, surname, newPassword, oldPassword);
+        });
     }
 
     @Test
@@ -209,9 +202,9 @@ class MemberManagerTest {
         String name = "Pinco88";
         String surname = "Pallino";
 
-        boolean check = MemberManager.modifyInfoMember(memberForTesting, name, surname, newPassword, oldPassword);
-
-        assertFalse(check);
+        assertThrows(RuntimeException.class, () -> {
+            MemberManager.modifyInfoMember(memberForTesting, name, surname, newPassword, oldPassword);
+        });
     }
 
     @Test
@@ -221,9 +214,9 @@ class MemberManagerTest {
         String name = "Pinco";
         String surname = "Pallino";
 
-        boolean check = MemberManager.modifyInfoMember(memberForTesting, name, surname, newPassword, oldPassword);
-
-        assertFalse(check);
+        assertThrows(RuntimeException.class, () -> {
+            MemberManager.modifyInfoMember(memberForTesting, name, surname, newPassword, oldPassword);
+        });
     }
 
     @Test
@@ -233,9 +226,9 @@ class MemberManagerTest {
         String name = "Pinco";
         String surname = "Pallino";
 
-        boolean check = MemberManager.modifyInfoMember(memberForTesting, name, surname, newPassword, oldPassword);
-
-        assertFalse(check);
+        assertThrows(RuntimeException.class, () -> {
+            MemberManager.modifyInfoMember(memberForTesting, name, surname, newPassword, oldPassword);
+        });
     }
 
     @Test
@@ -245,9 +238,9 @@ class MemberManagerTest {
         String name = "Pinco";
         String surname = "Pallino";
 
-        boolean check = MemberManager.modifyInfoMember(memberForTesting, name, surname, newPassword, oldPassword);
-
-        assertFalse(check);
+        assertThrows(RuntimeException.class, () -> {
+            MemberManager.modifyInfoMember(memberForTesting, name, surname, newPassword, oldPassword);
+        });
     }
 
     @Test
@@ -256,24 +249,10 @@ class MemberManagerTest {
         String newPassword = "P@ssword888";
         String name = "Pinco";
         String surname = "Pallino";
+        Member member = new Member(-2, "test@emailNotExisting.com", "P@ssword8", "Name", "Surname", new HashSet<Role>());
 
-        boolean check = MemberManager.modifyInfoMember(new Member(-2, "test@emailNotExisting.com", "P@ssword8", "Name", "Surname", new HashSet<Role>()), name, surname, newPassword, oldPassword);
-
-        assertFalse(check);
+        assertThrows(RuntimeException.class, () -> {
+            MemberManager.modifyInfoMember(member, name, surname, newPassword, oldPassword);
+        });
     }
-
-/*
-    @Test
-    void retrieveIdMemberByEmailSuccess() {
-        String email = memberForTesting.getEmail();
-        int id = MemberManager.retrieveIdMemberByEmail(email);
-        assertEquals(memberForTesting.getId(),id);
-    }
-
-    @Test
-    void retrieveIdMemberByEmailNotValid() {
-        String email = "test@otheremail.com";
-        int id = MemberManager.retrieveIdMemberByEmail(email);
-        assertEquals(-1,id);
-    }*/
 }

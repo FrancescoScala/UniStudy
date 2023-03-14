@@ -7,6 +7,4 @@
         <welcome-file>/user/login.jsp</welcome-file>
     </welcome-file-list>
 
-
-
 </web-app>

@@ -17,8 +17,11 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
+import static course.beans.Enrollment.EnrollType.GESTORECORSO;
 import static course.beans.Enrollment.EnrollType.STUDENTE;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -28,7 +31,7 @@ public class EnrollmentManagerTest {
     private Set<Enrollment> enrollmentsForTesting;
     private Course courseForTesting;
     @BeforeAll
-    void setUp() {
+    void setUp() throws SQLException {
         //create the course for testing
         String professors = "Andrea De Lucia, Vittorio Scarano";
         String schedule = "Lun 09:00 - 11:00, Gio 15:00 - 18:00";
@@ -116,18 +119,59 @@ public class EnrollmentManagerTest {
     }
 
     @Test
-    void unenrollSTUDENTE() {
-        Boolean check = EnrollmentManager.unenroll(STUDENTE,enrollmentForTesting);
+    void unenrollSTUDENTE() throws SQLException {
+        Set<Enrollment.EnrollType> mockedRoles = mock(Set.class);
+        when(mockedRoles.size()).thenReturn(2);
 
+        Enrollment e = mock(Enrollment.class);
+        when(e.getRoles()).thenReturn(mockedRoles);
+        when(e.getCourseId()).thenReturn(enrollmentForTesting.getCourseId());
+        when(e.getMemberId()).thenReturn(enrollmentForTesting.getMemberId());
+
+        Boolean check = EnrollmentManager.unenroll(STUDENTE,e);
+        assertTrue(check);
     }
 
-/*    @Test
-    void retrieveEnrollmentsByMemberIdSuccess() {
+    @Test
+    void unenrollGESTORECORSO() throws SQLException {
+        Set<Enrollment.EnrollType> mockedRoles = mock(Set.class);
+        when(mockedRoles.size()).thenReturn(2);
+
+        Enrollment e = mock(Enrollment.class);
+        when(e.getRoles()).thenReturn(mockedRoles);
+        when(e.getCourseId()).thenReturn(enrollmentForTesting.getCourseId());
+        when(e.getMemberId()).thenReturn(enrollmentForTesting.getMemberId());
+
+        Boolean check = EnrollmentManager.unenroll(GESTORECORSO,e);
+        assertTrue(check);
+    }
+
+    @Test
+    void unenrollDeletion() throws SQLException {
+        Set<Enrollment.EnrollType> mockedRoles = mock(Set.class);
+        when(mockedRoles.size()).thenReturn(1);
+
+        Enrollment e = mock(Enrollment.class);
+        when(e.getRoles()).thenReturn(mockedRoles);
+        when(e.getCourseId()).thenReturn(enrollmentForTesting.getCourseId());
+        when(e.getMemberId()).thenReturn(enrollmentForTesting.getMemberId());
+
+        Boolean check = EnrollmentManager.unenroll(STUDENTE,e);
+        assertTrue(check);
+    }
+
+    @Test
+    void retrieveEnrollmentsByMemberIdSuccess() throws SQLException {
         int id = memberForTesting.getId();
         Set<Enrollment> enrollments = EnrollmentManager.retrieveEnrollmentsByMemberId(id);
-        assertEquals(enrollmentsForTesting,enrollments);
+        assertNotNull(enrollments);
     }
-*/
+
+    @Test
+    void updateEnrollmentSuccess() throws SQLException {
+        assertNotNull(EnrollmentManager.updateEnrollment(enrollmentForTesting, GESTORECORSO));
+    }
+
 /*    @Test
     void retrieveEnrollmentsByMemberIdNotValid() {
         int id = -3;

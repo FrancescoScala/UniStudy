@@ -16,7 +16,8 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;display=swap">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/fonts/font-awesome.min.css">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/-Login-form-Page-BS4--Login-form-Page-BS4.css">
+    <link rel="stylesheet"
+          href="<%=request.getContextPath()%>/assets/css/-Login-form-Page-BS4--Login-form-Page-BS4.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/Banner-Heading-Image-images.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/Custom-File-Upload.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/Cute-Select.css">
@@ -42,6 +43,12 @@
                 <h3><span id="mex">Registrazione andata a buon fine!</span></h3>
                 <%
                     }
+                    if (request.getParameter("msg") != null &&
+                            request.getParameter("msg").equals("loginError")) {
+                %>
+                <h3><span id="mex">Login fallito. Inserisci i dati nel formato corretto.</span></h3>
+                <%
+                    }
                 %>
                 <form method="post" action="<%=request.getContextPath()%>/user/MemberControl">
                     <input type="hidden" name="action" value="login">
@@ -52,7 +59,8 @@
                             class="form-control" type="password" name="password" required=""></div>
                     <button class="btn btn-info mt-2" type="submit">Log In</button>
                 </form>
-                <p class="mt-3 mb-0"><a class="text-info small" href="<%=request.getContextPath()%>/user/signup.jsp">Oppure clicca qui per registrarti</a>
+                <p class="mt-3 mb-0"><a class="text-info small" href="<%=request.getContextPath()%>/user/signup.jsp">Oppure
+                    clicca qui per registrarti</a>
                 </p>
             </div>
         </div>

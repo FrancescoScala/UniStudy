@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Set;
 
@@ -36,24 +37,25 @@ public class NoteControl extends HttpServlet {
                         author.getId() +
                         author.getName() + author.getSurname() +
                         Integer.parseInt(request.getParameter("id")));
-
-                boolean check = NoteManager.createNote(request.getParameter("description"),
-                        new Timestamp(System.currentTimeMillis()),
-                        "/ciao/filepath.img",
-                        request.getParameter("title"),
-                        author.getId(),
-                        author.getName() + " " + author.getSurname(),
-                        Integer.parseInt(request.getParameter("id")));
-                String mex;
-                if (check) {
+                String mex = "";
+                try {
+                    NoteManager.createNote(request.getParameter("description"),
+                            new Timestamp(System.currentTimeMillis()),
+                            "/ciao/filepath.img",
+                            request.getParameter("title"),
+                            author.getId(),
+                            author.getName() + " " + author.getSurname(),
+                            Integer.parseInt(request.getParameter("id")));
                     mex = "OK";
-                } else {
+                } catch (SQLException | RuntimeException e) {
+                    e.printStackTrace();
                     mex = "Aggiunta nota fallita. Reinsirisci i dati nel formato errato corretto e riprova";
+                } finally {
+                    JSONObject json = new JSONObject();
+                    json.put("result", mex);
+                    System.out.println("addNote restituisce: " + mex);
+                    out.print(json.toString());
                 }
-                JSONObject json = new JSONObject();
-                json.put("result", mex);
-                System.out.println("addNote restituisce: " + mex);
-                out.print(json.toString());
                 break;
 
             case "delete":
@@ -62,36 +64,45 @@ public class NoteControl extends HttpServlet {
                     Member member = (Member) request.getSession().getAttribute("memberInSession");
                     int noteAuthorId = Integer.parseInt(request.getParameter("noteAuthorId"));
                     if (member.getId() == noteAuthorId) {
-                        boolean checkDelete = NoteManager.deleteNote(Integer.parseInt(request.getParameter("noteId")));
-                        if (checkDelete) {
+                        try {
+                            NoteManager.deleteNote(Integer.parseInt(request.getParameter("noteId")));
                             int id = Integer.parseInt(request.getParameter("id"));
                             Course course1 = CourseManager.retrieveCourseById(id);
                             request.setAttribute("course", course1);
                             request.getRequestDispatcher("/course/studente/view_course.jsp?id=" + course1.getId() + "").forward(request, response);
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
                         }
-                        // else pagina di errore
                     }
                 } else {
-                    boolean checkDelete1 = NoteManager.deleteNote(Integer.parseInt(request.getParameter("noteId")));
-                    if (checkDelete1) {
+                    try {
+                        NoteManager.deleteNote(Integer.parseInt(request.getParameter("noteId")));
                         int id = Integer.parseInt(request.getParameter("id"));
-                        Set<Note> notes = NoteManager.retrieveNotesByCourseId(id);
+                        Set<Note> notes = null;
+                        notes = NoteManager.retrieveNotesByCourseId(id);
                         System.out.println(notes);
                         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/course/gestorecorso/remove-note.jsp?id=" + id);
                         request.setAttribute("notes", notes);
                         dispatcher.forward(request, response);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
                     }
                 }
                 break;
 
             case "view":
-                System.out.println("Sono in note view");
-                Set<Note> notes = NoteManager.retrieveNotesByCourseId(Integer.parseInt(request.getParameter("id")));
-                System.out.println("Note:" + notes);
-                RequestDispatcher dispatcher = this.getServletContext()
-                        .getRequestDispatcher("/course/gestorecorso/remove-note.jsp?id=" + request.getParameter("id"));
-                request.setAttribute("notes", notes);
-                dispatcher.forward(request, response);
+                try {
+                    System.out.println("Sono in note view");
+                    Set<Note> notes = null;
+                    notes = NoteManager.retrieveNotesByCourseId(Integer.parseInt(request.getParameter("id")));
+                    System.out.println("Note:" + notes);
+                    RequestDispatcher dispatcher = this.getServletContext()
+                            .getRequestDispatcher("/course/gestorecorso/remove-note.jsp?id=" + request.getParameter("id"));
+                    request.setAttribute("notes", notes);
+                    dispatcher.forward(request, response);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 break;
             default:
         }
