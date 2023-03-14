@@ -81,7 +81,7 @@
                                                              for="professors">Professori</label><input
                                             class="form-control" name="professors" required=""
                                             pattern="^^(?:[a-zA-Z](?:\s[a-zA-Z]+)?(?:,\s?(?=[a-zA-Z]))?)+(?!,$)$"
-                                            oninvalid="this.setCustomValidity('Il campo evidenziato contenere solo lettere e/o spazi al suo interno. In caso di più docenti, separarli tramite una virgola')"
+                                            oninvalid="this.setCustomValidity('Il campo evidenziato deve contenere solo lettere e/o spazi al suo interno. In caso di più docenti, separarli tramite una virgola')"
                                             onchange="this.setCustomValidity('')" id="professors"></div>
                                     <button id="createCourseButton" class="btn btn-primary d-block w-100"
                                             type="submit">Conferma

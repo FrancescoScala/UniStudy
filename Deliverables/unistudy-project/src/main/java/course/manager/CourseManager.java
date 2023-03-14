@@ -59,12 +59,12 @@ public class CourseManager {
 
     }
 
-    public static boolean modifyInfoCourse(Course course, String newProfessor, String newSchedule) {
-        if(newProfessor.matches(professorsRegex) && newSchedule.matches(scheduleRegex)) {
+    public static boolean modifyInfoCourse(Course course, String newProfessors, String newSchedule) {
+        if(newProfessors.matches(professorsRegex) && newSchedule.matches(scheduleRegex) && retrieveIdCourseByTitle(course.getTitle())!=-1) {
             try {
                 String querySQL = "UPDATE course SET course_professors = ? , course_schedule = ? WHERE course_id=?";
                 PreparedStatement ps = conn.prepareStatement(querySQL);
-                ps.setString(1, newProfessor);
+                ps.setString(1, newProfessors);
                 ps.setString(2, newSchedule);
                 ps.setInt(3, course.getId());
                 ps.executeUpdate();
@@ -142,8 +142,6 @@ public class CourseManager {
                     courses.add(course);
                 } while (rs.next());
             }
-            else
-                return null;
             return courses;
         } catch (SQLException e) {
             e.printStackTrace();
