@@ -34,15 +34,11 @@ public class MemberControl extends HttpServlet {
                     check = MemberManager.signupMember(request.getParameter("email"), request.getParameter("password"),
                             request.getParameter("name"), request.getParameter("surname"));
                     mex = "OK";
-                }
-
-                catch (SQLException | RuntimeException e) {
+                } catch (SQLException | RuntimeException e) {
                     e.printStackTrace();
                     mex = "Registrazione fallita, si prega di riprovare";
 
-                }
-
-                finally {
+                } finally {
                     JSONObject json = new JSONObject();
                     json.put("result", mex);
                     out.print(json.toString());
@@ -59,7 +55,7 @@ public class MemberControl extends HttpServlet {
                     RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/course/homepage.jsp");
                     request.getSession().setAttribute("memberInSession", member);
                     request.getSession().setAttribute("enrollments", enrollments);
-                    System.out.println(member+" , "+enrollments+" , "+dispatcher);
+                    System.out.println(member + " , " + enrollments + " , " + dispatcher);
                     dispatcher.forward(request, response);
 
                 } catch (SQLException | RuntimeException e) {
@@ -67,7 +63,25 @@ public class MemberControl extends HttpServlet {
                     RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/user/login.jsp?msg=loginError");
                     dispatcher.forward(request, response);
                 }
+                break;
 
+            case "modify":
+                response.setContentType("application/json");
+                PrintWriter out1 = response.getWriter();
+                boolean check1 = false;
+                String mex1 = "";
+                try {
+                    check1 = MemberManager.modifyInfoMember((Member) request.getSession().getAttribute("memberInSession"), request.getParameter("name"), request.getParameter("surname"), request.getParameter("newPassword"), request.getParameter("oldPassword"));
+                    mex1 = "OK";
+                } catch (SQLException | RuntimeException e) {
+                    e.printStackTrace();
+                    mex1 = "Modifica fallita, si prega di riprovare";
+
+                } finally {
+                    JSONObject json = new JSONObject();
+                    json.put("result", mex1);
+                    out1.print(json.toString());
+                }
                 break;
 
             case "logout":

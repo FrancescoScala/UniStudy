@@ -73,7 +73,7 @@
                                             oninvalid="this.setCustomValidity('Il campo evidenziato deve avere da 1 a 50 caratteri')"
                                             onchange="this.setCustomValidity('')" id="title"></div>
                                     <div class="mb-3"><label class="form-label" for="schedule">Orario</label><input
-                                            class="form-control" name="schedule" required=""
+                                            class="form-control" placeholder="Lun 09:00 - 11:00, Gio 15:00 - 18:00" name="schedule" required=""
                                             pattern="^((Lun|Mar|Mer|Gio|Ven)\s(0[0-9]|1[0-9]|2[0-4]):[0-5][0-9]\s-\s(0[0-9]|1[0-9]|2[0-4]):[0-5][0-9],?\s?)*$"
                                             oninvalid="this.setCustomValidity('Il campo evidenziato deve rispettare il formato. Es: Lun 09:00 - 10:00')"
                                             onchange="this.setCustomValidity('')" id="schedule"></div>

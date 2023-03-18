@@ -82,12 +82,12 @@ class NoticeManagerTest {
         });
     }
 
-/*
+
     @Test
-    void retrieveNoticesByCourseIdSuccess() {
+    void retrieveNoticesByCourseIdSuccess() throws SQLException {
         Set<Notice> notices = NoticeManager.retrieveNoticesByCourseId(courseForTesting.getId());
         assertEquals(courseForTesting.getNotices(), notices);
-    }*/
+    }
 
 
 /*    @Test

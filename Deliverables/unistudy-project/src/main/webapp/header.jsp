@@ -50,7 +50,9 @@
                         <div class="dropdown-menu" data-bs-popper="none"><a class="dropdown-item"
                                                                             href="<%=request.getContextPath()%>/user/select-role.jsp">Seleziona
                             permessi</a><a class="dropdown-item"
-                                           href="<%=request.getContextPath()%>/user/MemberControl?action=logout">Logout</a>
+                                           href="<%=request.getContextPath()%>/user/MemberControl?action=logout">Logout</a><a
+                                class="dropdown-item"
+                                href="<%=request.getContextPath()%>/user/info-modify.jsp">Modifica info personali</a>
                         </div>
                     </div>
                 </li>

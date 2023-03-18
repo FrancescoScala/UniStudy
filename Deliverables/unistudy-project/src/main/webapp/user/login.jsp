@@ -46,17 +46,23 @@
                     if (request.getParameter("msg") != null &&
                             request.getParameter("msg").equals("loginError")) {
                 %>
-                <h3><span id="mex">Login fallito. Inserisci i dati nel formato corretto.</span></h3>
+                <h3><span id="mex">Email e/o password errata, si prega di riprovare</span></h3>
                 <%
                     }
                 %>
                 <form method="post" action="<%=request.getContextPath()%>/user/MemberControl">
                     <input type="hidden" name="action" value="login">
                     <div class="form-group mb-3"><label class="form-label text-secondary">Email</label><input
-                            class="form-control" type="text" required="" name="email"
-                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}$" inputmode="email"></div>
+                            class="form-control" id="email" type="text" required="" name="email"
+                            pattern="[a-zA-z0-9._%+-]+@[a-zA-z0-9.-]+\.[a-z]{2,15}$" inputmode="email"
+                            oninvalid="this.setCustomValidity('Inserisci un indirizzo email valido. Es: mail@mail.com')"
+                            onchange="this.setCustomValidity('')"></div>
                     <div class="form-group mb-3"><label class="form-label text-secondary">Password</label><input
-                            class="form-control" type="password" name="password" required=""></div>
+                            class="form-control" id="password" type="password" name="password" required=""
+                            pattern="^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,12}$"
+                            oninvalid="this.setCustomValidity('Inserisci una password valida. La psw deve essere tra gli 8 e i 12 ' +
+                             'caratteri e deve contenere almeno una lettera MAIUSCOLA, una minuscola, un numero e un carattere speciale.')"
+                            onchange="this.setCustomValidity('')"></div>
                     <button class="btn btn-info mt-2" type="submit">Log In</button>
                 </form>
                 <p class="mt-3 mb-0"><a class="text-info small" href="<%=request.getContextPath()%>/user/signup.jsp">Oppure

@@ -47,7 +47,7 @@ public class MemberManager {
             }
             //se l'email è già presente...
             else {
-                throw new RuntimeException("Email già errato");
+                throw new RuntimeException("Email già presente");
             }
         }
         //se il formato è sbagliato

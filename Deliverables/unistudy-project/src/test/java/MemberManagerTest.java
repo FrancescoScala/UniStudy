@@ -255,4 +255,10 @@ class MemberManagerTest {
             MemberManager.modifyInfoMember(member, name, surname, newPassword, oldPassword);
         });
     }
+    @Test
+    void retrieveIdMemberByEmailSuccess() {
+        String email = memberForTesting.getEmail();
+        int id = MemberManager.retrieveIdMemberByEmail(email);
+        assertEquals(memberForTesting.getId(),id);
+    }
 }

@@ -37,7 +37,7 @@ public class CourseControl extends HttpServlet {
                     mex = "OK";
                 } catch (SQLException | RuntimeException e) {
                     e.printStackTrace();
-                    mex = "Aggiunta fallita. Inserisci i dati nel formato corretto";
+                    mex = "Aggiunta fallita. Corso già presente o formato dati errato. Riprova";
                 } finally {
                     JSONObject json = new JSONObject();
                     json.put("result", mex);

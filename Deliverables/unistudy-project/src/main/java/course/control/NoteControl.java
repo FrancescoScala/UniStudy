@@ -49,7 +49,7 @@ public class NoteControl extends HttpServlet {
                     mex = "OK";
                 } catch (SQLException | RuntimeException e) {
                     e.printStackTrace();
-                    mex = "Aggiunta nota fallita. Reinsirisci i dati nel formato errato corretto e riprova";
+                    mex = "Aggiunta nota fallita. Reinserisci i dati nel formato errato corretto e riprova";
                 } finally {
                     JSONObject json = new JSONObject();
                     json.put("result", mex);
