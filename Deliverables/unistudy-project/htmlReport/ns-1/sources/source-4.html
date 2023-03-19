@@ -1,0 +1,173 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > NoticeManager</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">course.manager</a>
+</div>
+
+<h1>Coverage Summary for Class: NoticeManager (course.manager)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">NoticeManager</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (4/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91,7%
+  </span>
+  <span class="absValue">
+    (33/36)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package course.manager;
+&nbsp;
+&nbsp;import course.beans.Notice;
+&nbsp;import connection.ConnectionPoolDB;
+&nbsp;
+&nbsp;import java.sql.*;
+&nbsp;import java.util.HashSet;
+&nbsp;import java.util.Set;
+&nbsp;
+<b class="nc">&nbsp;public class NoticeManager {</b>
+&nbsp;    private static Connection conn; //final?
+&nbsp;
+&nbsp;    private static final String titleRegex = &quot;^.{1,50}$&quot;; //&quot;^[a-zA-Z ]+${8,12}&quot;;
+&nbsp;    private static final String descriptionRegex = &quot;^.{1,300}$&quot;;
+&nbsp;
+&nbsp;    static {
+&nbsp;        try {
+<b class="fc">&nbsp;            conn = ConnectionPoolDB.getConnection();</b>
+<b class="nc">&nbsp;        } catch (SQLException e) {</b>
+<b class="nc">&nbsp;            throw new RuntimeException(e);</b>
+<b class="fc">&nbsp;        }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    //notice needs to be unique. Can&#39;t be added if there&#39;s already a notice in the coruse with the same title...diagram?
+&nbsp;    public static boolean createNotice(String title, Timestamp creationDate, String description, int courseId) throws SQLException {
+&nbsp;        //control in db by title
+<b class="fc">&nbsp;        if (description.matches(descriptionRegex) &amp;&amp;</b>
+<b class="fc">&nbsp;                title.matches(titleRegex)) {</b>
+<b class="fc">&nbsp;            String querySQL1 = &quot;INSERT INTO notice(notice_description,notice_creation_date,notice_title,course_id) VALUES (?,?,?,?)&quot;;</b>
+<b class="fc">&nbsp;            PreparedStatement ps1 = conn.prepareStatement(querySQL1);</b>
+<b class="fc">&nbsp;            ps1.setString(1, description);</b>
+<b class="fc">&nbsp;            ps1.setTimestamp(2, creationDate);</b>
+<b class="fc">&nbsp;            ps1.setString(3, title);</b>
+<b class="fc">&nbsp;            ps1.setInt(4, courseId);</b>
+<b class="fc">&nbsp;            ps1.executeUpdate();</b>
+<b class="fc">&nbsp;            ps1.close();</b>
+<b class="fc">&nbsp;            return true;</b>
+&nbsp;        } else
+<b class="fc">&nbsp;            throw new RuntimeException(&quot;Formato errato&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static Set&lt;Notice&gt; retrieveNoticesByCourseId(int courseId) throws SQLException {
+<b class="fc">&nbsp;        Set&lt;Notice&gt; notices = new HashSet&lt;Notice&gt;();</b>
+<b class="fc">&nbsp;        String querySQL = &quot;SELECT * FROM notice WHERE course_id=?&quot;;</b>
+<b class="fc">&nbsp;        PreparedStatement ps = conn.prepareStatement(querySQL);</b>
+<b class="fc">&nbsp;        ps.setInt(1, courseId);</b>
+<b class="fc">&nbsp;        ResultSet rs = ps.executeQuery();</b>
+<b class="fc">&nbsp;        if (rs.next()) {</b>
+&nbsp;            do {
+<b class="fc">&nbsp;                int id = rs.getInt(&quot;notice_id&quot;);</b>
+<b class="fc">&nbsp;                String title = rs.getString(&quot;notice_title&quot;);</b>
+<b class="fc">&nbsp;                Timestamp creationDate = rs.getTimestamp(&quot;notice_creation_date&quot;);</b>
+<b class="fc">&nbsp;                String description = rs.getString(&quot;notice_description&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;                Notice notice = new Notice(id, title, creationDate, description);</b>
+<b class="fc">&nbsp;                notices.add(notice);</b>
+<b class="fc">&nbsp;            } while (rs.next());</b>
+&nbsp;
+&nbsp;        }
+<b class="fc">&nbsp;        return notices;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static boolean deleteNotice(int id) throws SQLException { // da testare
+<b class="fc">&nbsp;        PreparedStatement ps = conn.prepareStatement(&quot;DELETE FROM notice WHERE notice_id=?&quot;);</b>
+<b class="fc">&nbsp;        ps.setInt(1, id);</b>
+<b class="fc">&nbsp;        ps.executeUpdate();</b>
+<b class="fc">&nbsp;        ps.close();</b>
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-03-19 17:00</div>
+</div>
+</body>
+</html>
