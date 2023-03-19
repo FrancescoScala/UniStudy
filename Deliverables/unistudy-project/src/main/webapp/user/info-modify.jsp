@@ -23,7 +23,6 @@
                 $.post("MemberControl",
                     {
                         "action": "modify",
-                        //    "member": $("#id").val(),
                         "oldPassword": $("#oldPassword").val(),
                         "newPassword": $("#newPassword").val(),
                         "name": $("#name").val(),
@@ -53,7 +52,6 @@
             </div>
             <form id="form-id" onsubmit="return false;">
                 <p id="mex"></p>
-                <%--    <input type="hidden" id="id" name="id" value="<%=(Member) session.getAttribute("memberInSession")%>">--%>
                 <div class="mb-3"><label class="form-label">Nome</label><input class="form-control"
                                                                                type="text"
                                                                                value="<%=((Member) session.getAttribute("memberInSession")).getName()%>"

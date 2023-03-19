@@ -114,7 +114,6 @@ class MemberManagerTest {
         });
     }
 
-    //Login
     @Order(2)
     @Test
     void loginMemberSuccess() throws SQLException, RuntimeException {

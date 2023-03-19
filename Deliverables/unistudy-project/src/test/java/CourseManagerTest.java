@@ -7,7 +7,6 @@ import course.manager.NoticeManager;
 import org.junit.jupiter.api.*;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import user.manager.MemberManager;
 
 import java.sql.SQLException;
 import java.util.HashSet;

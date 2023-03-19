@@ -25,13 +25,14 @@ public class MemberControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         switch (request.getParameter("action")) {
+            // sign up
             case "signup":
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
-                boolean check = false;
+
                 String mex = "";
                 try {
-                    check = MemberManager.signupMember(request.getParameter("email"), request.getParameter("password"),
+                    MemberManager.signupMember(request.getParameter("email"), request.getParameter("password"),
                             request.getParameter("name"), request.getParameter("surname"));
                     mex = "OK";
                 } catch (SQLException | RuntimeException e) {
@@ -45,9 +46,8 @@ public class MemberControl extends HttpServlet {
                 }
                 break;
 
+            // login
             case "login":
-                // verificare se è necessario crittografare la password
-                System.out.println("Sono in Login");
                 Member member = null;
                 try {
                     member = MemberManager.loginMember(request.getParameter("email"), request.getParameter("password"));
@@ -55,7 +55,7 @@ public class MemberControl extends HttpServlet {
                     RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/course/homepage.jsp");
                     request.getSession().setAttribute("memberInSession", member);
                     request.getSession().setAttribute("enrollments", enrollments);
-                    System.out.println(member + " , " + enrollments + " , " + dispatcher);
+
                     dispatcher.forward(request, response);
 
                 } catch (SQLException | RuntimeException e) {
@@ -65,13 +65,14 @@ public class MemberControl extends HttpServlet {
                 }
                 break;
 
+            // modify member's personal info
             case "modify":
                 response.setContentType("application/json");
                 PrintWriter out1 = response.getWriter();
-                boolean check1 = false;
+
                 String mex1 = "";
                 try {
-                    check1 = MemberManager.modifyInfoMember((Member) request.getSession().getAttribute("memberInSession"), request.getParameter("name"), request.getParameter("surname"), request.getParameter("newPassword"), request.getParameter("oldPassword"));
+                    MemberManager.modifyInfoMember((Member) request.getSession().getAttribute("memberInSession"), request.getParameter("name"), request.getParameter("surname"), request.getParameter("newPassword"), request.getParameter("oldPassword"));
                     mex1 = "OK";
                 } catch (SQLException | RuntimeException e) {
                     e.printStackTrace();
@@ -84,17 +85,18 @@ public class MemberControl extends HttpServlet {
                 }
                 break;
 
+            // to logout
             case "logout":
-                System.out.println("Sono in logout");
+
                 request.getSession().removeAttribute("memberInSession");
                 request.getSession().removeAttribute("enrollments");
-                System.out.println(request.getContextPath());
+
                 RequestDispatcher dispatcher1 = this.getServletContext().getRequestDispatcher("/user/login.jsp");
                 dispatcher1.forward(request, response);
                 break;
 
             default:
-                // pagina 404
+                throw new RuntimeException("Nessuna azione selezionata");
         }
     }
 }

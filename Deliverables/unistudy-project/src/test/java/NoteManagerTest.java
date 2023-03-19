@@ -28,30 +28,31 @@ class NoteManagerTest {
 
     @BeforeAll
     void setUp() throws SQLException {
-        //create the course for testing
+        // create the course for testing
         String professors = "Andrea De Lucia, Vittorio Scarano";
         String schedule = "Lun 09:00 - 11:00, Gio 15:00 - 18:00";
         String title = "Ingegneria del software";
         Set<Note> notes = new HashSet<Note>();
         Set<Notice> notices = new HashSet<Notice>();
-
         courseForTesting = new Course(-2, professors, schedule, title, notices, notes);
+
+        // save the course in the db. Take the real id
         CourseManager.createCourse(courseForTesting.getProfessors(), courseForTesting.getTimeSchedule(), courseForTesting.getTitle());
         courseForTestingId = CourseManager.retrieveIdCourseByTitle(courseForTesting.getTitle());
         courseForTesting.setId(courseForTestingId);
 
-        //create the author for testing
+        // create the author for testing
         String email = "test@email.com";
         String password = "P@ssword8";
         String name = "Name";
         String surname = "Surname";
         Set<Role> roles = new HashSet<Role>();
-        //roles.add(new Role(1, "PARTECIPANTE"));
         authorForTesting = new Member(-1, email, password, name, surname, roles);
 
         //save the author in the db. Take the real id
         MemberManager.signupMember(email, password, name, surname);
         authorForTesting.setId(MemberManager.retrieveIdMemberByEmail(email));
+
         //create the note for testing, using the id of the author just created
         noteForTesting = new Note(-1, "descrizione", new Timestamp(System.currentTimeMillis()), "/ciao/filepath.img", "title",
                 authorForTesting.getId(),
@@ -82,14 +83,6 @@ class NoteManagerTest {
 
         assertTrue(check);
     }
-
-   /* @Test
-    void createNoteCourseNull() {
-        boolean check = NoteManager.createNote(noteForTesting.getDescription(),noteForTesting.getCreationDate(),noteForTesting.getFilePath(),noteForTesting.getTitle(),
-                noteForTesting.getAuthorId(), noteForTesting.getAuthorInfo(),null);
-
-        assertFalse(check);
-    }*/
 
     @Test
     void createNoteAuthorInfoBadFormatted() {
@@ -131,7 +124,6 @@ class NoteManagerTest {
         });
     }
 
-    //checks on the title still to implement in NoteManager
     @Test
     void createNoteTitleBadFormatted() {
         assertThrows(RuntimeException.class, () -> {
@@ -146,5 +138,4 @@ class NoteManagerTest {
         courseForTesting = CourseManager.retrieveCourseById(courseForTestingId);
         assertEquals(courseForTesting.getNotes(), notes);
     }
-
 }

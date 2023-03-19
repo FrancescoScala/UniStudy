@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class NoteManager {
-    private static Connection conn; //final?
+    private static Connection conn;
     private static final String titleRegex = "^.{1,50}$";
     private static final String authorRegex = "^[a-zA-Z ]+$";
     private static final String pathRegex = "^(\\/[A-Za-z0-9_-]+)+\\.(txt|pdf|png|docx|doc|jpeg|jpg|img)$";
@@ -22,10 +22,8 @@ public class NoteManager {
         }
     }
 
-    //note needs to be unique. Can't be added if there's already a note in the course with the same title...diagram?
-    //controllo formato sul path? O sulla dimensione della description e del titolo?
     public static boolean createNote(String description, Timestamp creationDate, String filepath, String title, int authorId, String authorInfo, int courseId) throws NullPointerException, SQLException {
-
+        // check that the regexes match
         if (authorInfo.matches(authorRegex) &&
                 description.matches(descriptionRegex) &&
                 title.matches(titleRegex) &&
@@ -43,10 +41,12 @@ public class NoteManager {
             ps1.executeUpdate();
             ps1.close();
             return true;
-        } else
+        }
+        // regexes are not respected
+        else
             throw new RuntimeException("Formato errato");
     }
-
+    // retrieve course's notes
     public static Set<Note> retrieveNotesByCourseId(int courseId) throws SQLException {
         Set<Note> notes = new HashSet<Note>();
         String querySQL = "SELECT note_id, note_title, note_description, note_creation_date, note_path, " +

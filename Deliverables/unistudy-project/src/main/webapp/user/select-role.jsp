@@ -37,7 +37,6 @@
                                     <%
                                         }
                                         if (role.getRoleName().toString().equals("AMMINISTRATORE")) {
-                                            System.out.println("è AMMINISTAR");
                                     %>
                                     <label class="selectgroup-item"><input type="checkbox" name="value" value="CSS"
                                                                            class="selectgroup-input"/><a

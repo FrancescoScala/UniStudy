@@ -21,7 +21,6 @@
             $("#deleteCourseButton").click(chiamaControl);
 
             function viewCourses() {
-                console.log("dentro view Courses");
                 $("#courses").find('option').remove();
                 $.post("<%=request.getContextPath()%>/CourseControl",
                     {

@@ -8,9 +8,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class NoticeManager {
-    private static Connection conn; //final?
+    private static Connection conn;
 
-    private static final String titleRegex = "^.{1,50}$"; //"^[a-zA-Z ]+${8,12}";
+    private static final String titleRegex = "^.{1,50}$";
     private static final String descriptionRegex = "^.{1,300}$";
 
     static {
@@ -21,9 +21,9 @@ public class NoticeManager {
         }
     }
 
-    //notice needs to be unique. Can't be added if there's already a notice in the coruse with the same title...diagram?
+
     public static boolean createNotice(String title, Timestamp creationDate, String description, int courseId) throws SQLException {
-        //control in db by title
+        // check that the regexes match
         if (description.matches(descriptionRegex) &&
                 title.matches(titleRegex)) {
             String querySQL1 = "INSERT INTO notice(notice_description,notice_creation_date,notice_title,course_id) VALUES (?,?,?,?)";
@@ -35,10 +35,12 @@ public class NoticeManager {
             ps1.executeUpdate();
             ps1.close();
             return true;
-        } else
+        }
+        // regexes are not respected
+        else
             throw new RuntimeException("Formato errato");
     }
-
+    // retrieve course's notices
     public static Set<Notice> retrieveNoticesByCourseId(int courseId) throws SQLException {
         Set<Notice> notices = new HashSet<Notice>();
         String querySQL = "SELECT * FROM notice WHERE course_id=?";
@@ -60,7 +62,7 @@ public class NoticeManager {
         return notices;
     }
 
-    public static boolean deleteNotice(int id) throws SQLException { // da testare
+    public static boolean deleteNotice(int id) throws SQLException {
         PreparedStatement ps = conn.prepareStatement("DELETE FROM notice WHERE notice_id=?");
         ps.setInt(1, id);
         ps.executeUpdate();

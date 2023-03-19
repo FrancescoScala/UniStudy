@@ -16,11 +16,9 @@
     </script>
     <script type="text/javascript">
         $(document).ready(function () {
-            console.log("Ready!");
             $("#createCourseButton").click(chiamaControl);
 
             function chiamaControl() {
-                console.log("chiamaControl");
                 $.post("<%=request.getContextPath()%>/CourseControl",
                     {
                         "action": $("#action").val(),
@@ -33,7 +31,6 @@
                         var result = (JSON.stringify(data.result)).localeCompare(success);
 
                         if (result == 0) {
-                            console.log("ok!");
                             $("#mex").html("Aggiunta effettuata");
                         } else {
                             $("#mex").html(data.result);

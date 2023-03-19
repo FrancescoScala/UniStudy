@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class MemberManager {
-    private static Connection conn; //final?
+    private static Connection conn;
 
     static {
         try {
@@ -27,12 +27,12 @@ public class MemberManager {
     private static final String pswRegex = "^(?=.*\\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\\w\\d\\s:])([^\\s]){8,12}$";
 
     public static boolean signupMember(String email, String password, String name, String surname) throws SQLException {
-        //controllo formato -- AGGIUNGERE ECCEZIONI
+        // check that the regexes match
         if (email.matches(emailRegex) &&
                 password.matches(pswRegex) &&
                 name.matches(alphabeticRegex) &&
                 surname.matches(alphabeticRegex)) {
-            //si controlla che l'email NON sia presente nel sistema...
+            // check that the email is not already in the system
             if (retrieveIdMemberByEmail(email) == -1) {
                 String querySQL1 = "INSERT INTO user(user_email,user_password,user_name,user_surname) VALUES (?,?,?,?)";
                 PreparedStatement ps1 = conn.prepareStatement(querySQL1);
@@ -45,23 +45,24 @@ public class MemberManager {
 
                 return true;
             }
-            //se l'email è già presente...
+            // the email already exists
             else {
                 throw new RuntimeException("Email già presente");
             }
         }
-        //se il formato è sbagliato
+        // regexes are not respected
         else {
             throw new RuntimeException("Formato errato");
         }
     }
 
     public static Member loginMember(String email, String password) throws SQLException {
+        // check that the regexes match
         if (email.matches(emailRegex) &&
                 password.matches(pswRegex)) {
             int memberId = retrieveIdMemberByEmail(email);
             Member member;
-            //se l'email è presente nel sistema...
+            // check that the email is in the system
             if (memberId != -1) {
                 String querySQL1 = "SELECT *  FROM user WHERE user.user_id=?";
                 PreparedStatement ps1 = conn.prepareStatement(querySQL1);
@@ -69,7 +70,7 @@ public class MemberManager {
                 ResultSet rs1 = ps1.executeQuery();
                 rs1.next();
                 String passwordDB = rs1.getString("user_password");
-                //se la password è corretta...
+                // check that the passwords match
                 if (passwordDB.equals(password)) {
                     String emailDB = rs1.getString("user_email");
                     String nameDB = rs1.getString("user_name");
@@ -88,19 +89,22 @@ public class MemberManager {
                         rolesDB.add(role);
                     }
                     member = new Member(memberId, emailDB, passwordDB, nameDB, surnameDB, rolesDB);
+                // passwords don't match
                 } else {
                     throw new RuntimeException("Password non corretta");
                 }
                 return member;
+            // the email is not in the system
             } else {
                 throw new RuntimeException("Email non presente");
             }
+        // regexes are not respected
         } else {
             throw new RuntimeException("Formato errato");
         }
     }
 
-    // per verificare se la email inserita in signup è già associata ad un utente del sistema
+    // check if the email entered in signupMember is already associated with a system user
     public static int retrieveIdMemberByEmail(String email) {
         try {
             String querySQL = "SELECT user.user_id FROM user WHERE user_email=?";
@@ -111,7 +115,9 @@ public class MemberManager {
 
             if (rs.next()) {
                 return rs.getInt("user_id");
-            } else
+            }
+            // there is no platform member with that email
+            else
                 return -1;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -120,12 +126,13 @@ public class MemberManager {
     }
 
     public static boolean modifyInfoMember(Member member, String name, String surname, String newPassword, String oldPassword) throws SQLException {
+        // check that the regexes match and makes sure the member is valid
         if (oldPassword.matches(pswRegex) &&
                 newPassword.matches(pswRegex) &&
                 name.matches(alphabeticRegex) &&
                 surname.matches(alphabeticRegex) &&
                 retrieveIdMemberByEmail(member.getEmail()) != -1) {
-
+            // check that the passwords match
             if (member.getPassword().equals(oldPassword)) {
 
                 String querySQL = "UPDATE user SET user_name = ? , user_surname = ?, user_password=? WHERE user_id=?";
@@ -136,10 +143,11 @@ public class MemberManager {
                 ps.setInt(4, member.getId());
                 ps.executeUpdate();
                 return true;
-
+            // passwords don't match
             } else {
                 throw new RuntimeException("Password errata");
             }
+        // regexes are not respected
         } else {
             throw new RuntimeException("Formato errato");
         }
