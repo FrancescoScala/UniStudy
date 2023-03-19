@@ -1,10 +1,4 @@
-<%@ page import="user.beans.Member" %><%--
-  Created by IntelliJ IDEA.
-  Member: nickm
-  Date: 10/02/2023
-  Time: 19:47
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="user.beans.Member" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -19,12 +13,10 @@
     </script>
     <script type="text/javascript">
         $(document).ready(function () {
-            console.log("Ready!");
             loadCourseInfo();
             $("#confirmButton").click(chiamaControl);
 
             function loadCourseInfo() {
-                console.log("loadCourseInfo()");
                 $.post("<%=request.getContextPath()%>/CourseControl",
                     {
                         "action": "view",
@@ -35,7 +27,6 @@
                         let course = data.course;
 
                         let object = course[0];
-                        console.log(object);
                         $("#title").append(object["title"]);
                         let schedule = document.getElementById("schedule");
                         let professors = document.getElementById("professors");
@@ -45,7 +36,6 @@
             }
 
             function chiamaControl() {
-                console.log("chiamaControl");
                 $.post("<%=request.getContextPath()%>/CourseControl",
                     {
                         "action": "modify",
@@ -58,7 +48,6 @@
                         var result = (JSON.stringify(data.result)).localeCompare(success);
 
                         if (result == 0) {
-                            console.log("ok!");
                             $("#mex").html("Aggiornamento corso effettuato");
                         } else {
                             $("#mex").html(data.result);

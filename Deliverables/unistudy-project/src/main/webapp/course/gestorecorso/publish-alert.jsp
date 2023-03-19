@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  Member: nickm
-  Date: 10/02/2023
-  Time: 19:27
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -16,11 +9,9 @@
     </script>
     <script type="text/javascript">
         $(document).ready(function () {
-            console.log("Ready!");
             $("#createNoticeButton").click(chiamaControl);
 
             function chiamaControl() {
-                console.log("chiamaControl");
                 $.post("<%=request.getContextPath()%>/NoticeControl",
                     {
                         "action": $("#action").val(),
@@ -33,7 +24,6 @@
                         var result = (JSON.stringify(data.result)).localeCompare(success);
 
                         if (result == 0) {
-                            console.log("ok!");
                             $("#mex").html("Aggiunta avviso effettuata");
                         } else {
                             $("#mex").html(data.result);

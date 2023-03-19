@@ -32,7 +32,7 @@ public class EnrollmentManagerTest {
     private Course courseForTesting;
     @BeforeAll
     void setUp() throws SQLException {
-        //create the course for testing
+        // create the course for testing
         String professors = "Andrea De Lucia, Vittorio Scarano";
         String schedule = "Lun 09:00 - 11:00, Gio 15:00 - 18:00";
         String title = "Ingegneria del software";
@@ -42,7 +42,7 @@ public class EnrollmentManagerTest {
         CourseManager.createCourse(courseForTesting.getProfessors(),courseForTesting.getTimeSchedule(),courseForTesting.getTitle());
         courseForTesting.setId(CourseManager.retrieveIdCourseByTitle(courseForTesting.getTitle()));
 
-        //create the author for testing
+        // create the author for testing
         String email = "test@email.com";
         String password = "P@ssword8";
         String name = "Name";
@@ -50,10 +50,11 @@ public class EnrollmentManagerTest {
         Set<Role> memberRoles = new HashSet<Role>();
         memberForTesting = new Member(-1, email, password, name, surname, memberRoles);
 
-        //save the author in the db. Take the real id
+        // save the author in the db. Take the real id
         MemberManager.signupMember(email, password, name, surname);
         memberForTesting.setId(MemberManager.retrieveIdMemberByEmail(email));
-        //create the enrollment for testing, using the id of the author just created
+
+        // create the enrollment for testing, using the id of the author just created
         Set<Enrollment.EnrollType> enrollRoles = new HashSet<Enrollment.EnrollType>();
         enrollRoles.add(STUDENTE);
         enrollmentForTesting = new Enrollment(memberForTesting.getId(),courseForTesting.getId(),courseForTesting.getTitle(),enrollRoles);
@@ -171,12 +172,4 @@ public class EnrollmentManagerTest {
     void updateEnrollmentSuccess() throws SQLException {
         assertNotNull(EnrollmentManager.updateEnrollment(enrollmentForTesting, GESTORECORSO));
     }
-
-/*    @Test
-    void retrieveEnrollmentsByMemberIdNotValid() {
-        int id = -3;
-        Set<Enrollment> enrollments = EnrollmentManager.retrieveEnrollmentsByMemberId(id);
-        assertNull(enrollments);
-    }*/
-
 }

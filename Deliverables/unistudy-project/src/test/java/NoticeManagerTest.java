@@ -1,7 +1,6 @@
 import course.beans.Course;
 import course.beans.Note;
 import course.beans.Notice;
-import connection.ConnectionPoolDB;
 import course.manager.CourseManager;
 import course.manager.NoticeManager;
 import org.junit.jupiter.api.*;
@@ -21,6 +20,7 @@ class NoticeManagerTest {
 
     @BeforeAll
     void setUp() throws SQLException {
+        // create course for testing
         String professors = "Andrea De Lucia, Vittorio Scarano";
         String schedule = "Lun 09:00 - 11:00, Gio 15:00 - 18:00";
         String title = "Ingegneria del software";
@@ -31,6 +31,7 @@ class NoticeManagerTest {
         courseForTestingId = CourseManager.retrieveIdCourseByTitle(courseForTesting.getTitle());
         courseForTesting.setId(courseForTestingId);
 
+        // create notice for testing
         noticeForTesting = new Notice(-3, "Comunicazione data inizio tutorato", new Timestamp(System.currentTimeMillis()), "Si comunica che dalla prossima settimana inizierà il tutoraggio per il presente corso");
     }
 
@@ -83,12 +84,4 @@ class NoticeManagerTest {
         Set<Notice> notices = NoticeManager.retrieveNoticesByCourseId(courseForTesting.getId());
         assertEquals(courseForTesting.getNotices(), notices);
     }
-
-
-/*    @Test
-    void retrieveNoticesByCourseIdNotValid() {
-        Set<Notice> notices = NoticeManager.retrieveNoticesByCourseId(-2);
-
-        assertNull(notices);
-    }*/
 }

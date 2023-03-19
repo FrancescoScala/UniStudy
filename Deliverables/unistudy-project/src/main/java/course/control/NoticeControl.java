@@ -23,9 +23,8 @@ public class NoticeControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         switch (request.getParameter("action")) {
+            // add a notice
             case "add":
-                System.out.println("SONO NELLO SWITCH iN add\n"+"Titolo: "+request.getParameter("titolo")+" action: "+request.getParameter("action")+
-                        "Id: "+ request.getParameter("id")+ "descrizione: "+ request.getParameter("description"));
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
                 String mex = "";
@@ -42,17 +41,17 @@ public class NoticeControl extends HttpServlet {
                 finally {
                     JSONObject json = new JSONObject();
                     json.put("result", mex);
-                    System.out.println("CreateNotice: action=add restituisce: " + mex);
                     out.print(json.toString());
                 }
                 break;
 
+            // load notices for the RemoveAlert functionality
             case "view":
                 try {
                     Set<Notice> notices = null;
                     notices = NoticeManager.retrieveNoticesByCourseId(Integer.parseInt(request.getParameter("id")));
-                    System.out.println(notices);
-                    RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/course/gestorecorso/remove-alert.jsp?id="+request.getParameter("id"));
+                    RequestDispatcher dispatcher = this.getServletContext().
+                            getRequestDispatcher("/course/gestorecorso/remove-alert.jsp?id="+request.getParameter("id"));
                     request.setAttribute("notices", notices);
                     dispatcher.forward(request,response);
                 } catch (SQLException e) {
@@ -60,6 +59,7 @@ public class NoticeControl extends HttpServlet {
                 }
                 break;
 
+            // delete a notice
             case "delete":
                 try {
                     NoticeManager.deleteNotice(Integer.parseInt(request.getParameter("noticeId")));

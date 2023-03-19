@@ -74,7 +74,7 @@ public class Note {
         return authorInfo;
     }
 
-    public void setAuthorName(String authorInfo) {
+    public void setAuthorInfo(String authorInfo) {
         this.authorInfo = authorInfo;
     }
 

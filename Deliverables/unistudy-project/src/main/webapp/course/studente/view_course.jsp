@@ -2,13 +2,7 @@
 <%@ page import="course.beans.Notice" %>
 <%@ page import="java.util.Set" %>
 <%@ page import="course.beans.Note" %>
-<%@ page import="user.beans.Member" %><%--
-  Created by IntelliJ IDEA.
-  Member: francesco
-  Date: 08/02/23
-  Time: 18:33
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="user.beans.Member" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 

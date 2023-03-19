@@ -14,9 +14,7 @@ public class AmministratoreFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
         HttpServletRequest request1 = (HttpServletRequest) request;
-
         Member member = (Member)request1.getSession(false).getAttribute("memberInSession");
-
         for(Role r : member.getRoles())
         {
             if(r.getRoleName().toString().equals("AMMINISTRATORE"))
@@ -24,7 +22,8 @@ public class AmministratoreFilter implements Filter {
                 chain.doFilter(request, response);
             }
         }
-        // else pagina di errore, permesso posseduto non sufficiente
+
+        throw new RuntimeException("Permesso negato. L'utente in sessione non e' un Amministratore");
     }
 
     public void init(FilterConfig config) throws ServletException {

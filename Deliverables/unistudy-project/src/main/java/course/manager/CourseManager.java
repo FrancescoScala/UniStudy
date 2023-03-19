@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CourseManager {
-    private static Connection conn; //final?
+    private static Connection conn;
 
     static {
         try {
@@ -23,37 +23,36 @@ public class CourseManager {
         }
     }
 
-    private static final String professorsRegex = "^(?:[a-zA-Z](?:\\s[a-zA-Z]+)?(?:,\\s?(?=[a-zA-Z]))?)+(?!,$)$";//^[a-zA-Z\s,]+$
-
+    private static final String professorsRegex = "^(?:[a-zA-Z](?:\\s[a-zA-Z]+)?(?:,\\s?(?=[a-zA-Z]))?)+(?!,$)$";
     private static final String scheduleRegex = "^((Lun|Mar|Mer|Gio|Ven)\\s(0[0-9]|1[0-9]|2[0-4]):[0-5][0-9]\\s-\\s(0[0-9]|1[0-9]|2[0-4]):[0-5][0-9],?\\s?)*$";
-
-    private static final String alphanumericRegex = "^.{1,50}$";//"^[a-zA-Z0-9\\s]+$";
+    private static final String alphanumericRegex = "^.{1,50}$";
 
     public static boolean createCourse(String professors, String schedule, String title) throws SQLException {
-        //controllo formato?
         if (professors.matches(professorsRegex) &&
                 schedule.matches(scheduleRegex) &&
                 title.matches(alphanumericRegex)) {
-            //se NON esiste un corso avente lo stesso nome
+            // if there isn't already a course with the same name
             if (retrieveIdCourseByTitle(title) == -1) {
                 String querySQL1 = "INSERT INTO course(course_professors,course_schedule,course_title) VALUES (?,?,?)";
                 PreparedStatement ps1 = conn.prepareStatement(querySQL1);
-
                 ps1.setString(1, professors);
                 ps1.setString(2, schedule);
                 ps1.setString(3, title);
                 ps1.executeUpdate();
-
                 return true;
-            } else {//se esiste un corso con lo stesso nome
+            } else {
                 throw new RuntimeException("Formato errato");
             }
-        } else {//se il formato non è valido
+        }
+        // if input data format is not valid
+        else {
             throw new RuntimeException("Id errato");
         }
     }
 
+    // modify course's info
     public static boolean modifyInfoCourse(Course course, String newProfessors, String newSchedule) throws SQLException {
+        // if input data format is valid
         if (newProfessors.matches(professorsRegex) && newSchedule.matches(scheduleRegex) && retrieveIdCourseByTitle(course.getTitle()) != -1) {
             String querySQL = "UPDATE course SET course_professors = ? , course_schedule = ? WHERE course_id=?";
             PreparedStatement ps = conn.prepareStatement(querySQL);
@@ -67,6 +66,7 @@ public class CourseManager {
         }
     }
 
+    // retrieve Course by passing courseId as an explicit parameter
     public static Course retrieveCourseById(int courseId) {
         try {
             Course course;
@@ -74,7 +74,7 @@ public class CourseManager {
             PreparedStatement ps1 = conn.prepareStatement(querySQL1);
             ps1.setInt(1, courseId);
             ResultSet rs1 = ps1.executeQuery();
-            //se id è presente
+            // if course's id is valid
             if (rs1.next()) {
                 String courseProfessors = rs1.getString("course_professors");
                 String courseSchedule = rs1.getString("course_schedule");
@@ -84,7 +84,6 @@ public class CourseManager {
                 course = new Course(courseId, courseProfessors, courseSchedule, courseTitle, notices, notes);
                 return course;
             }
-            //se id non è presente
             else {
                 return null;
             }
@@ -95,16 +94,16 @@ public class CourseManager {
         }
     }
 
+    // retrieve Course by its title
     public static int retrieveIdCourseByTitle(String courseTitle) {
         try {
             String querySQL = "SELECT course.course_id FROM course WHERE course_title=?";
             PreparedStatement ps = conn.prepareStatement(querySQL);
-
             ps.setString(1, courseTitle);
             ResultSet rs = ps.executeQuery();
-
             if (rs.next()) {
                 return rs.getInt("course_id");
+            // if there's no course for the given title
             } else {
                 return -1;
             }
@@ -114,11 +113,11 @@ public class CourseManager {
         }
     }
 
+    // retrieve all the Course instances in the db
     public static Set<Course> retrieveAll() {
         try {
             String querySQL = "SELECT * FROM course";
             PreparedStatement ps = conn.prepareStatement(querySQL);
-
             ResultSet rs = ps.executeQuery();
             Set<Course> courses = new HashSet<Course>();
             if (rs.next()) {
@@ -138,6 +137,7 @@ public class CourseManager {
         }
     }
 
+    // delete a Course
     public static boolean deleteCourse(int id) throws SQLException {
         PreparedStatement ps = conn.prepareStatement("DELETE FROM course WHERE course_id=?");
         ps.setInt(1, id);

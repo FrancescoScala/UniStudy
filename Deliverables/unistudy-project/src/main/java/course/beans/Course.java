@@ -10,7 +10,6 @@ public class Course {
     private String title;
     private Set<Notice> notices;
     private Set<Note> notes;
-    //per il mapping model->code (deprecato):  private Set<Enrollment> enrollments;
 
     public Course(int id, String professors, String timeSchedule, String title, Set<Notice> notices, Set<Note> notes) {
         this.id = id;

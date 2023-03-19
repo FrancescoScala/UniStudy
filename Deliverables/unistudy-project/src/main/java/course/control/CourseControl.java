@@ -26,14 +26,14 @@ public class CourseControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         switch (request.getParameter("action")) {
+            // create course
             case "create":
-                System.out.println("Creo il corso");
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
-                System.out.println("Parametri passati: " + request.getParameter("professors") + request.getParameter("schedule") + request.getParameter("title"));
                 String mex = "";
                 try {
-                    CourseManager.createCourse(request.getParameter("professors"), request.getParameter("schedule"), request.getParameter("title"));
+                    CourseManager.createCourse(request.getParameter("professors"),
+                            request.getParameter("schedule"), request.getParameter("title"));
                     mex = "OK";
                 } catch (SQLException | RuntimeException e) {
                     e.printStackTrace();
@@ -45,14 +45,13 @@ public class CourseControl extends HttpServlet {
                 }
                 break;
 
+            // view course
             case "view":
-                System.out.println("Vedo il corso");
                 if (request.getParameter("qty").equals("all")) {
                     response.setContentType("application/json");
                     PrintWriter out1 = response.getWriter();
                     JSONObject json1 = new JSONObject();
                     json1.put("objects", CourseManager.retrieveAll());
-                    System.out.println(json1.toString());
                     out1.print(json1.toString());
                 } else if (request.getParameter("qty").equals("all-objects")) {
                     Set<Course> courses = CourseManager.retrieveAll();
@@ -65,7 +64,6 @@ public class CourseControl extends HttpServlet {
                     Set<Course> course = new HashSet<>();
                     course.add(CourseManager.retrieveCourseById(Integer.parseInt(request.getParameter("id"))));
                     json1.put("course", course);
-                    System.out.println(json1.toString());
                     out1.print(json1.toString());
                 } else {
                     int id = Integer.parseInt(request.getParameter("id"));
@@ -75,6 +73,7 @@ public class CourseControl extends HttpServlet {
                 }
                 break;
 
+            // delete course
             case "delete":
                 response.setContentType("application/json");
                 PrintWriter out2 = response.getWriter();
@@ -92,6 +91,7 @@ public class CourseControl extends HttpServlet {
                 }
                 break;
 
+            // enroll to a course
             case "enroll":
                 int memberId = ((Member) request.getSession().getAttribute("memberInSession")).getId();
                 int courseIdParam = Integer.parseInt(request.getParameter("id"));
@@ -102,7 +102,7 @@ public class CourseControl extends HttpServlet {
                 for (Enrollment enrollment : enrollments) {
                     if (enrollment.getCourseId() == courseIdParam) {
                         try {
-                            addedEnrollment = EnrollmentManager.updateEnrollment(enrollment, Enrollment.EnrollType.STUDENTE);
+                            EnrollmentManager.updateEnrollment(enrollment, Enrollment.EnrollType.STUDENTE);
                             isStudente = true;
                             break;
                         } catch (SQLException e) {
@@ -124,6 +124,7 @@ public class CourseControl extends HttpServlet {
                         courseIdParam + "").forward(request, response);
                 break;
 
+            // delete an enrollment
             case "delete-enroll":
                 Member member = (Member) request.getSession().getAttribute("memberInSession");
                 Set<Enrollment> enrollmentsSet = (Set<Enrollment>) request.getSession().getAttribute("enrollments");
@@ -142,13 +143,11 @@ public class CourseControl extends HttpServlet {
                 }
                 break;
 
+            // modify course's info
             case "modify":
-                System.out.println("Sono in modify info course");
                 response.setContentType("application/json");
                 PrintWriter out3 = response.getWriter();
-                System.out.println("Eseguo la retrieve su courseId: " + request.getParameter("id"));
                 Course course1 = CourseManager.retrieveCourseById(Integer.parseInt(request.getParameter("id")));
-                System.out.println(course1 + request.getParameter("schedule") + request.getParameter("professors"));
                 String mex1 = "";
                 try {
                     CourseManager.modifyInfoCourse(course1,

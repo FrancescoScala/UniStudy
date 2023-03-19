@@ -26,17 +26,12 @@ public class NoteControl extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         switch (request.getParameter("action")) {
+            // add a note
             case "add":
                 response.setContentType("application/json");
                 PrintWriter out = response.getWriter();
 
                 Member author = (Member) request.getSession().getAttribute("memberInSession");
-                System.out.println("Dati arrivati a addNote: " +
-                        request.getParameter("description") +
-                        request.getParameter("title") +
-                        author.getId() +
-                        author.getName() + author.getSurname() +
-                        Integer.parseInt(request.getParameter("id")));
                 String mex = "";
                 try {
                     NoteManager.createNote(request.getParameter("description"),
@@ -53,11 +48,11 @@ public class NoteControl extends HttpServlet {
                 } finally {
                     JSONObject json = new JSONObject();
                     json.put("result", mex);
-                    System.out.println("addNote restituisce: " + mex);
                     out.print(json.toString());
                 }
                 break;
 
+            // delete a note
             case "delete":
                 String askerRole = request.getParameter("role");
                 if (askerRole == null) {
@@ -80,7 +75,6 @@ public class NoteControl extends HttpServlet {
                         int id = Integer.parseInt(request.getParameter("id"));
                         Set<Note> notes = null;
                         notes = NoteManager.retrieveNotesByCourseId(id);
-                        System.out.println(notes);
                         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/course/gestorecorso/remove-note.jsp?id=" + id);
                         request.setAttribute("notes", notes);
                         dispatcher.forward(request, response);
@@ -90,12 +84,11 @@ public class NoteControl extends HttpServlet {
                 }
                 break;
 
+            // load course's notes for the RemoveNote functionality
             case "view":
                 try {
-                    System.out.println("Sono in note view");
                     Set<Note> notes = null;
                     notes = NoteManager.retrieveNotesByCourseId(Integer.parseInt(request.getParameter("id")));
-                    System.out.println("Note:" + notes);
                     RequestDispatcher dispatcher = this.getServletContext()
                             .getRequestDispatcher("/course/gestorecorso/remove-note.jsp?id=" + request.getParameter("id"));
                     request.setAttribute("notes", notes);
