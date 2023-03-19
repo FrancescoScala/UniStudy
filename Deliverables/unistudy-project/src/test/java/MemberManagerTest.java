@@ -261,4 +261,11 @@ class MemberManagerTest {
         int id = MemberManager.retrieveIdMemberByEmail(email);
         assertEquals(memberForTesting.getId(),id);
     }
+
+    @Test
+    void retrieveIdMemberByEmailNotValid() {
+        String email = "";
+        int id = MemberManager.retrieveIdMemberByEmail(email);
+        assertEquals(-1, id);
+    }
 }

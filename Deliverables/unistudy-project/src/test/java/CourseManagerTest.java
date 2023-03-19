@@ -164,7 +164,7 @@ public class CourseManagerTest {
         assertTrue(courses.size() != 0);
     }
 
-/*
+
     @Test
     void retrieveIdCourseByTitleSuccess() {
         String title = courseForTesting.getTitle();
@@ -174,8 +174,8 @@ public class CourseManagerTest {
 
     @Test
     void retrieveIdCourseByTitleNotValid() {
-        String title = "Architettura degli elaboratori 2";
+        String title = "";
         int id = CourseManager.retrieveIdCourseByTitle(title);
         assertEquals(-1, id);
-    }*/
+    }
 }

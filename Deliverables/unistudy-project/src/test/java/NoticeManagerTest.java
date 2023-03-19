@@ -38,12 +38,7 @@ class NoticeManagerTest {
     void tearDown() {
         try {
             boolean check = NoticeManager.deleteNotice(courseForTestingId);
-            Connection con = ConnectionPoolDB.getConnection();
-            PreparedStatement ps = con.prepareStatement("DELETE FROM course WHERE course_id=?");
-            ps.setInt(1, courseForTesting.getId());
-            ps.executeUpdate();
-            ps.close();
-            con.close();
+            CourseManager.deleteCourse(courseForTestingId);
             assertTrue(check);
         } catch (SQLException e) {
             throw new RuntimeException(e);

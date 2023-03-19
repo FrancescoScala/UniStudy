@@ -63,10 +63,7 @@ class NoteManagerTest {
         boolean check = NoteManager.deleteNote(noteForTesting.getId());
         Connection con = ConnectionPoolDB.getConnection();
 
-        PreparedStatement ps2 = con.prepareStatement("DELETE FROM course WHERE course_id=?");
-        ps2.setInt(1, courseForTesting.getId());
-        ps2.executeUpdate();
-        ps2.close();
+        CourseManager.deleteCourse(courseForTestingId);
 
         PreparedStatement ps1 = con.prepareStatement("DELETE FROM user WHERE user_id=?");
         ps1.setInt(1, authorForTesting.getId());
