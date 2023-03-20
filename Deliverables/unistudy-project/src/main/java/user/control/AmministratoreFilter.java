@@ -20,9 +20,9 @@ public class AmministratoreFilter implements Filter {
             if(r.getRoleName().toString().equals("AMMINISTRATORE"))
             {
                 chain.doFilter(request, response);
+                return;
             }
         }
-
         throw new RuntimeException("Permesso negato. L'utente in sessione non e' un Amministratore");
     }
 
