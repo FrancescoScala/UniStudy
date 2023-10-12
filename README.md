@@ -1,15 +1,14 @@
 # UniStudy
-Progetto per il corso di Ingegneria del Software, anno accademico 2022/2023 [Dipartimento di Informatica, Università degli Studi di Salerno]
+Project for the Software Engineering course, academic year 2022/2023 [Department of Computer Science, University of Salerno].
 
-UniStudy è un portale di corsi dell’Università di Salerno, gestito dagli 
-studenti, con i seguenti obiettivi:
+UniStudy is a course portal of the University of Salerno, managed by the 
+students, with the following objectives:
 
-• permettere l’accesso al materiale didattico in modo semplice e organizzato, dividendo le informazioni dei corsi per sezioni (info, avvisi e appunti)
+- allow access to course materials in a simple and organized way by dividing course information into sections (info, notices, and notes)
 
-• consentire a qualunque studente l’iscrizione ai corsi disponibili, senza limiti di numero o vincoli
+- allow any student to enroll in the available courses, without number limits or constraints
 
-• dare la possibilità a tutti gli studenti iscritti al corso di condividere autonomamente appunti ed elaborati inerenti al corso
+- provide the opportunity for all students enrolled in the course to independently share notes and papers about the course
 
-# Organizzazione delle directory:
-
-• Deliverables: contiene tutti gli elaborati riguardanti il progetto (codice e documentazione)
+# Project structure
+- Deliverables: contains all deliverables regarding the project (code and documentation)
