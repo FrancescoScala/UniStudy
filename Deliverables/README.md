@@ -1,6 +1,5 @@
-# Organizzazione delle directory:
+# Project structure:
 
-• unistudy-project: contiene il codice di UniStudy
+- unistudy-project: contains UniStudy's code.
 
-• Documents: contiene documentazione e meeting agenda
-
+- Documents: contains documentation and meeting agendas.
